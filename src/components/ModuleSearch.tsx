@@ -42,7 +42,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
   return (
     <div className="relative">
       <label className="mb-1 block text-sm font-medium text-slate-300">
-        PV-Modul suchen ({modules.length.toLocaleString("de-DE")} Module, CEC-Datenbank)
+        PV-Modul suchen ({modules.length.toLocaleString("de-DE")} Module, CEC + manuell gepflegt)
       </label>
       <input
         type="search"

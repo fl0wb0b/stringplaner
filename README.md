@@ -20,6 +20,31 @@ npm run preview     # Build lokal testen
 npm run import:cec  # CEC-Moduldaten neu importieren
 ```
 
+## Moduldaten erweitern
+
+Die Modulsuche speist sich aus zwei Quellen, die die App zusammenführt:
+`public/data/modules.json` (automatisch generiert aus der CEC-Datenbank,
+nicht von Hand editieren) und `public/data/modules_manual.json` (händisch
+gepflegt – für EU-Markt-Module, die in der CEC-Liste fehlen). Bei gleichem
+Hersteller+Modell gewinnt der manuelle Eintrag. Schema pro Modul:
+
+```jsonc
+{
+  "manufacturer": "Hersteller",
+  "model_name": "Modellbezeichnung",
+  "power_stc": 450,          // Wp
+  "voc": 38.5,               // V bei STC
+  "vmp": 32.1,               // V bei STC
+  "isc": 14.2,               // A bei STC
+  "imp": 13.5,               // A bei STC
+  "temp_coeff_voc": -0.25,   // %/°C
+  "temp_coeff_pmax": -0.3,   // %/°C
+  "temp_coeff_isc": 0.006,   // A/°C absolut (= %/°C-Wert × Isc / 100)
+  "source": "manual",
+  "source_url": "https://…"  // Pflicht: Datenblatt/Herstellerseite
+}
+```
+
 ## Gerätedaten erweitern
 
 Die Geräteliste ist ein allgemeines, erweiterbares Starter-Set – Ergänzungen

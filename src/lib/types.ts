@@ -11,7 +11,8 @@ export interface PVModule {
   temp_coeff_voc: number; // %/°C, usually negative
   temp_coeff_pmax: number; // %/°C, usually negative
   temp_coeff_isc: number; // A/°C, absolute (CEC alpha_sc) — needed for the cold-current check
-  source: "CEC";
+  source: "CEC" | "manual";
+  source_url?: string; // required for manual entries — provenance of the extracted values
 }
 
 export type DeviceType = "mppt_charger" | "string_inverter" | "hybrid";

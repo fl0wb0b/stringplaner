@@ -15,8 +15,21 @@ async function fetchJson<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export function loadModules(): Promise<PVModule[]> {
-  return fetchJson<PVModule[]>("data/modules.json");
+// CEC bulk data merged with hand-curated entries (EU-market modules missing
+// from the CEC list). On slug collision the manual entry wins.
+export async function loadModules(): Promise<PVModule[]> {
+  const [cec, manual] = await Promise.all([
+    fetchJson<PVModule[]>("data/modules.json"),
+    fetchJson<PVModule[]>("data/modules_manual.json"),
+  ]);
+  const bySlug = new Map<string, PVModule>();
+  for (const m of cec) bySlug.set(moduleSlug(m), m);
+  for (const m of manual) bySlug.set(moduleSlug(m), m);
+  return [...bySlug.values()].sort(
+    (a, b) =>
+      a.manufacturer.localeCompare(b.manufacturer) ||
+      a.model_name.localeCompare(b.model_name),
+  );
 }
 
 export async function loadInverters(): Promise<Inverter[]> {
