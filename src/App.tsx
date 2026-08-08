@@ -116,12 +116,14 @@ function App() {
                 label="Module in Serie"
                 value={config.modulesInSeries}
                 min={1}
+                stepper
                 onChange={(v) => update({ modulesInSeries: Math.max(1, Math.trunc(v)) })}
               />
               <NumberField
                 label="Strings parallel"
                 value={config.stringsParallel}
                 min={1}
+                stepper
                 onChange={(v) => update({ stringsParallel: Math.max(1, Math.trunc(v)) })}
               />
               <NumberField
