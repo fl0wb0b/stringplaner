@@ -1,0 +1,15 @@
+node_modules
+dist
+dev-dist
+*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Never commit original vendor files (license rule, see CLAUDE.md section 5)
+*.xlsm
+*.xlsx
+*.pdf
