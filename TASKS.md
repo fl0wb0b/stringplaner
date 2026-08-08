@@ -17,27 +17,33 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
 
 ## Schritt 2: Datenbeschaffung
 
-- [ ] 2a: Import-Script `/scripts/import-cec.ts` – CEC-CSV → `data/modules.json`
-- [ ] 2b: GitHub Action: monatlicher Cron + manueller Trigger für CEC-Update
-- [ ] 2c: Victron-MPPT-Geräte manuell erfassen → `data/inverters_victron.json`
-- [ ] 2d: Eigene Geräte erfassen (Huawei SUN2000-12KTL, Hoymiles) → `data/inverters_manual.json`
+- [x] 2a: Import-Script `/scripts/import-cec.mjs` – CEC-CSV → `public/data/modules.json` (21.641 Module)
+- [x] 2b: GitHub Action: monatlicher Cron + manueller Trigger für CEC-Update (`update-cec.yml`)
+- [x] 2c: Victron-MPPT-Geräte manuell erfasst → `public/data/inverters_victron.json`
+      (Starter-Set: 100/20, 150/35, 150/45, 150/70, 150/100, 250/100, RS 450/100;
+      **Werte vor Verlass darauf gegen aktuelle Datenblätter prüfen!**)
+- [x] 2d: Eigene Geräte erfasst (Huawei SUN2000-12KTL-M1, Hoymiles HM-800) →
+      `public/data/inverters_manual.json` (**ebenfalls gegen Datenblätter prüfen**)
 
 ## Schritt 3: Rechenkern
 
-- [ ] 3a: `src/lib/calc.ts` – reine Funktionen gemäß CLAUDE.md Abschnitt 6
-- [ ] 3b: Unit-Tests (Vitest) mit Referenzwerten aus dem Victron-Tool
-- [ ] 3c: Statusmodell (ok / warnung / fehler) + Gesamtstatus-Priorisierung
+- [x] 3a: `src/lib/calc.ts` – reine Funktionen gemäß CLAUDE.md Abschnitt 6
+- [x] 3b: Unit-Tests (Vitest, `src/lib/calc.test.ts`, 13 Tests) – handgerechnete
+      Referenzwerte; TODO: zusätzlich echte Victron-Tool-Referenzfälle ergänzen
+- [x] 3c: Statusmodell (ok / warnung / fehler) + Gesamtstatus-Priorisierung
+      (Warnung überdeckt nie einen Fehler)
 
 ## Schritt 4: UI
 
-- [ ] 4a: Eingabe-Flow – Modulsuche (uFuzzy + react-virtual), Geräteauswahl,
+- [x] 4a: Eingabe-Flow – Modulsuche (uFuzzy + react-virtual), Geräteauswahl,
       Tracker-Auswahl, Serien-/Parallelanzahl, Temperaturgrenzen,
       Kabellänge/Querschnitt; Ergebnis als Ampel-Tabelle
-- [ ] 4b: Spannungs-/Temperatur-Graph (recharts): Voc-/Vmp-Kurven über
+- [x] 4b: Spannungs-/Temperatur-Graph (recharts): Voc-/Vmp-Kurven über
       Temperaturbereich, Gerätegrenzen als ReferenceLines, gewählte
       Grenztemperaturen als vertikale Marker
-- [ ] 4c: Speichern & Teilen – Konfiguration als URL-Query-Parameter
-      (stabile Slugs `manufacturer__model_name`), localStorage-Fallback
+- [x] 4c: Speichern & Teilen – Konfiguration als URL-Query-Parameter
+      (stabile Slugs `manufacturer__model_name`), localStorage-Fallback,
+      Teilen-Button (Clipboard)
 
 ## Schritt 5: Feinschliff
 

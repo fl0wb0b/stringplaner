@@ -10,6 +10,7 @@ export interface PVModule {
   imp: number; // A at STC
   temp_coeff_voc: number; // %/°C, usually negative
   temp_coeff_pmax: number; // %/°C, usually negative
+  temp_coeff_isc: number; // A/°C, absolute (CEC alpha_sc) — needed for the cold-current check
   source: "CEC";
 }
 

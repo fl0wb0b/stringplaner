@@ -13,9 +13,11 @@ gehostet auf GitHub Pages.
 
 ```bash
 npm install
-npm run dev      # Dev-Server
-npm run build    # Produktions-Build nach dist/
-npm run preview  # Build lokal testen
+npm run dev         # Dev-Server
+npm run test        # Unit-Tests (Rechenkern)
+npm run build       # Produktions-Build nach dist/
+npm run preview     # Build lokal testen
+npm run import:cec  # CEC-Moduldaten neu importieren
 ```
 
 ## Projektkontext

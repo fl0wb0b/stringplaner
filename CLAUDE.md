@@ -54,7 +54,7 @@ Ausrichtung/Modultypen) sowie ggf. andere PV-Planer/Selbstbauer.
 | Listen-Virtualisierung | `@tanstack/react-virtual` | flüssiges Scrolling großer Trefferlisten auf Mobile |
 | Charts | `recharts` | Spannungs-/Temperatur-Graph (Schritt 4b), ReferenceLine-Support |
 | Backend | **keins** – rein clientseitig | keine laufenden Kosten, keine Wartung |
-| Datenhaltung | statische JSON-Dateien im Repo (`/data`) | reicht für 20-30k Module, kein DB-Server nötig |
+| Datenhaltung | statische JSON-Dateien im Repo (`/public/data`, ausgeliefert unter `data/`) | reicht für 20-30k Module, kein DB-Server nötig |
 | Modul-Datenquelle | ausschließlich CEC-CSV (California Energy Commission / NREL SAM) | einzige Quelle mit gesicherter freier Nutzbarkeit, automatisierbar |
 | Victron-MPPT-Daten | manuell aus offizieller Victron-Excel-Liste **extrahiert** | siehe Lizenz-Regel Abschnitt 5 |
 | String-Wechselrichter-Daten | manuell aus Herstellerdatenblättern **extrahiert** | siehe Lizenz-Regel Abschnitt 5 |
@@ -69,7 +69,7 @@ Ausrichtung/Modultypen) sowie ggf. andere PV-Planer/Selbstbauer.
 
 Drei Entitätstypen, als JSON-Dateien im Repo abgelegt (kein DB-Server).
 
-### 4.1 PV-Modul (`data/modules.json`, generiert aus CEC-CSV)
+### 4.1 PV-Modul (`public/data/modules.json`, generiert aus CEC-CSV via `scripts/import-cec.mjs`)
 
 ```typescript
 interface PVModule {
@@ -82,11 +82,12 @@ interface PVModule {
   imp: number;              // A, bei STC
   temp_coeff_voc: number;   // %/°C, i.d.R. negativ
   temp_coeff_pmax: number;  // %/°C, i.d.R. negativ
+  temp_coeff_isc: number;   // A/°C, absolut (CEC alpha_sc) – für Stromprüfung (Abschnitt 6, Punkt 2)
   source: "CEC";
 }
 ```
 
-### 4.2 Geräte-Basis (Laderegler / Wechselrichter) (`data/inverters_victron.json`, `data/inverters_manual.json`)
+### 4.2 Geräte-Basis (Laderegler / Wechselrichter) (`public/data/inverters_victron.json`, `public/data/inverters_manual.json`)
 
 ```typescript
 type DeviceType = "mppt_charger" | "string_inverter" | "hybrid";

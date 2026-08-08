@@ -1,0 +1,24 @@
+[
+  {
+    "manufacturer": "Huawei",
+    "model_name": "SUN2000-12KTL-M1",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 12000,
+    "source_url": "https://solar.huawei.com/eu/professionals/all-products/SUN2000-3-10KTL-M1",
+    "trackers": [
+      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2, "p_max_w": 9000 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2, "p_max_w": 9000 }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HM-800",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.hoymiles.com/products/microinverter/hm-series/",
+    "trackers": [
+      { "tracker_label": "PV-Eingang 1", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 11.5, "max_strings_parallel": 1, "p_max_w": 540 },
+      { "tracker_label": "PV-Eingang 2", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 11.5, "max_strings_parallel": 1, "p_max_w": 540 }
+    ]
+  }
+]
