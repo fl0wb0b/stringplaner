@@ -19,11 +19,13 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
 
 - [x] 2a: Import-Script `/scripts/import-cec.mjs` – CEC-CSV → `public/data/modules.json` (21.641 Module)
 - [x] 2b: GitHub Action: monatlicher Cron + manueller Trigger für CEC-Update (`update-cec.yml`)
-- [x] 2c: Victron-MPPT-Geräte manuell erfasst → `public/data/inverters_victron.json`
-      (Starter-Set: 100/20, 150/35, 150/45, 150/70, 150/100, 250/100, RS 450/100;
+- [x] 2c: Victron-MPPT-Laderegler erfasst → `public/data/inverters_victron.json`
+      (SmartSolar 75/15 bis 250/100 + RS 450/100 und RS 450/200;
       **Werte vor Verlass darauf gegen aktuelle Datenblätter prüfen!**)
-- [x] 2d: Eigene Geräte erfasst (Huawei SUN2000-12KTL-M1, Hoymiles HM-800) →
-      `public/data/inverters_manual.json` (**ebenfalls gegen Datenblätter prüfen**)
+- [x] 2d: Allgemeines String-Wechselrichter-Starter-Set erfasst →
+      `public/data/inverters_manual.json` (SMA Sunny Boy, Fronius Primo/Symo,
+      Huawei SUN2000, Growatt MIN, Hoymiles HM – **ebenfalls gegen Datenblätter
+      prüfen**; Erweiterung per PR, Schema siehe README)
 
 ## Schritt 3: Rechenkern
 

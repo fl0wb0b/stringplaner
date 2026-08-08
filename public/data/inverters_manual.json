@@ -1,13 +1,78 @@
 [
   {
+    "manufacturer": "SMA",
+    "model_name": "Sunny Boy 5.0",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.sma.de/produkte/solar-wechselrichter/sunny-boy-30-36-40-50-60",
+    "trackers": [
+      { "tracker_label": "MPPT A", "v_mppt_min": 175, "v_mppt_max": 500, "v_max_absolute": 600, "i_max": 15, "max_strings_parallel": 2 },
+      { "tracker_label": "MPPT B", "v_mppt_min": 175, "v_mppt_max": 500, "v_max_absolute": 600, "i_max": 15, "max_strings_parallel": 2 }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Primo 5.0-1",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-primo/fronius-primo-5-0-1",
+    "trackers": [
+      { "tracker_label": "MPPT 1", "v_mppt_min": 240, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 12, "max_strings_parallel": 2 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 240, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 12, "max_strings_parallel": 2 }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo 10.0-3-M",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-symo/fronius-symo-10-0-3-m",
+    "trackers": [
+      { "tracker_label": "MPPT 1", "v_mppt_min": 270, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 27, "max_strings_parallel": 3 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 270, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 16.5, "max_strings_parallel": 2 }
+    ]
+  },
+  {
+    "manufacturer": "Huawei",
+    "model_name": "SUN2000-6KTL-M1",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://solar.huawei.com/eu/professionals/all-products/SUN2000-3-10KTL-M1",
+    "trackers": [
+      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 11, "max_strings_parallel": 1 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 11, "max_strings_parallel": 1 }
+    ]
+  },
+  {
     "manufacturer": "Huawei",
     "model_name": "SUN2000-12KTL-M1",
     "device_type": "string_inverter",
     "ac_power_nominal_w": 12000,
-    "source_url": "https://solar.huawei.com/eu/professionals/all-products/SUN2000-3-10KTL-M1",
+    "source_url": "https://solar.huawei.com/eu/professionals/all-products/SUN2000-12-20KTL-M1",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2, "p_max_w": 9000 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2, "p_max_w": 9000 }
+      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 22, "max_strings_parallel": 2 }
+    ]
+  },
+  {
+    "manufacturer": "Growatt",
+    "model_name": "MIN 5000TL-X",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.growatt.com/products/min-2500-6000tl-x",
+    "trackers": [
+      { "tracker_label": "MPPT 1", "v_mppt_min": 80, "v_mppt_max": 550, "v_max_absolute": 550, "i_max": 13.5, "max_strings_parallel": 1 },
+      { "tracker_label": "MPPT 2", "v_mppt_min": 80, "v_mppt_max": 550, "v_max_absolute": 550, "i_max": 13.5, "max_strings_parallel": 1 }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HM-300",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 300,
+    "source_url": "https://www.hoymiles.com/products/microinverter/hm-series/",
+    "trackers": [
+      { "tracker_label": "PV-Eingang", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 11.5, "max_strings_parallel": 1, "p_max_w": 540 }
     ]
   },
   {

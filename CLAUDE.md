@@ -14,9 +14,10 @@ herstellerunabhängig ist: sie prüft, ob eine geplante PV-Modul-Verschaltung
 Wechselrichter passt – spannungs-, strom- und leistungsseitig, unter
 Berücksichtigung von Temperatureinflüssen.
 
-**Zielnutzer:** Der App-Betreiber selbst (IT/OT-Admin, betreibt privat eine
-Victron-ESS-Anlage mit mehreren MPPT-Ladereglern, PV-Strings unterschiedlicher
-Ausrichtung/Modultypen) sowie ggf. andere PV-Planer/Selbstbauer.
+**Zielnutzer:** PV-Planer, Selbstbauer und ESS-Betreiber allgemein – die App
+ist ein herstellerunabhängiges Allgemein-Tool, die Geräteliste ist ein
+erweiterbares Starter-Set (Schema und Beitragsregeln siehe README) und wird
+nicht auf eine einzelne Anlage zugeschnitten.
 
 **Kernproblem, das gelöst wird:**
 - Bei Kälte steigt die Leerlaufspannung (Voc) eines Moduls – zu viele Module
