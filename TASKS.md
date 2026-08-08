@@ -20,12 +20,15 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
 - [x] 2a: Import-Script `/scripts/import-cec.mjs` – CEC-CSV → `public/data/modules.json` (21.641 Module)
 - [x] 2b: GitHub Action: monatlicher Cron + manueller Trigger für CEC-Update (`update-cec.yml`)
 - [x] 2c: Victron-MPPT-Laderegler erfasst → `public/data/inverters_victron.json`
-      (SmartSolar 75/15 bis 250/100 + RS 450/100 und RS 450/200;
-      **Werte vor Verlass darauf gegen aktuelle Datenblätter prüfen!**)
-- [x] 2d: Allgemeines String-Wechselrichter-Starter-Set erfasst →
-      `public/data/inverters_manual.json` (SMA Sunny Boy, Fronius Primo/Symo,
-      Huawei SUN2000, Growatt MIN, Hoymiles HM – **ebenfalls gegen Datenblätter
-      prüfen**; Erweiterung per PR, Schema siehe README)
+      (komplette aktuelle SmartSolar-Palette 75/10 bis 250/100 inkl. 36V-Varianten
+      + RS 450/100 und RS 450/200; Werte per Web-Recherche gegen offizielle
+      Victron-Datenblätter abgeglichen, Quelle je Gerät in `source_url`)
+- [x] 2d: Allgemeines String-Wechselrichter-Set erfasst →
+      `public/data/inverters_manual.json` (SMA Sunny Boy 5.0 / Tripower 10.0,
+      Fronius Primo GEN24 5.0 / Symo GEN24 10.0, Huawei SUN2000-6KTL-M1 /
+      12KTL-M5, Growatt MIN 5000TL-X, Hoymiles HMS-800W-2T / HMS-2000-4T;
+      Werte per Web-Recherche gegen Herstellerangaben abgeglichen;
+      Erweiterung per PR, Schema siehe README)
 
 ## Schritt 3: Rechenkern
 

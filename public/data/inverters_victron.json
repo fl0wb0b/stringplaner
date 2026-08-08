@@ -1,9 +1,19 @@
 [
   {
     "manufacturer": "Victron Energy",
+    "model_name": "SmartSolar MPPT 75/10",
+    "device_type": "mppt_charger",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-75-10,-75-15,-100-15,-100-20_48V-EN.pdf",
+    "trackers": [
+      { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 75, "v_max_absolute": 75, "i_max": 13, "max_strings_parallel": 2, "p_max_w": 145 },
+      { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 75, "v_max_absolute": 75, "i_max": 13, "max_strings_parallel": 2, "p_max_w": 290 }
+    ]
+  },
+  {
+    "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 75/15",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-75-10-75-15-100-15-100-20",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-75-10,-75-15,-100-15,-100-20_48V-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 75, "v_max_absolute": 75, "i_max": 15, "max_strings_parallel": 2, "p_max_w": 220 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 75, "v_max_absolute": 75, "i_max": 15, "max_strings_parallel": 2, "p_max_w": 440 }
@@ -11,9 +21,19 @@
   },
   {
     "manufacturer": "Victron Energy",
+    "model_name": "SmartSolar MPPT 100/15",
+    "device_type": "mppt_charger",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-75-10,-75-15,-100-15,-100-20_48V-EN.pdf",
+    "trackers": [
+      { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 15, "max_strings_parallel": 2, "p_max_w": 220 },
+      { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 15, "max_strings_parallel": 2, "p_max_w": 440 }
+    ]
+  },
+  {
+    "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 100/20",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-75-10-75-15-100-15-100-20",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-75-10,-75-15,-100-15,-100-20_48V-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 290 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 580 },
@@ -24,7 +44,7 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 100/30",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-100-30",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-100-30-&-100-50-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 35, "max_strings_parallel": 2, "p_max_w": 440 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 35, "max_strings_parallel": 2, "p_max_w": 880 }
@@ -34,7 +54,7 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 100/50",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-100-50",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-100-30-&-100-50-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 60, "max_strings_parallel": 3, "p_max_w": 700 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 100, "v_max_absolute": 100, "i_max": 60, "max_strings_parallel": 3, "p_max_w": 1400 }
@@ -44,10 +64,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/35",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-150-35",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-35-&-150-45-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 40, "max_strings_parallel": 3, "p_max_w": 500 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 40, "max_strings_parallel": 3, "p_max_w": 1000 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 40, "max_strings_parallel": 3, "p_max_w": 1500 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 40, "max_strings_parallel": 3, "p_max_w": 2000 }
     ]
   },
@@ -55,10 +76,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/45",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-150-45-up-to-150-70",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-35-&-150-45-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 650 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 1300 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 1950 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 2600 }
     ]
   },
@@ -66,10 +88,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/60",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-150-45-up-to-150-70",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-60-&-150-70-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 860 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 1720 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 2580 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 3440 }
     ]
   },
@@ -77,10 +100,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/70",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-150-45-up-to-150-70",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-60-&-150-70-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 1000 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 2000 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 3000 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 4000 }
     ]
   },
@@ -88,10 +112,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/85",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-150-85-150-100",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-70-up-to-150-100-VE.Can-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 1200 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 2400 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 3600 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 4900 }
     ]
   },
@@ -99,32 +124,47 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 150/100",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-150-85-150-100",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-150-70-up-to-150-100-VE.Can-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 1450 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 2900 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 4350 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 150, "v_max_absolute": 150, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 5800 }
+    ]
+  },
+  {
+    "manufacturer": "Victron Energy",
+    "model_name": "SmartSolar MPPT 250/60",
+    "device_type": "mppt_charger",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-250-60-and-250-70-EN.pdf",
+    "trackers": [
+      { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 860 },
+      { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 1720 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 2580 },
+      { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 3440 }
     ]
   },
   {
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 250/70",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-250-60-250-70",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-250-60-and-250-70-EN.pdf",
     "trackers": [
-      { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 1000 },
-      { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 2000 },
-      { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 50, "max_strings_parallel": 4, "p_max_w": 4000 }
+      { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 1000 },
+      { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 2000 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 3000 },
+      { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 35, "max_strings_parallel": 3, "p_max_w": 4000 }
     ]
   },
   {
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 250/85",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-250-85-250-100",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-250-70-up-to-250-100-VE.Can-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 1200 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 2400 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 3600 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 4900 }
     ]
   },
@@ -132,10 +172,11 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT 250/100",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-250-85-250-100",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-charge-controller-MPPT-250-70-up-to-250-100-VE.Can-EN.pdf",
     "trackers": [
       { "tracker_label": "PV (12V-Batterie)", "v_mppt_min": 13, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 1450 },
       { "tracker_label": "PV (24V-Batterie)", "v_mppt_min": 25, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 2900 },
+      { "tracker_label": "PV (36V-Batterie)", "v_mppt_min": 37, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 4350 },
       { "tracker_label": "PV (48V-Batterie)", "v_mppt_min": 49, "v_mppt_max": 250, "v_max_absolute": 250, "i_max": 70, "max_strings_parallel": 4, "p_max_w": 5800 }
     ]
   },
@@ -143,22 +184,22 @@
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT RS 450/100",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-rs-450",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-MPPT-RS-EN-.pdf",
     "trackers": [
-      { "tracker_label": "Tracker 1 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 },
-      { "tracker_label": "Tracker 2 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 }
+      { "tracker_label": "Tracker 1 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 },
+      { "tracker_label": "Tracker 2 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 }
     ]
   },
   {
     "manufacturer": "Victron Energy",
     "model_name": "SmartSolar MPPT RS 450/200",
     "device_type": "mppt_charger",
-    "source_url": "https://www.victronenergy.com/solar-charge-controllers/smartsolar-mppt-rs-450",
+    "source_url": "https://www.victronenergy.com/upload/documents/Datasheet-SmartSolar-MPPT-RS-EN-.pdf",
     "trackers": [
-      { "tracker_label": "Tracker 1 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 },
-      { "tracker_label": "Tracker 2 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 },
-      { "tracker_label": "Tracker 3 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 },
-      { "tracker_label": "Tracker 4 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 18, "max_strings_parallel": 2, "p_max_w": 2880 }
+      { "tracker_label": "Tracker 1 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 },
+      { "tracker_label": "Tracker 2 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 },
+      { "tracker_label": "Tracker 3 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 },
+      { "tracker_label": "Tracker 4 (48V-Batterie)", "v_mppt_min": 80, "v_mppt_max": 450, "v_max_absolute": 450, "i_max": 20, "max_strings_parallel": 2, "p_max_w": 4000 }
     ]
   }
 ]
