@@ -88,10 +88,19 @@ function App() {
     setConfig((c) => ({ ...c, deviceSlug: slug, trackerIndex: 0, trackers: [] }));
   };
 
-  const calcFor = (tracker: Inverter["trackers"][number], series: number, parallel: number) =>
-    selectedModule
+  // per-tracker module override (e.g. Anlagen-Erweiterung); null slug = Modul aus Schritt 2
+  const moduleForTracker = (tc: TrackerConfig): PVModule | null =>
+    tc.moduleSlug ? (moduleBySlug.get(tc.moduleSlug) ?? null) : selectedModule;
+
+  const calcFor = (
+    tracker: Inverter["trackers"][number],
+    series: number,
+    parallel: number,
+    mod: PVModule | null = selectedModule,
+  ) =>
+    mod
       ? calculate({
-          module: selectedModule,
+          module: mod,
           modulesInSeries: series,
           stringsParallel: parallel,
           tracker,
@@ -117,7 +126,12 @@ function App() {
   const trackerResults: Array<CalcResult | null> = isIndependent
     ? trackerConfigs.map((tc, i) =>
         tc.enabled
-          ? calcFor(selectedDevice!.trackers[i], tc.modulesInSeries, tc.stringsParallel)
+          ? calcFor(
+              selectedDevice!.trackers[i],
+              tc.modulesInSeries,
+              tc.stringsParallel,
+              moduleForTracker(tc),
+            )
           : null,
       )
     : [];
@@ -256,6 +270,12 @@ function App() {
                       index={i}
                       config={trackerConfigs[i]}
                       module={selectedModule}
+                      modules={modules}
+                      overrideModule={
+                        trackerConfigs[i].moduleSlug
+                          ? (moduleBySlug.get(trackerConfigs[i].moduleSlug!) ?? null)
+                          : null
+                      }
                       result={trackerResults[i]}
                       tempMin={config.tempMin}
                       tempMax={config.tempMax}

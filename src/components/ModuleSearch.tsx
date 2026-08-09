@@ -8,11 +8,12 @@ interface Props {
   modules: PVModule[];
   selected: PVModule | null;
   onSelect: (m: PVModule) => void;
+  label?: string;
 }
 
 const MAX_RESULTS = 1000;
 
-export function ModuleSearch({ modules, selected, onSelect }: Props) {
+export function ModuleSearch({ modules, selected, onSelect, label = "PV-Modul" }: Props) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -41,7 +42,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
 
   return (
     <div className="relative">
-      <label className="field-label">PV-Modul</label>
+      <label className="field-label">{label}</label>
       <input
         type="search"
         value={query}

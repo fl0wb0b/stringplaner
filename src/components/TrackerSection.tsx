@@ -1,7 +1,9 @@
+import { moduleSlug } from "../lib/data";
 import type { CalcResult } from "../lib/calc";
 import type { MpptTracker, PVModule } from "../lib/types";
 import type { TrackerConfig } from "../lib/urlState";
 import { TRACKER_BORDER, TRACKER_DOT } from "../lib/trackerColors";
+import { ModuleSearch } from "./ModuleSearch";
 import { NumberField } from "./NumberField";
 import { ResultPanel } from "./ResultPanel";
 import { VoltageChart } from "./VoltageChart";
@@ -11,6 +13,8 @@ interface Props {
   index: number; // color index, matches the distribution bar in the total summary
   config: TrackerConfig;
   module: PVModule | null; // global module from step 2
+  modules: PVModule[]; // full list for the per-tracker override search
+  overrideModule: PVModule | null; // deviating module for this tracker only
   result: CalcResult | null;
   tempMin: number;
   tempMax: number;
@@ -18,17 +22,22 @@ interface Props {
 }
 
 // One independent MPPT input: enable toggle, series/parallel layout, own
-// result table and voltage/temperature chart. The module comes from step 2.
+// result table and voltage/temperature chart. The module comes from step 2,
+// unless a deviating module is chosen for this tracker (e.g. plant extension
+// where the original module is no longer available).
 export function TrackerSection({
   tracker,
   index,
   config,
   module: mod,
+  modules,
+  overrideModule,
   result,
   tempMin,
   tempMax,
   onChange,
 }: Props) {
+  const effectiveModule = overrideModule ?? mod;
   return (
     <div
       className={`rounded-2xl border p-4 transition-colors ${
@@ -61,6 +70,33 @@ export function TrackerSection({
 
       {config.enabled && (
         <div className="mt-4 space-y-4">
+          <div>
+            <ModuleSearch
+              modules={modules}
+              selected={overrideModule}
+              onSelect={(m) => onChange({ moduleSlug: moduleSlug(m) })}
+              label={
+                overrideModule
+                  ? "Abweichendes Modul für diesen Tracker"
+                  : "Abweichendes Modul für diesen Tracker (Standard: Modul aus Schritt 2)"
+              }
+            />
+            {overrideModule ? (
+              <button
+                type="button"
+                onClick={() => onChange({ moduleSlug: null })}
+                className="mt-2 rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
+              >
+                Wieder Modul aus Schritt 2 verwenden
+              </button>
+            ) : (
+              mod && (
+                <p className="mt-1.5 text-sm text-slate-500">
+                  Verwendet: {mod.manufacturer} {mod.model_name}
+                </p>
+              )
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <NumberField
               label="Module in Serie"
@@ -78,21 +114,20 @@ export function TrackerSection({
             />
           </div>
           {result && <ResultPanel result={result} tracker={tracker} />}
-          {mod && (
+          {effectiveModule ? (
             <div>
               <h3 className="mb-2 text-sm font-medium text-slate-300">
                 Spannungs-/Temperatur-Graph
               </h3>
               <VoltageChart
-                module={mod}
+                module={effectiveModule}
                 modulesInSeries={config.modulesInSeries}
                 tracker={tracker}
                 tempMin={tempMin}
                 tempMax={tempMax}
               />
             </div>
-          )}
-          {!mod && (
+          ) : (
             <p className="text-sm text-slate-500">Modul in Schritt 2 wählen.</p>
           )}
         </div>

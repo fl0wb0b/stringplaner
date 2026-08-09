@@ -33,6 +33,9 @@ export interface TrackerConfig {
   enabled: boolean;
   modulesInSeries: number;
   stringsParallel: number;
+  // Abweichendes Modul nur für diesen Tracker (z.B. Anlagen-Erweiterung);
+  // null = Modul aus Schritt 2.
+  moduleSlug: string | null;
 }
 
 export interface ConfigState {
@@ -56,6 +59,7 @@ export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
   enabled: false,
   modulesInSeries: 2,
   stringsParallel: 1,
+  moduleSlug: null,
 };
 
 export const DEFAULT_CONFIG: ConfigState = {
@@ -84,6 +88,7 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
       p.set(`e${i}`, t.enabled ? "1" : "0");
       p.set(`s${i}`, String(t.modulesInSeries));
       p.set(`p${i}`, String(t.stringsParallel));
+      if (t.moduleSlug) p.set(`m${i}`, t.moduleSlug);
     });
     if (c.moduleSlug) p.set("m", c.moduleSlug);
   } else {
@@ -128,6 +133,8 @@ export function decodeConfig(search: string): ConfigState | null {
       enabled: p.get(`e${i}`) !== "0",
       modulesInSeries: posInt(num(p, `s${i}`, 2)),
       stringsParallel: posInt(num(p, `p${i}`, 1)),
+      // old links carried the global module as m0 — treat it as global, not override
+      moduleSlug: p.has("m") || i > 0 ? p.get(`m${i}`) : null,
     });
   }
 
