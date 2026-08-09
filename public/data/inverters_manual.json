@@ -2687,7 +2687,7 @@
   },
   {
     "manufacturer": "Growatt",
-    "model_name": "MOD 8KTL3-XH2",
+    "model_name": "MOD 8KTL3-XH2 / 8000TL3-XH BP",
     "device_type": "hybrid",
     "ac_power_nominal_w": 8000,
     "source_url": "https://geizhals.de/",
@@ -2739,7 +2739,7 @@
   },
   {
     "manufacturer": "Growatt",
-    "model_name": "MOD 10KTL3-XH2",
+    "model_name": "MOD 10KTL3-XH2 / 10000TL3-XH BP",
     "device_type": "hybrid",
     "ac_power_nominal_w": 10000,
     "source_url": "https://geizhals.de/",
@@ -2815,60 +2815,6 @@
         "i_max": 16,
         "max_strings_parallel": 1,
         "p_max_w": 6000
-      }
-    ]
-  },
-  {
-    "manufacturer": "Growatt",
-    "model_name": "MOD 8000TL3-XH BP",
-    "device_type": "hybrid",
-    "ac_power_nominal_w": 8000,
-    "source_url": "https://geizhals.de/",
-    "trackers": [
-      {
-        "tracker_label": "MPPT 1",
-        "v_mppt_min": 140,
-        "v_mppt_max": 1000,
-        "v_max_absolute": 1100,
-        "i_max": 16,
-        "max_strings_parallel": 1,
-        "p_max_w": 8000
-      },
-      {
-        "tracker_label": "MPPT 2",
-        "v_mppt_min": 140,
-        "v_mppt_max": 1000,
-        "v_max_absolute": 1100,
-        "i_max": 16,
-        "max_strings_parallel": 1,
-        "p_max_w": 8000
-      }
-    ]
-  },
-  {
-    "manufacturer": "Growatt",
-    "model_name": "MOD 10000TL3-XH BP",
-    "device_type": "hybrid",
-    "ac_power_nominal_w": 10000,
-    "source_url": "https://geizhals.de/",
-    "trackers": [
-      {
-        "tracker_label": "MPPT 1",
-        "v_mppt_min": 140,
-        "v_mppt_max": 1000,
-        "v_max_absolute": 1100,
-        "i_max": 16,
-        "max_strings_parallel": 1,
-        "p_max_w": 10000
-      },
-      {
-        "tracker_label": "MPPT 2",
-        "v_mppt_min": 140,
-        "v_mppt_max": 1000,
-        "v_max_absolute": 1100,
-        "i_max": 16,
-        "max_strings_parallel": 1,
-        "p_max_w": 10000
       }
     ]
   },
@@ -3394,34 +3340,7 @@
   },
   {
     "manufacturer": "Hoymiles",
-    "model_name": "HMS-800-2WB",
-    "device_type": "string_inverter",
-    "ac_power_nominal_w": 800,
-    "source_url": "https://www.hoymiles.com/",
-    "trackers": [
-      {
-        "tracker_label": "PV-Eingang 1",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      },
-      {
-        "tracker_label": "PV-Eingang 2",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      }
-    ]
-  },
-  {
-    "manufacturer": "Hoymiles",
-    "model_name": "HMS-800W-2T",
+    "model_name": "HMS-800W-2T / HMS-800-2WB",
     "device_type": "string_inverter",
     "ac_power_nominal_w": 800,
     "source_url": "https://www.hoymiles.com/products/hms-600w-700w-800w-900w-1000w-2t-wi-fi-integrated-eu.html",
@@ -3475,55 +3394,10 @@
   },
   {
     "manufacturer": "Hoymiles",
-    "model_name": "HMS-1600-4T",
+    "model_name": "HMS-1600-4T / HMS-1600-4WB",
     "device_type": "string_inverter",
     "ac_power_nominal_w": 1600,
     "source_url": "https://www.hoymiles.com/products/microinverter/hms-series/",
-    "trackers": [
-      {
-        "tracker_label": "PV-Eingang 1",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      },
-      {
-        "tracker_label": "PV-Eingang 2",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      },
-      {
-        "tracker_label": "PV-Eingang 3",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      },
-      {
-        "tracker_label": "PV-Eingang 4",
-        "v_mppt_min": 16,
-        "v_mppt_max": 60,
-        "v_max_absolute": 65,
-        "i_max": 14,
-        "max_strings_parallel": 1,
-        "p_max_w": 540
-      }
-    ]
-  },
-  {
-    "manufacturer": "Hoymiles",
-    "model_name": "HMS-1600-4WB",
-    "device_type": "string_inverter",
-    "ac_power_nominal_w": 1600,
-    "source_url": "https://www.hoymiles.com/",
     "trackers": [
       {
         "tracker_label": "PV-Eingang 1",
