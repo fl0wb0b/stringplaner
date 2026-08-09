@@ -24,6 +24,16 @@ jobs:
         run: node scripts/scan-modules.mjs
         env:
           SCAN_DEBUG_DIR: scan-debug
+      - name: Extrahierte Texte ins Log (Parser-Tuning)
+        if: always()
+        run: |
+          for f in scan-debug/*Datenblatt*.txt scan-debug/*data*sheet*.txt; do
+            [ -e "$f" ] || continue
+            echo "::group::$f"
+            head -c 6000 "$f"
+            echo ""
+            echo "::endgroup::"
+          done
       - name: Upload extracted texts (debug)
         if: always()
         uses: actions/upload-artifact@v4

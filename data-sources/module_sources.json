@@ -14,5 +14,21 @@
     "follow_pattern": "venturama-solar\\.de/produkt/[a-z0-9-]+",
     "pdf_pattern": "https://[^\"' ]+\\.pdf",
     "max_pages": 40
+  },
+  {
+    "name": "tepto",
+    "type": "page",
+    "url": "https://www.tepto.de/Solarmodule/Einzelmodule/",
+    "follow_pattern": "https://www\\.tepto\\.de/[A-Za-z0-9.]+(?:-[A-Za-z0-9.%]+){2,}",
+    "pdf_pattern": "/media/[^\"' ]+\\.pdf",
+    "max_pages": 40
+  },
+  {
+    "name": "solarscouts",
+    "type": "page",
+    "url": "https://solarscouts.de/Solarmodule_1",
+    "follow_pattern": "https?://(?:www\\.)?solarscouts\\.de/[^\"' <>]*\\?a=\\d+",
+    "pdf_pattern": "[^\"' <>]+\\.pdf",
+    "max_pages": 40
   }
 ]

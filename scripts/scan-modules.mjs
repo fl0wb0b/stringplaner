@@ -177,29 +177,35 @@ async function fetchPdfText(url, tmp) {
   return text;
 }
 
+// Certificates, warranties and manuals share the shops' PDF paths but never
+// contain the STC table — skip them before downloading.
+const PDF_JUNK = /zert(?:i?f)?ikat|garantie|warranty|certificate|anleitung|manual|installation|erkl(?:ae|ä)rung|declaration|montage|versandinfo/i;
+
 async function collectPdfUrls(source) {
   const urls = new Set();
   if (source.type === "pdf") {
     urls.add(source.url);
-    return [...urls];
+    return { urls: [...urls], pages: 0 };
   }
   const html = await fetchText(source.url);
-  const pdfRe = new RegExp(source.pdf_pattern, "g");
+  const pdfRe = new RegExp(source.pdf_pattern, "gi");
   for (const m of html.matchAll(pdfRe)) urls.add(new URL(m[0], source.url).href);
+  let pageCount = 0;
   if (source.follow_pattern) {
-    const followRe = new RegExp(source.follow_pattern, "g");
+    const followRe = new RegExp(source.follow_pattern, "gi");
     const pages = [...new Set([...html.matchAll(followRe)].map((m) => new URL(m[0], source.url).href))];
+    pageCount = pages.length;
     for (const page of pages.slice(0, source.max_pages ?? 30)) {
       try {
         const sub = await fetchText(page);
-        for (const m of sub.matchAll(new RegExp(source.pdf_pattern, "g")))
+        for (const m of sub.matchAll(new RegExp(source.pdf_pattern, "gi")))
           urls.add(new URL(m[0], page).href);
       } catch {
         // single product page failing must not kill the scan
       }
     }
   }
-  return [...urls];
+  return { urls: [...urls].filter((u) => !PDF_JUNK.test(u)), pages: pageCount };
 }
 
 // -------------------------------------------------------------------- main ---
@@ -243,12 +249,13 @@ const tmp = mkdtempSync(join(tmpdir(), "modscan-"));
 for (const source of sources) {
   let pdfUrls = [];
   try {
-    pdfUrls = await collectPdfUrls(source);
+    const collected = await collectPdfUrls(source);
+    pdfUrls = collected.urls;
+    report.sources[source.name] = `${collected.pages} Produktseiten, ${pdfUrls.length} Datenblatt-PDFs`;
   } catch (e) {
     report.sources[source.name] = `Quelle nicht erreichbar: ${e.message}`;
     continue;
   }
-  report.sources[source.name] = `${pdfUrls.length} PDFs gefunden`;
   for (const url of pdfUrls) {
     report.scanned++;
     let text;
