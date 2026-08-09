@@ -182,8 +182,8 @@ function App() {
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 px-4 pt-3 pb-4 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-3xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3">
             <img
               src={`${import.meta.env.BASE_URL}icon.svg`}
               alt=""
@@ -199,7 +199,7 @@ function App() {
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={resetAll}
