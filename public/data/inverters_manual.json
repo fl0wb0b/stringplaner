@@ -186,7 +186,7 @@
         "v_mppt_min": 140,
         "v_mppt_max": 980,
         "v_max_absolute": 1100,
-        "i_max": 13.5,
+        "i_max": 11,
         "max_strings_parallel": 1
       },
       {
@@ -194,7 +194,7 @@
         "v_mppt_min": 140,
         "v_mppt_max": 980,
         "v_max_absolute": 1100,
-        "i_max": 13.5,
+        "i_max": 11,
         "max_strings_parallel": 1
       }
     ]
@@ -947,6 +947,511 @@
         "v_max_absolute": 1000,
         "i_max": 28,
         "max_strings_parallel": 2
+      }
+    ]
+  },
+  {
+    "manufacturer": "Kostal",
+    "model_name": "Plenticore G3 M",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.kostal-solar-electric.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 170,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 17,
+        "max_strings_parallel": 1,
+        "p_max_w": 4250
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 170,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 17,
+        "max_strings_parallel": 1,
+        "p_max_w": 4250
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 170,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 17,
+        "max_strings_parallel": 1,
+        "p_max_w": 4250
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo GEN24 6.0 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 25,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo GEN24 10.0 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 25,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Verto 15.0",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 15000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Verto 15.0 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 15000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Verto 20.0 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 20000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      }
+    ]
+  },
+  {
+    "manufacturer": "Growatt",
+    "model_name": "SPH 8000TL3 BH-UP",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.growatt.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1000,
+        "i_max": 13.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1000,
+        "i_max": 13.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HMS-1600-4WB",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 1600,
+    "source_url": "https://www.hoymiles.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Huawei",
+    "model_name": "SUN2000-6KTL-M1 High Current",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://solar.huawei.com/en/products/sun2000-3-4-5-6-8-10ktl-m1/specs/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Huawei",
+    "model_name": "SUN2000-8KTL-M1 High Current",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://solar.huawei.com/en/products/sun2000-3-4-5-6-8-10ktl-m1/specs/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "SMA",
+    "model_name": "Sunny Tripower 5.0 Smart Energy (STP5.0-3SE-40)",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.sma.de/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 210,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 3750
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 210,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 3750
+      }
+    ]
+  },
+  {
+    "manufacturer": "SMA",
+    "model_name": "Sunny Tripower 8.0 Smart Energy (STP8.0-3SE-40)",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.sma.de/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 330,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 330,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      }
+    ]
+  },
+  {
+    "manufacturer": "TSUN",
+    "model_name": "TSOL-MS800",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.tsun-ess.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 550
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 550
+      }
+    ]
+  },
+  {
+    "manufacturer": "TSUN",
+    "model_name": "TSOL-MS2000",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 2000,
+    "source_url": "https://www.tsun-ess.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 700
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 700
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 700
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 700
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fox ESS",
+    "model_name": "M1-800-E",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.fox-ess.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 31,
+        "v_mppt_max": 45,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 31,
+        "v_mppt_max": 45,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      }
+    ]
+  },
+  {
+    "manufacturer": "Envertech",
+    "model_name": "EVT 2000SE",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 2000,
+    "source_url": "https://www.envertec.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 22,
+        "v_mppt_max": 50,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 650
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 22,
+        "v_mppt_max": 50,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 650
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 22,
+        "v_mppt_max": 50,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 650
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 22,
+        "v_mppt_max": 50,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 650
       }
     ]
   }
