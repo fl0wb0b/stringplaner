@@ -30,7 +30,10 @@ export interface OvervoltageAdvice {
 // Preisvergleichsportale (Idealo/Geizhals), nicht auf den Hersteller-Shop.
 export function overvoltageAdviceFor(stringsParallel: number): OvervoltageAdvice {
   if (stringsParallel <= 1) {
-    return { text: "1 String – kein Kombinierer nötig, einfacher Überspannungsschutz reicht." };
+    return {
+      text: "Weidmüller PVI DC 1I 1O 1MPP SPD1 MC4 10 (3108220000) – Einzelstring-Überspannungsschutz, kein Kombinierer nötig",
+      productQuery: "Weidmüller PVI DC 1I 1O 1MPP SPD1 MC4 10 3108220000",
+    };
   }
   if (stringsParallel === 2) {
     return {
