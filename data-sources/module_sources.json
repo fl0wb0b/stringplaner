@@ -26,8 +26,8 @@
   {
     "name": "solarscouts",
     "type": "page",
-    "url": "https://solarscouts.de/Solarmodule_1",
-    "follow_pattern": "https?://(?:www\\.)?solarscouts\\.de/[^\"' <>]*\\?a=\\d+",
+    "url": "https://solarscouts.de/sitemap.xml",
+    "follow_pattern": "https://solarscouts\\.de/[A-Za-z0-9][A-Za-z0-9_.-]{8,}",
     "pdf_pattern": "[^\"' <>]+\\.pdf",
     "max_pages": 40
   }

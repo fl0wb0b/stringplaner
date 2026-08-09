@@ -56,26 +56,42 @@ function findRow(lines, pattern, { min, max, count }) {
 function findCoefficient(lines, keyPattern) {
   for (const line of lines) {
     if (!keyPattern.test(line) || !/%\s*\/?\s*(°?c|k)/i.test(line)) continue;
-    const m = line.match(/([+-]?\d+(?:[.,]\d+)?)\s*%/);
-    if (m) return num(m[1]);
+    // sign may be separated by a space ("- 0.22%/ °C") or a Unicode minus
+    const m = line.match(/([+\-−]?)\s*(\d+(?:[.,]\d+)?)\s*%/);
+    if (m) return num((m[1] === "−" ? "-" : m[1]) + m[2]);
   }
   return null;
 }
 
-// Model base like "JAM54D40", "TSM-NEG9R.28", "JW-HD108N-R2", "A___-MCE54Db"
-const MODEL_TOKEN = /\b([A-Z]{1,4}[A-Z0-9]*[-_][A-Z0-9][A-Z0-9._\/-]{2,})\b/g;
+// Model base like "JAM54D40", "TSM-NEG9R.28", "JW-HD108N-R2", "AIKO-A-MAH54Db"
+// (mixed case allowed after the uppercase start; must contain a digit)
+const MODEL_TOKEN = /\b([A-Z]{1,4}[A-Za-z0-9]*[-_][A-Za-z0-9][A-Za-z0-9.\/-]{2,})\b/g;
+const TOKEN_JUNK =
+  /datenblatt|zertifikat|garantie|anleitung|modul|sheet|solar|neostar|vertex|black|glas|frame|full|plus|bifazial|am1|noct|stc|mc4|vde|iec|iso|din/i;
+
+function modelTokens(s) {
+  return [...s.matchAll(MODEL_TOKEN)]
+    .map((m) => m[1].replace(/[.,;:_-]+$/, ""))
+    .filter((t) => /\d/.test(t) && t.length >= 6 && t.length <= 24 && !TOKEN_JUNK.test(t));
+}
+
+// "JAM54D40-445/LR" → "JAM54D40": drop a trailing power-class variant suffix
+const stripPowerSuffix = (t) => t.replace(/[-_]\d{3}(\/[A-Za-z]{1,4})?$/, "");
 
 function guessModelBase(text, pdfUrl) {
   const counts = new Map();
-  for (const m of text.matchAll(MODEL_TOKEN)) {
-    const tok = m[1].replace(/[.,;:]$/, "");
-    if (/^\d+$/.test(tok) || tok.length > 24) continue;
-    counts.set(tok, (counts.get(tok) ?? 0) + 1);
+  for (const tok of modelTokens(text)) {
+    const base = stripPowerSuffix(tok);
+    counts.set(base, (counts.get(base) ?? 0) + 1);
   }
   const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
   if (best && best[1] >= 2) return best[0];
-  const file = decodeURIComponent(pdfUrl.split("/").pop() ?? "datenblatt");
-  return file.replace(/\.pdf$/i, "").replace(/[^A-Za-z0-9._-]+/g, "-").slice(0, 40);
+  // shop filenames usually carry the model code — underscores split the tokens
+  const file = decodeURIComponent(pdfUrl.split("/").pop() ?? "").replace(/_+/g, " ");
+  const fromFile = modelTokens(file).sort((a, b) => b.length - a.length)[0];
+  if (fromFile) return stripPowerSuffix(fromFile);
+  if (best) return best[0];
+  return file.replace(/\.pdf$/i, "").trim().replace(/[^A-Za-z0-9._-]+/g, "-").slice(0, 40) || "datenblatt";
 }
 
 const KNOWN_MANUFACTURERS = [
