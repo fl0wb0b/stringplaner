@@ -33,6 +33,12 @@ jobs:
             grep -inE 'leistung|spannung|strom|voltage|current|power|voc|isc|imp|vmp|pmax|koeffizient|coefficient|temperatur|stc|noct' "$f" | head -80
             echo "::endgroup::"
           done
+          for f in scan-debug/*__index.html scan-debug/*__page1.html; do
+            [ -e "$f" ] || continue
+            echo "::group::links in $f"
+            grep -oiE '(href|src|data-[a-z-]+)="[^"]*(\.pdf|\?a=|produkt|datenblatt|download)[^"]*"' "$f" | sort -u | head -40
+            echo "::endgroup::"
+          done
       - name: Upload extracted texts (debug)
         if: always()
         uses: actions/upload-artifact@v4

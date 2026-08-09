@@ -33,7 +33,7 @@ const num = (s) => Number.parseFloat(String(s).replace(",", "."));
 // ---------------------------------------------------------------- parsing ---
 
 const ROW_PATTERNS = {
-  power: /rated max(imum)? power|max(imum)? power\s*\(?pmax|nennleistung|leistung\s*\(?pmax/i,
+  power: /rated max(imum)? power|max(imum)? power\s*\(?pmax|nennleistung|leistung\s*\(?pmax|\bpmax\s*[\[(]/i,
   voc: /open circuit voltage|leerlaufspannung|\(voc\)|\bvoc\b/i,
   vmp: /max(imum)? power voltage|voltage at max|mpp[- ]?spannung|\(vmp p?\)|\bvmpp?\b/i,
   isc: /short circuit current|kurzschlussstrom|\(isc\)|\bisc\b/i,
@@ -99,13 +99,18 @@ function guessManufacturer(text) {
  */
 export function parseDatasheet(text, pdfUrl) {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
-  const powers = findRow(lines, ROW_PATTERNS.power, { min: 150, max: 800, count: 8 });
+  // Aiko-style sheets interleave STC and NOCT columns (440 331 445 335 …);
+  // in that case only every other value belongs to STC.
+  const interleaved = lines.some((l) => /STC\s+NOCT\s+STC\s+NOCT/i.test(l));
+  const stride = interleaved ? 2 : 1;
+  const pick = (arr) => (arr && stride === 2 ? arr.filter((_, i) => i % 2 === 0) : arr);
+  const powers = pick(findRow(lines, ROW_PATTERNS.power, { min: 150, max: 800, count: 8 * stride }));
   if (!powers) return { entries: [], reason: "keine Leistungsklassen gefunden" };
   const n = powers.length;
-  const voc = findRow(lines, ROW_PATTERNS.voc, { min: 10, max: 100, count: n });
-  const vmp = findRow(lines, ROW_PATTERNS.vmp, { min: 10, max: 100, count: n });
-  const isc = findRow(lines, ROW_PATTERNS.isc, { min: 5, max: 25, count: n });
-  const imp = findRow(lines, ROW_PATTERNS.imp, { min: 5, max: 25, count: n });
+  const voc = pick(findRow(lines, ROW_PATTERNS.voc, { min: 10, max: 100, count: n * stride }));
+  const vmp = pick(findRow(lines, ROW_PATTERNS.vmp, { min: 10, max: 100, count: n * stride }));
+  const isc = pick(findRow(lines, ROW_PATTERNS.isc, { min: 5, max: 25, count: n * stride }));
+  const imp = pick(findRow(lines, ROW_PATTERNS.imp, { min: 5, max: 25, count: n * stride }));
   if (!voc || !vmp || !isc || !imp)
     return { entries: [], reason: "elektrische Tabelle unvollständig" };
 
@@ -188,6 +193,11 @@ async function collectPdfUrls(source) {
     return { urls: [...urls], pages: 0 };
   }
   const html = await fetchText(source.url);
+  const debugDir = process.env.SCAN_DEBUG_DIR;
+  if (debugDir) {
+    mkdirSync(debugDir, { recursive: true });
+    writeFileSync(join(debugDir, `${source.name}__index.html`), html);
+  }
   const pdfRe = new RegExp(source.pdf_pattern, "gi");
   for (const m of html.matchAll(pdfRe)) urls.add(new URL(m[0], source.url).href);
   let pageCount = 0;
@@ -195,9 +205,14 @@ async function collectPdfUrls(source) {
     const followRe = new RegExp(source.follow_pattern, "gi");
     const pages = [...new Set([...html.matchAll(followRe)].map((m) => new URL(m[0], source.url).href))];
     pageCount = pages.length;
+    let first = true;
     for (const page of pages.slice(0, source.max_pages ?? 30)) {
       try {
         const sub = await fetchText(page);
+        if (debugDir && first) {
+          writeFileSync(join(debugDir, `${source.name}__page1.html`), sub);
+          first = false;
+        }
         for (const m of sub.matchAll(new RegExp(source.pdf_pattern, "gi")))
           urls.add(new URL(m[0], page).href);
       } catch {
@@ -224,14 +239,38 @@ Temperature Coefficient of Voc (β_Voc) -0.250%/°C
 Temperature Coefficient of Pmax(γ_Pmp) -0.290%/°C
 `;
 
+// Aiko-style German sheet: short labels (Pmax [W]) and interleaved STC/NOCT columns.
+const FIXTURE_AIKO = `
+Neostar 2S+                              AIKO-A-MAH54Db
+Elektrische Eigenschaften (STC: AM1.5 1000 W/m² 25 ℃ NOCT: AM1.5 800 W/m² 20 ℃ 1 m/s)
+Testbedingungen        STC      NOCT      STC       NOCT        STC          NOCT
+Pmax [W]               440       331      445        335        450           339
+Voc [V]              40,82     38,55    40,88      38,60      40,94         38,66
+Vmp [V]              34,38     32,47    34,44      32,52      34,50         32,58
+Isc [A]              13,92     11,26    14,02      11,34      14,12         11,42
+Imp [A]              12,80     10,22    12,93      10,32      13,05         10,41
+Isc-Temperaturkoeffizient    +0,05 %/°C
+Voc-Temperaturkoeffizient    -0,22 %/°C
+Pmax-Temperaturkoeffizient   -0,26 %/°C
+Aiko AIKO-A-MAH54Db
+`;
+
 if (process.argv.includes("--parse-test")) {
-  const { entries, reason } = parseDatasheet(FIXTURE, "https://example.com/JAM54D40.pdf");
-  console.log(reason ?? `${entries.length} Einträge extrahiert`);
-  for (const e of entries) {
-    const err = validateEntry(e);
-    console.log(` - ${e.manufacturer} ${e.model_name}: ${e.power_stc} Wp, Voc ${e.voc}, tcIsc ${e.temp_coeff_isc} ${err ? "✗ " + err : "✓"}`);
+  const cases = [
+    { name: "JA Solar (EN, mehrspaltig)", text: FIXTURE, url: "https://example.com/JAM54D40.pdf", expect: 3 },
+    { name: "Aiko (DE, STC/NOCT-interleaved)", text: FIXTURE_AIKO, url: "https://example.com/AIKO-A-MAH54Db.pdf", expect: 3 },
+  ];
+  let ok = true;
+  for (const c of cases) {
+    const { entries, reason } = parseDatasheet(c.text, c.url);
+    console.log(`${c.name}: ${reason ?? entries.length + " Einträge extrahiert"}`);
+    for (const e of entries) {
+      const err = validateEntry(e);
+      console.log(` - ${e.manufacturer} ${e.model_name}: ${e.power_stc} Wp, Voc ${e.voc}, tcIsc ${e.temp_coeff_isc} ${err ? "✗ " + err : "✓"}`);
+    }
+    ok &&= entries.length === c.expect && entries.every((e) => !validateEntry(e));
   }
-  process.exit(entries.length === 3 && entries.every((e) => !validateEntry(e)) ? 0 : 1);
+  process.exit(ok ? 0 : 1);
 }
 
 const sources = JSON.parse(readFileSync(SOURCES_PATH, "utf8"));
