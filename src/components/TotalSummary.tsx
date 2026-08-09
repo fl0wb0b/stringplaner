@@ -11,12 +11,7 @@ import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 import { TRACKER_DOT } from "../lib/trackerColors";
-import {
-  geizhalsSearchUrl,
-  idealoSearchUrl,
-  noCombinerNote,
-  weidmuellerBoxFor,
-} from "../lib/accessories";
+import { geizhalsSearchUrl, idealoSearchUrl, overvoltageAdviceFor } from "../lib/accessories";
 
 interface Props {
   device: Inverter;
@@ -68,14 +63,12 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
           : "Konfiguration zulässig";
 
   const deviceQuery = `${device.manufacturer} ${device.model_name}`;
-  const combinerRecommendations = results
-    .map((r) => ({ label: r.label, box: weidmuellerBoxFor(r.stringsParallel) }))
-    .filter((r): r is { label: string; box: NonNullable<ReturnType<typeof weidmuellerBoxFor>> } =>
-      r.box !== null,
-    );
-  const noCombinerNotes = results
-    .map((r) => ({ label: r.label, note: noCombinerNote(r.stringsParallel) }))
-    .filter((r): r is { label: string; note: string } => r.note !== null);
+  // Immer eine Zeile pro aktivem Tracker – auch bei 1 String – damit die
+  // Einkaufshilfe nie kommentarlos leer wirkt.
+  const overvoltageAdvice = results.map((r) => ({
+    label: r.label,
+    advice: overvoltageAdviceFor(r.stringsParallel),
+  }));
 
   const plzYield = yieldForPlz(plz);
   const specificYield = plzYield?.value ?? DEFAULT_YIELD;
@@ -211,24 +204,22 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
               bei Geizhals vergleichen ↗
             </a>
           </div>
-          {combinerRecommendations.map(({ label, box }) => (
+          {overvoltageAdvice.map(({ label, advice }) => (
             <div key={label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="text-slate-400">{label} – Überspannungsschutz/Kombinierer:</span>
-              <a
-                href={box.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-sky-400 hover:underline"
-              >
-                {box.name} ↗
-              </a>
-              <span className="text-xs text-slate-600">({box.note})</span>
+              <span className="text-slate-400">{label} – Überspannungsschutz:</span>
+              {advice.url ? (
+                <a
+                  href={advice.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sky-400 hover:underline"
+                >
+                  {advice.text} ↗
+                </a>
+              ) : (
+                <span className="text-xs text-slate-500">{advice.text}</span>
+              )}
             </div>
-          ))}
-          {noCombinerNotes.map(({ label, note }) => (
-            <p key={label} className="text-xs text-slate-500">
-              {label}: {note}
-            </p>
           ))}
         </div>
         <p className="mt-2 text-xs text-slate-500">
