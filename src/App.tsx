@@ -9,6 +9,7 @@ import {
   type ConfigState,
   type TrackerConfig,
 } from "./lib/urlState";
+import { DeviceFinder } from "./components/DeviceFinder";
 import { DeviceSelect } from "./components/DeviceSelect";
 import { ModuleSearch } from "./components/ModuleSearch";
 import { NumberField } from "./components/NumberField";
@@ -224,19 +225,121 @@ function App() {
         ) : (
           <>
             <section className="card">
-              <h2 className="card-title">
-                Gerät
-              </h2>
-              <DeviceSelect
-                inverters={inverters}
-                selectedSlug={config.deviceSlug}
-                trackerIndex={config.trackerIndex}
-                onSelectDevice={selectDevice}
-                onSelectTracker={(i) => update({ trackerIndex: i })}
-              />
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="card-title" style={{ marginBottom: 0 }}>
+                  Gerät
+                </h2>
+                <div className="flex overflow-hidden rounded-lg border border-slate-700 text-sm">
+                  <button
+                    type="button"
+                    onClick={() => update({ mode: "check" })}
+                    className={`px-3 py-1.5 transition-colors ${
+                      config.mode !== "finder"
+                        ? "bg-sky-500 font-semibold text-slate-950"
+                        : "text-slate-300 hover:bg-slate-800"
+                    }`}
+                  >
+                    Prüfen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => update({ mode: "finder" })}
+                    className={`px-3 py-1.5 transition-colors ${
+                      config.mode === "finder"
+                        ? "bg-sky-500 font-semibold text-slate-950"
+                        : "text-slate-300 hover:bg-slate-800"
+                    }`}
+                  >
+                    Finden
+                  </button>
+                </div>
+              </div>
+              {config.mode === "finder" ? (
+                <p className="text-sm text-slate-400">
+                  Verschaltung unten festlegen – alle Geräte werden automatisch bewertet.
+                </p>
+              ) : (
+                <DeviceSelect
+                  inverters={inverters}
+                  selectedSlug={config.deviceSlug}
+                  trackerIndex={config.trackerIndex}
+                  onSelectDevice={selectDevice}
+                  onSelectTracker={(i) => update({ trackerIndex: i })}
+                />
+              )}
             </section>
 
-            {isIndependent && selectedDevice ? (
+            {config.mode === "finder" ? (
+              <section className="space-y-4">
+                <div className="card">
+                  <h2 className="card-title">String-Konfiguration</h2>
+                  <div className="space-y-4">
+                    <ModuleSearch
+                      modules={modules}
+                      selected={selectedModule}
+                      onSelect={(m) => update({ moduleSlug: moduleSlug(m) })}
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <NumberField
+                        label="Module in Serie"
+                        value={config.modulesInSeries}
+                        min={1}
+                        stepper
+                        onChange={(v) =>
+                          update({ modulesInSeries: Math.max(1, Math.trunc(v)) })
+                        }
+                      />
+                      <NumberField
+                        label="Strings parallel"
+                        value={config.stringsParallel}
+                        min={1}
+                        stepper
+                        onChange={(v) =>
+                          update({ stringsParallel: Math.max(1, Math.trunc(v)) })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+                {conditionsCard}
+                {selectedModule ? (
+                  <section className="card">
+                    <h2 className="card-title">Geeignete Geräte</h2>
+                    <DeviceFinder
+                      inverters={inverters}
+                      module={selectedModule}
+                      modulesInSeries={config.modulesInSeries}
+                      stringsParallel={config.stringsParallel}
+                      tempMin={config.tempMin}
+                      tempMax={config.tempMax}
+                      cableLength={config.cableLength}
+                      crossSection={config.crossSection}
+                      onPick={(slug, trackerIndex) => {
+                        const device = inverters.find((i) => inverterSlug(i) === slug);
+                        const independent = device?.tracker_mode !== "variants";
+                        setConfig((c) => ({
+                          ...c,
+                          mode: "check",
+                          deviceSlug: slug,
+                          trackerIndex,
+                          trackers: independent
+                            ? (device?.trackers.map((_, i) => ({
+                                enabled: i === trackerIndex,
+                                moduleSlug: c.moduleSlug,
+                                modulesInSeries: c.modulesInSeries,
+                                stringsParallel: c.stringsParallel,
+                              })) ?? [])
+                            : [],
+                        }));
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                    />
+                  </section>
+                ) : (
+                  <p className="text-sm text-slate-500">Modul wählen, um Geräte zu bewerten.</p>
+                )}
+              </section>
+            ) : isIndependent && selectedDevice ? (
               <section className="space-y-4">
                 {selectedDevice.trackers.map((tracker, i) => (
                   <TrackerSection

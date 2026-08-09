@@ -15,6 +15,7 @@ export interface TrackerConfig {
 }
 
 export interface ConfigState {
+  mode: "check" | "finder";
   deviceSlug: string | null;
   // variants mode (and module preselection before a device is chosen)
   moduleSlug: string | null;
@@ -37,6 +38,7 @@ export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
 };
 
 export const DEFAULT_CONFIG: ConfigState = {
+  mode: "check",
   deviceSlug: null,
   moduleSlug: null,
   trackerIndex: 0,
@@ -54,8 +56,9 @@ const MAX_TRACKERS = 8;
 
 export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): string {
   const p = new URLSearchParams();
+  if (c.mode === "finder") p.set("mode", "finder");
   if (c.deviceSlug) p.set("d", c.deviceSlug);
-  if (mode === "independent" && c.trackers.length) {
+  if (mode === "independent" && c.mode !== "finder" && c.trackers.length) {
     c.trackers.forEach((t, i) => {
       p.set(`e${i}`, t.enabled ? "1" : "0");
       if (t.moduleSlug) p.set(`m${i}`, t.moduleSlug);
@@ -99,6 +102,7 @@ export function decodeConfig(search: string): ConfigState | null {
   }
 
   return {
+    mode: p.get("mode") === "finder" ? "finder" : "check",
     deviceSlug: p.get("d"),
     moduleSlug: p.get("m"),
     trackerIndex: Math.max(0, Math.trunc(num(p, "t", d.trackerIndex))),
