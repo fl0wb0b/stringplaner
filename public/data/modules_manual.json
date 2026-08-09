@@ -1,6 +1,20 @@
 [
   {
     "manufacturer": "Aiko",
+    "model_name": "A460-MAH54Db (Neostar 2S+)",
+    "power_stc": 460,
+    "voc": 41.06,
+    "vmp": 34.62,
+    "isc": 14.25,
+    "imp": 13.29,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00713,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko_Neostar_2S_Plus_AIKO-A-MAH54Db_440-470W_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
     "model_name": "A465-MAH54Db (Neostar 2S+)",
     "power_stc": 465,
     "voc": 41.12,
@@ -9,9 +23,23 @@
     "imp": 13.41,
     "temp_coeff_voc": -0.22,
     "temp_coeff_pmax": -0.26,
-    "temp_coeff_isc": 0.00715,
+    "temp_coeff_isc": 0.00714,
     "source": "manual",
-    "source_url": "https://aikosolar.com/en/products/neostar-2splus54-dual-glass/"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko_Neostar_2S_Plus_AIKO-A-MAH54Db_440-470W_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A470-MAH54Dw (Neostar 2P+)",
+    "power_stc": 470,
+    "voc": 41.18,
+    "vmp": 34.74,
+    "isc": 14.32,
+    "imp": 13.54,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00716,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko_Neostar_2P_Plus_AIKO-A-MAH54Dw_455-475W_PV-Modul.pdf"
   },
   {
     "manufacturer": "Aiko",
@@ -26,6 +54,104 @@
     "temp_coeff_isc": 0.00738,
     "source": "manual",
     "source_url": "https://litsenergy.com/wp-content/uploads/2026/01/Neostar-3Splus54_AIKO-A-MCE54Db_460-475W-1762%C3%971134%C3%9730_V4.1_202510_DsDr_EN.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A475-MCE54Dw (Neostar 3P+)",
+    "power_stc": 475,
+    "voc": 40.8,
+    "vmp": 34.4,
+    "isc": 14.76,
+    "imp": 13.81,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00738,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko_Neostar_3P_54_465_495W_AIKO-A-MCE54Dw_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A480-MCE54Db (Neostar 3S+)",
+    "power_stc": 480,
+    "voc": 40.9,
+    "vmp": 34.5,
+    "isc": 14.8,
+    "imp": 13.92,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.0074,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_AIKO_Neostar_3S_MCE54Db_480-490W_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A485-MCE54Db (Neostar 3S+)",
+    "power_stc": 485,
+    "voc": 41,
+    "vmp": 34.6,
+    "isc": 14.84,
+    "imp": 14.02,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00742,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko-A-MCE54Db_480-490_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A485-MCE54Dw (Neostar 3P+)",
+    "power_stc": 485,
+    "voc": 41,
+    "vmp": 34.6,
+    "isc": 14.84,
+    "imp": 14.02,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00742,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_AIKO_Neostar-3P_Plus54_AIKO-A-MCE54Dw_465-495W_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A500-MAH60Db (Neostar 2S+ 60)",
+    "power_stc": 500,
+    "voc": 45.02,
+    "vmp": 37.9,
+    "isc": 14.05,
+    "imp": 13.21,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00703,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Aiko_Neostar_2S_Plus_60_AIKO-A-MAH60Db_500-520W_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A530-MCE60Db (Neostar 3S+ 60)",
+    "power_stc": 530,
+    "voc": 45.4,
+    "vmp": 38.2,
+    "isc": 14.76,
+    "imp": 13.88,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00738,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_AIKO-A-A-MCE60Db_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Aiko",
+    "model_name": "A540-MCE60Db (Neostar 3S+ 60)",
+    "power_stc": 540,
+    "voc": 45.6,
+    "vmp": 38.4,
+    "isc": 14.84,
+    "imp": 14.07,
+    "temp_coeff_voc": -0.22,
+    "temp_coeff_pmax": -0.26,
+    "temp_coeff_isc": 0.00742,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_AIKO-A-A-MCE60Db_PV-Modul.pdf"
   },
   {
     "manufacturer": "JA Solar",
@@ -88,6 +214,20 @@
   },
   {
     "manufacturer": "JA Solar",
+    "model_name": "JAM54D40-460/GB",
+    "power_stc": 460,
+    "voc": 39.7,
+    "vmp": 33.17,
+    "isc": 14.64,
+    "imp": 13.87,
+    "temp_coeff_voc": -0.25,
+    "temp_coeff_pmax": -0.29,
+    "temp_coeff_isc": 0.00659,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_460W_Bifazial_Glas-Glas_Black_Frame_JAM54D40_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "JA Solar",
     "model_name": "JAM54D40-460/LR",
     "power_stc": 460,
     "voc": 39.7,
@@ -112,9 +252,8 @@
     "temp_coeff_voc": -0.25,
     "temp_coeff_pmax": -0.29,
     "temp_coeff_isc": 0.00659,
-    "note": "Werte aus offiziellem JA-Solar-Datenblatt Global-EN-20250620C (Deep Blue 4.0 Pro, n-type Double Glass Monofacial)",
     "source": "manual",
-    "source_url": "https://www.jasolar.com/html/en/en_pv/"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_JAM54D40_445-470_LR_PV-Modul.pdf"
   },
   {
     "manufacturer": "JA Solar",
@@ -127,9 +266,8 @@
     "temp_coeff_voc": -0.25,
     "temp_coeff_pmax": -0.29,
     "temp_coeff_isc": 0.0066,
-    "note": "Werte aus offiziellem JA-Solar-Datenblatt Global-EN-20250620C (Deep Blue 4.0 Pro, n-type Double Glass Monofacial)",
     "source": "manual",
-    "source_url": "https://www.jasolar.com/html/en/en_pv/"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_JAM54D40_445-470_LR_PV-Modul.pdf"
   },
   {
     "manufacturer": "JA Solar",
@@ -171,7 +309,35 @@
     "temp_coeff_pmax": -0.3,
     "temp_coeff_isc": 0.0067,
     "source": "manual",
-    "source_url": "https://www.jasolar.com/uploadfile/2023/0606/20230606020521211.pdf"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_JAM54D41_LB_FB_JAM54D41_430-455_LB_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "JA Solar",
+    "model_name": "JAM54D41-460/LR",
+    "power_stc": 460,
+    "voc": 40.6,
+    "vmp": 33.68,
+    "isc": 14.43,
+    "imp": 13.66,
+    "temp_coeff_voc": -0.26,
+    "temp_coeff_pmax": -0.29,
+    "temp_coeff_isc": 0.00649,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_JAM54D41_440-465_LR_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "JA Solar",
+    "model_name": "JAM54D41-465/LR",
+    "power_stc": 465,
+    "voc": 40.7,
+    "vmp": 34.02,
+    "isc": 14.44,
+    "imp": 13.67,
+    "temp_coeff_voc": -0.25,
+    "temp_coeff_pmax": -0.29,
+    "temp_coeff_isc": 0.0065,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Ja_Solar_JAM54D41_440-465_LR_PV-Modul.pdf"
   },
   {
     "manufacturer": "JA Solar",
@@ -198,9 +364,8 @@
     "temp_coeff_voc": -0.25,
     "temp_coeff_pmax": -0.28,
     "temp_coeff_isc": 0.0071,
-    "note": "Voc-/Isc-Koeffizienten aus Serienwerten (HD96N-R2 / ältere Niwa-Datenblätter)",
     "source": "manual",
-    "source_url": "https://www.pvxchange.com/mediafiles/pvxchange/attachments/Niwa_Black-HD108N-R2_Transparent_Black_Module-EN_2mm_25years-V202412.pdf"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Jolywood_485-515W-Niwa_Black-HD108N-R2_Transparent_Black_PV-Modul.pdf"
   },
   {
     "manufacturer": "Jolywood",
@@ -219,6 +384,20 @@
   },
   {
     "manufacturer": "Jolywood",
+    "model_name": "Niwa Black JW-HD96N-R2-455",
+    "power_stc": 455,
+    "voc": 35.11,
+    "vmp": 30.16,
+    "isc": 15.93,
+    "imp": 15.09,
+    "temp_coeff_voc": -0.25,
+    "temp_coeff_pmax": -0.28,
+    "temp_coeff_isc": 0.00717,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Jolywood_435-460w-Niwa_Black-HD96N-R2_Transparent_Black_PV-Module.pdf"
+  },
+  {
+    "manufacturer": "Jolywood",
     "model_name": "Niwa Black JW-HD96N-R2-460",
     "power_stc": 460,
     "voc": 35.31,
@@ -229,7 +408,7 @@
     "temp_coeff_pmax": -0.28,
     "temp_coeff_isc": 0.0072,
     "source": "manual",
-    "source_url": "https://www.jolywood.com/upload/f314848170fd48e8/Niwa%20Black-HD96N-R2%20Transparent%20Black%20Module-EN(2.0mm)%2025years-V202507.pdf"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Jolywood_455-470w-Niwa_Black-HD96N-R2_Transparent_Black_PV-Module.pdf"
   },
   {
     "manufacturer": "SoliTek",
@@ -349,6 +528,20 @@
   },
   {
     "manufacturer": "Trina Solar",
+    "model_name": "TSM-465NEG9R.28",
+    "power_stc": 465,
+    "voc": 54.2,
+    "vmp": 45.8,
+    "isc": 10.85,
+    "imp": 10.16,
+    "temp_coeff_voc": -0.24,
+    "temp_coeff_pmax": -0.29,
+    "temp_coeff_isc": 0.00434,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Vertex-S_NEG9R.28_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Trina Solar",
     "model_name": "TSM-470NEG9R.28",
     "power_stc": 470,
     "voc": 54.6,
@@ -359,6 +552,20 @@
     "temp_coeff_pmax": -0.29,
     "temp_coeff_isc": 0.00436,
     "source": "manual",
-    "source_url": "https://www-cdn.trinasolar.com/wwwstorage/sites/8/260217_Datasheet_Vertex-S_NEG9R.28_DE_2025_D_web.pdf"
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Vertex-S_NEG9R.28_PV-Modul.pdf"
+  },
+  {
+    "manufacturer": "Trina Solar",
+    "model_name": "TSM-475NEG9R.28",
+    "power_stc": 475,
+    "voc": 55,
+    "vmp": 46.4,
+    "isc": 10.93,
+    "imp": 10.24,
+    "temp_coeff_voc": -0.24,
+    "temp_coeff_pmax": -0.29,
+    "temp_coeff_isc": 0.00437,
+    "source": "manual",
+    "source_url": "https://solarhandel24.de/cdn/shop/files/Datenblatt_Vertex-S_NEG9R.28_PV-Modul.pdf"
   }
 ]
