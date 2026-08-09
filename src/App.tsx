@@ -122,6 +122,51 @@ function App() {
     .filter((r) => r.result)
     .map((r) => ({ label: r.label, result: r.result! }));
 
+  // Rarely changed inputs live in a collapsed card; the summary line shows the active values.
+  const conditionsCard = (
+    <details className="card">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+        <span className="card-title" style={{ marginBottom: 0 }}>
+          Standort &amp; Verkabelung
+        </span>
+        <span className="text-sm tabular-nums text-slate-500">
+          {config.tempMin} bis {config.tempMax} °C · {config.cableLength} m ·{" "}
+          {config.crossSection} mm²
+        </span>
+      </summary>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <NumberField
+          label="Min. Temperatur"
+          unit="°C"
+          value={config.tempMin}
+          onChange={(v) => update({ tempMin: v })}
+        />
+        <NumberField
+          label="Max. Modultemperatur"
+          unit="°C"
+          value={config.tempMax}
+          onChange={(v) => update({ tempMax: v })}
+        />
+        <NumberField
+          label="Kabellänge einfach"
+          unit="m"
+          value={config.cableLength}
+          min={0}
+          step={0.5}
+          onChange={(v) => update({ cableLength: Math.max(0, v) })}
+        />
+        <NumberField
+          label="Kabelquerschnitt"
+          unit="mm²"
+          value={config.crossSection}
+          min={0.5}
+          step={0.5}
+          onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
+        />
+      </div>
+    </details>
+  );
+
   const share = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -183,42 +228,6 @@ function App() {
               />
             </section>
 
-            <section className="card">
-              <h2 className="card-title">
-                Standort &amp; Verkabelung
-              </h2>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <NumberField
-                  label="Min. Temperatur"
-                  unit="°C"
-                  value={config.tempMin}
-                  onChange={(v) => update({ tempMin: v })}
-                />
-                <NumberField
-                  label="Max. Modultemperatur"
-                  unit="°C"
-                  value={config.tempMax}
-                  onChange={(v) => update({ tempMax: v })}
-                />
-                <NumberField
-                  label="Kabellänge einfach"
-                  unit="m"
-                  value={config.cableLength}
-                  min={0}
-                  step={0.5}
-                  onChange={(v) => update({ cableLength: Math.max(0, v) })}
-                />
-                <NumberField
-                  label="Kabelquerschnitt"
-                  unit="mm²"
-                  value={config.crossSection}
-                  min={0.5}
-                  step={0.5}
-                  onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
-                />
-              </div>
-            </section>
-
             {isIndependent && selectedDevice ? (
               <section className="space-y-4">
                 {selectedDevice.trackers.map((tracker, i) => (
@@ -234,6 +243,7 @@ function App() {
                     onChange={(patch) => updateTracker(i, patch)}
                   />
                 ))}
+                {conditionsCard}
                 {completeResults.length > 0 ? (
                   <TotalSummary device={selectedDevice} results={completeResults} />
                 ) : (
@@ -276,14 +286,16 @@ function App() {
                     </div>
                   </div>
                 </div>
+                {conditionsCard}
                 {variantResult && variantTracker ? (
-                  <>
+                  <section className="card">
+                    <h2 className="card-title">Ergebnis</h2>
                     <ResultPanel result={variantResult} tracker={variantTracker} />
                     {selectedModule && (
-                      <section>
-                        <h2 className="mb-2 text-sm font-medium text-slate-300">
-                          String-Spannung über Temperatur
-                        </h2>
+                      <details className="mt-3">
+                        <summary className="cursor-pointer text-sm font-medium text-slate-300">
+                          Spannungs-/Temperatur-Graph
+                        </summary>
                         <VoltageChart
                           module={selectedModule}
                           modulesInSeries={config.modulesInSeries}
@@ -291,9 +303,9 @@ function App() {
                           tempMin={config.tempMin}
                           tempMax={config.tempMax}
                         />
-                      </section>
+                      </details>
                     )}
-                  </>
+                  </section>
                 ) : (
                   <p className="text-sm text-slate-500">
                     Modul und Gerät wählen, um die Prüfung zu starten.

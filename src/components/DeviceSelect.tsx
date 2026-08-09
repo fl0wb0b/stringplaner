@@ -25,7 +25,13 @@ export function DeviceSelect({
   const device = inverters.find((i) => inverterSlug(i) === selectedSlug) ?? null;
   const tracker: MpptTracker | null = device?.trackers[trackerIndex] ?? null;
 
-  const manufacturers = [...new Set(inverters.map((i) => i.manufacturer))];
+  const manufacturers = [...new Set(inverters.map((i) => i.manufacturer))].sort((a, b) =>
+    a.localeCompare(b, "de"),
+  );
+  const modelsOf = (man: string) =>
+    inverters
+      .filter((i) => i.manufacturer === man)
+      .sort((a, b) => a.model_name.localeCompare(b.model_name, "de", { numeric: true }));
 
   return (
     <div className="space-y-3">
@@ -41,13 +47,11 @@ export function DeviceSelect({
           </option>
           {manufacturers.map((man) => (
             <optgroup key={man} label={man}>
-              {inverters
-                .filter((i) => i.manufacturer === man)
-                .map((i) => (
-                  <option key={inverterSlug(i)} value={inverterSlug(i)}>
-                    {i.model_name} ({DEVICE_TYPE_LABEL[i.device_type]})
-                  </option>
-                ))}
+              {modelsOf(man).map((i) => (
+                <option key={inverterSlug(i)} value={inverterSlug(i)}>
+                  {i.model_name} ({DEVICE_TYPE_LABEL[i.device_type]})
+                </option>
+              ))}
             </optgroup>
           ))}
         </select>
