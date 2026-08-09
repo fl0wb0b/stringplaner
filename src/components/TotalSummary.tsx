@@ -21,20 +21,27 @@ export function TotalSummary({ device, results }: Props) {
   if (!results.length) return null;
 
   const totalWp = results.reduce((a, r) => a + r.result.powerTotal, 0);
-  const worst: CheckStatus = results.some((r) => r.result.overallStatus === "fehler")
-    ? "fehler"
-    : results.some((r) => r.result.overallStatus === "warnung")
-      ? "warnung"
-      : "ok";
   const acW = device.ac_power_nominal_w;
   const dcAcRatio = acW ? totalWp / acW : null;
+  // Oversizing check on device level — catches trackers without their own p_max_w
+  const oversized = dcAcRatio != null && dcAcRatio > 1.3;
+
+  const worst: CheckStatus = results.some((r) => r.result.overallStatus === "fehler")
+    ? "fehler"
+    : oversized || results.some((r) => r.result.overallStatus === "warnung")
+      ? "warnung"
+      : "ok";
 
   const text =
     worst === "fehler"
       ? "Gesamtstatus: NICHT zulässig – mindestens ein Tracker verletzt eine Grenze"
-      : worst === "warnung"
-        ? "Gesamtstatus: zulässig, mit Warnung"
-        : "Gesamtstatus: alle Tracker zulässig";
+      : oversized
+        ? `Gesamtstatus: zulässig, mit Warnung – Überdimensionierung ${Math.round(
+            dcAcRatio! * 100,
+          )} % der AC-Nennleistung (> 130 % empfohlen)`
+        : worst === "warnung"
+          ? "Gesamtstatus: zulässig, mit Warnung"
+          : "Gesamtstatus: alle Tracker zulässig";
 
   return (
     <div className={`rounded-2xl border px-4 py-3.5 shadow-lg shadow-black/20 ${STATUS_STYLE[worst]}`}>
