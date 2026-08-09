@@ -3,11 +3,56 @@
 Herstellerunabhängiger PV-String-Rechner als PWA – prüft, ob eine geplante
 PV-Modul-Verschaltung (Module in Serie × Strings parallel) zu einem MPPT-
 Laderegler oder String-Wechselrichter passt: spannungs-, strom- und
-leistungsseitig, unter Berücksichtigung von Temperatureinflüssen.
+leistungsseitig, unter Berücksichtigung von Temperatureinflüssen und
+Kabelverlusten.
 
 Funktioniert wie der Victron String Calculator, unterstützt aber beliebige
-Geräte (Victron, Huawei, SMA, Fronius, …). Rein clientseitig, offline-fähig,
-gehostet auf GitHub Pages.
+Geräte und Module (Victron, Huawei, SMA, Fronius, Deye, Growatt, JA Solar,
+Aiko, Trina, …). Rein clientseitig, offline-fähig, gehostet auf GitHub
+Pages: **https://fl0wb0b.github.io/stringplaner/**
+
+## Funktionsumfang
+
+1. **Wechselrichter/MPPT wählen** – Geräteauswahl nach Hersteller, bei
+   Geräten mit mehreren unabhängigen MPPT-Eingängen (Wechselrichter) werden
+   alle Tracker parallel konfiguriert; Balkonkraftwerk-Mikrowechselrichter
+   (<900 W AC) stehen gesammelt am Ende der Liste. Victron-Laderegler mit
+   Batteriespannungs-Varianten nutzen einen Einzel-Dropdown.
+2. **Modul wählen** – Volltextsuche über die gesamte Modul-Datenbank
+   (uFuzzy + virtualisierte Liste) oder eigene Werte manuell eintragen wie
+   beim Victron-Rechner. Plus Min./Max.-Temperatur und Kabellänge/-querschnitt
+   für die Spannungsfall-Berechnung.
+3. **Tracker/Strings konfigurieren** – Module in Serie × Strings parallel je
+   Tracker, mit Ampel-Ergebnis (ok/Warnung/Fehler), Spannungs-/Temperatur-
+   Graph und optional einem abweichenden Modul pro Tracker (z. B. bei
+   Anlagen-Erweiterungen, wenn das Original-Modul nicht mehr lieferbar ist).
+4. **Gesamtleistung** – DC/AC-Verhältnis mit Übergrößen-Warnung (>1,3),
+   farblich verknüpfte Leistungsverteilung über alle Tracker, PLZ-basierte
+   Jahresertrags-Schätzung mit Monatsverlauf.
+
+Konfigurationen lassen sich per URL teilen (Button „Konfiguration
+speichern“) oder bleiben lokal per localStorage erhalten. Keine Anmeldung,
+keine Cloud, keine Werbung.
+
+## Datenstand
+
+- **~21.680 PV-Module**: CEC-Datenbank (automatisch importiert) + händisch
+  gepflegte EU-Markt-Module (Aiko, JA Solar, Trina, Jolywood, SoliTek, Solyco)
+- **254 Wechselrichter/Laderegler**: allgemeines Starter-Set großer Marken
+  (SMA, Fronius, Huawei, Growatt, GoodWe, Solis, SofarSolar, SolaX, Kaco,
+  Fox ESS, Deye, Hoymiles, APsystems, Enphase, Kostal, Sungrow u. a.) plus
+  die komplette aktuelle Victron-SmartSolar-/RS-Palette
+- **Automatischer Datenblatt-Scan**: ein wöchentlicher GitHub-Actions-Lauf
+  durchsucht konfigurierte Shop-/Herstellerseiten (aktuell solarhandel24,
+  venturama, tepto, solarscouts) nach neuen Modul-Datenblättern, extrahiert
+  die STC-Werte, prüft sie auf Plausibilität (Vmp×Imp ≈ Pmax) und öffnet bei
+  Treffern automatisch einen Pull Request zur Prüfung – nichts landet
+  ungeprüft auf `main` (siehe `scripts/scan-modules.mjs`,
+  `.github/workflows/scan-modules.yml`)
+
+Datenqualität: nur Werte, die eindeutig aus einem Datenblatt hervorgehen,
+werden übernommen. Aggregierte Summenwerte (z. B. Gesamtstrom über mehrere
+MPPT-Eingänge) werden bewusst ausgelassen statt geraten.
 
 ## Entwicklung
 
@@ -18,6 +63,7 @@ npm run test        # Unit-Tests (Rechenkern)
 npm run build       # Produktions-Build nach dist/
 npm run preview     # Build lokal testen
 npm run import:cec  # CEC-Moduldaten neu importieren
+npm run scan        # Datenblatt-Scan lokal ausführen (node scripts/scan-modules.mjs)
 ```
 
 ## Moduldaten erweitern
@@ -25,8 +71,9 @@ npm run import:cec  # CEC-Moduldaten neu importieren
 Die Modulsuche speist sich aus zwei Quellen, die die App zusammenführt:
 `public/data/modules.json` (automatisch generiert aus der CEC-Datenbank,
 nicht von Hand editieren) und `public/data/modules_manual.json` (händisch
-gepflegt – für EU-Markt-Module, die in der CEC-Liste fehlen). Bei gleichem
-Hersteller+Modell gewinnt der manuelle Eintrag. Schema pro Modul:
+gepflegt – für EU-Markt-Module, die in der CEC-Liste fehlen, oder aus dem
+automatischen Scan). Bei gleichem Hersteller+Modell gewinnt der manuelle
+Eintrag. Schema pro Modul:
 
 ```jsonc
 {
@@ -58,8 +105,11 @@ sind willkommen (Pull Request oder Issue). Neue Geräte kommen in
   "model_name": "Modellbezeichnung",
   "device_type": "mppt_charger | string_inverter | hybrid",
   "ac_power_nominal_w": 5000,        // nur Wechselrichter/Hybrid
+  "tracker_mode": "independent",     // "independent" (Standard, mehrere unabhängige
+                                      // Tracker) oder "variants" (Batteriespannungs-
+                                      // Varianten wie bei Victron, nur eine aktiv)
   "source_url": "https://…",         // Pflicht: Link zum Datenblatt/Produktseite
-  "trackers": [                      // ein Eintrag pro MPPT-Eingang
+  "trackers": [                      // ein Eintrag pro MPPT-Eingang bzw. Variante
     {
       "tracker_label": "MPPT 1",
       "v_mppt_min": 140,             // V, untere MPPT-Grenze
@@ -77,6 +127,23 @@ Regeln: nur Zahlenwerte aus Datenblättern übernehmen, niemals Original-PDFs
 oder Excel-Dateien committen (siehe CLAUDE.md Abschnitt 5). Alle Werte des
 Starter-Sets sind aus Herstellerangaben zusammengetragen und sollten vor
 Verlass darauf gegen das aktuelle Original-Datenblatt geprüft werden.
+
+## Automatischer Datenblatt-Scan
+
+`scripts/scan-modules.mjs` durchsucht die in
+`data-sources/module_sources.json` konfigurierten Quellen nach PDF-
+Datenblättern, extrahiert die elektrischen STC-Werte per `pdftotext`
+(Multi-Spalten-Layouts sowie interleavte STC/NOCT-Tabellen wie bei Aiko
+werden erkannt), validiert sie (Vmp×Imp ≈ Pmax, plausible Temperatur-
+koeffizienten) und dedupliziert gegen die vorhandene Datenbank. Der
+Workflow `.github/workflows/scan-modules.yml` läuft wöchentlich (Montag,
+5:43 UTC) sowie manuell und öffnet bei neuen Treffern einen Pull Request
+zur Prüfung. Bild-Datenblätter ohne Textebene werden im Report als „OCR
+nötig“ gelistet statt geraten.
+
+Neue Quelle hinzufügen: Eintrag in `data-sources/module_sources.json` mit
+`url`, `pdf_pattern` (Regex für PDF-Links) und optional `follow_pattern`
+(Regex für Produktseiten, die zuerst besucht werden).
 
 ## Projektkontext
 
