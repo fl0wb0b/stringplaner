@@ -16,7 +16,7 @@
  * Image-only PDFs (no text layer) are skipped and listed in the report.
  */
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -166,7 +166,15 @@ async function fetchPdfText(url, tmp) {
   writeFileSync(pdfPath, buf);
   const txtPath = join(tmp, "ds.txt");
   execFileSync("pdftotext", ["-layout", pdfPath, txtPath], { stdio: "pipe" });
-  return readFileSync(txtPath, "utf8");
+  const text = readFileSync(txtPath, "utf8");
+  // Optional debug dump of extracted text (workflow artifact, aids parser tuning)
+  const debugDir = process.env.SCAN_DEBUG_DIR;
+  if (debugDir) {
+    const name = decodeURIComponent(url.split("/").pop() ?? "ds").replace(/[^A-Za-z0-9._-]+/g, "_");
+    mkdirSync(debugDir, { recursive: true });
+    writeFileSync(join(debugDir, name + ".txt"), text);
+  }
+  return text;
 }
 
 async function collectPdfUrls(source) {

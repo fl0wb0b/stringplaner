@@ -22,6 +22,16 @@ jobs:
         run: node scripts/scan-modules.mjs --parse-test
       - name: Scan sources
         run: node scripts/scan-modules.mjs
+        env:
+          SCAN_DEBUG_DIR: scan-debug
+      - name: Upload extracted texts (debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-debug
+          path: scan-debug/
+          retention-days: 3
+          if-no-files-found: ignore
       - name: Open pull request with proposals
         uses: peter-evans/create-pull-request@v6
         with:
