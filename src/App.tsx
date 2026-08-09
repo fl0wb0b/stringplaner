@@ -136,11 +136,18 @@ function App() {
     <div className="min-h-dvh bg-slate-900 text-slate-100">
       <header className="border-b border-slate-700 px-4 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold">Stringplaner</h1>
-            <p className="text-sm text-slate-400">
-              PV-String-Rechner für MPPT-Laderegler &amp; Wechselrichter
-            </p>
+          <div className="flex items-center gap-3">
+            <img
+              src={`${import.meta.env.BASE_URL}icon.svg`}
+              alt=""
+              className="h-9 w-9 rounded-lg"
+            />
+            <div>
+              <h1 className="text-xl font-semibold">Stringplaner</h1>
+              <p className="text-sm text-slate-400">
+                PV-String-Rechner für MPPT-Laderegler &amp; Wechselrichter
+              </p>
+            </div>
           </div>
           <button
             type="button"
@@ -163,43 +170,53 @@ function App() {
           !loadError && <p className="text-slate-400">Lade Modul- und Gerätedaten …</p>
         ) : (
           <>
-            <DeviceSelect
-              inverters={inverters}
-              selectedSlug={config.deviceSlug}
-              trackerIndex={config.trackerIndex}
-              onSelectDevice={selectDevice}
-              onSelectTracker={(i) => update({ trackerIndex: i })}
-            />
+            <section className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
+              <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+                Gerät
+              </h2>
+              <DeviceSelect
+                inverters={inverters}
+                selectedSlug={config.deviceSlug}
+                trackerIndex={config.trackerIndex}
+                onSelectDevice={selectDevice}
+                onSelectTracker={(i) => update({ trackerIndex: i })}
+              />
+            </section>
 
-            <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <NumberField
-                label="Min. Temperatur"
-                unit="°C"
-                value={config.tempMin}
-                onChange={(v) => update({ tempMin: v })}
-              />
-              <NumberField
-                label="Max. Modultemperatur"
-                unit="°C"
-                value={config.tempMax}
-                onChange={(v) => update({ tempMax: v })}
-              />
-              <NumberField
-                label="Kabellänge einfach"
-                unit="m"
-                value={config.cableLength}
-                min={0}
-                step={0.5}
-                onChange={(v) => update({ cableLength: Math.max(0, v) })}
-              />
-              <NumberField
-                label="Kabelquerschnitt"
-                unit="mm²"
-                value={config.crossSection}
-                min={0.5}
-                step={0.5}
-                onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
-              />
+            <section className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
+              <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+                Standort &amp; Verkabelung
+              </h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <NumberField
+                  label="Min. Temperatur"
+                  unit="°C"
+                  value={config.tempMin}
+                  onChange={(v) => update({ tempMin: v })}
+                />
+                <NumberField
+                  label="Max. Modultemperatur"
+                  unit="°C"
+                  value={config.tempMax}
+                  onChange={(v) => update({ tempMax: v })}
+                />
+                <NumberField
+                  label="Kabellänge einfach"
+                  unit="m"
+                  value={config.cableLength}
+                  min={0}
+                  step={0.5}
+                  onChange={(v) => update({ cableLength: Math.max(0, v) })}
+                />
+                <NumberField
+                  label="Kabelquerschnitt"
+                  unit="mm²"
+                  value={config.crossSection}
+                  min={0.5}
+                  step={0.5}
+                  onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
+                />
+              </div>
             </section>
 
             {isIndependent && selectedDevice ? (
@@ -227,26 +244,37 @@ function App() {
               </section>
             ) : (
               <section className="space-y-4">
-                <ModuleSearch
-                  modules={modules}
-                  selected={selectedModule}
-                  onSelect={(m) => update({ moduleSlug: moduleSlug(m) })}
-                />
-                <div className="grid grid-cols-2 gap-3">
-                  <NumberField
-                    label="Module in Serie"
-                    value={config.modulesInSeries}
-                    min={1}
-                    stepper
-                    onChange={(v) => update({ modulesInSeries: Math.max(1, Math.trunc(v)) })}
-                  />
-                  <NumberField
-                    label="Strings parallel"
-                    value={config.stringsParallel}
-                    min={1}
-                    stepper
-                    onChange={(v) => update({ stringsParallel: Math.max(1, Math.trunc(v)) })}
-                  />
+                <div className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
+                  <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+                    String-Konfiguration
+                  </h2>
+                  <div className="space-y-4">
+                    <ModuleSearch
+                      modules={modules}
+                      selected={selectedModule}
+                      onSelect={(m) => update({ moduleSlug: moduleSlug(m) })}
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <NumberField
+                        label="Module in Serie"
+                        value={config.modulesInSeries}
+                        min={1}
+                        stepper
+                        onChange={(v) =>
+                          update({ modulesInSeries: Math.max(1, Math.trunc(v)) })
+                        }
+                      />
+                      <NumberField
+                        label="Strings parallel"
+                        value={config.stringsParallel}
+                        min={1}
+                        stepper
+                        onChange={(v) =>
+                          update({ stringsParallel: Math.max(1, Math.trunc(v)) })
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
                 {variantResult && variantTracker ? (
                   <>
@@ -277,9 +305,15 @@ function App() {
         )}
 
         <footer className="border-t border-slate-800 pt-4 text-xs text-slate-500">
-          Moduldaten: CEC (California Energy Commission / NREL SAM) + manuell gepflegte
-          EU-Module. Gerätedaten manuell aus Herstellerangaben – vor Installation immer das
-          Original-Datenblatt prüfen. Alle Angaben ohne Gewähr.
+          Alle Angaben ohne Gewähr – vor Installation Original-Datenblätter prüfen.{" "}
+          <a
+            href="https://github.com/fl0wb0b/stringplaner"
+            target="_blank"
+            rel="noreferrer"
+            className="text-slate-400 hover:text-sky-400 hover:underline"
+          >
+            Quellcode &amp; Datenquellen
+          </a>
         </footer>
       </main>
     </div>

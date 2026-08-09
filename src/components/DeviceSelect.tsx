@@ -77,17 +77,17 @@ export function DeviceSelect({
       )}
 
       {device && device.tracker_mode !== "variants" && (
-        <div className="rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-slate-400">
-          <div>
-            {device.trackers.length} unabhängige MPPT-Eingänge – unten einzeln konfigurierbar
-          </div>
+        <div className="flex items-center justify-between text-sm text-slate-400">
+          <span>
+            {device.trackers.length} MPPT-Eingäng{device.trackers.length === 1 ? "" : "e"}
+          </span>
           <a
             href={device.source_url}
             target="_blank"
             rel="noreferrer"
             className="text-sky-400 hover:underline"
           >
-            Datenblatt / Quelle
+            Datenblatt ↗
           </a>
         </div>
       )}
@@ -98,19 +98,21 @@ export function DeviceSelect({
             MPPT-Fenster {tracker.v_mppt_min}–{tracker.v_mppt_max} V · max.{" "}
             {tracker.v_max_absolute} V absolut
           </div>
-          <div>
-            max. {tracker.i_max} A · max. {tracker.max_strings_parallel} String
-            {tracker.max_strings_parallel !== 1 ? "s" : ""} parallel
-            {tracker.p_max_w ? ` · ${tracker.p_max_w} W PV` : ""}
+          <div className="flex items-center justify-between">
+            <span>
+              max. {tracker.i_max} A · max. {tracker.max_strings_parallel} String
+              {tracker.max_strings_parallel !== 1 ? "s" : ""} parallel
+              {tracker.p_max_w ? ` · ${tracker.p_max_w} W PV` : ""}
+            </span>
+            <a
+              href={device.source_url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sky-400 hover:underline"
+            >
+              Datenblatt ↗
+            </a>
           </div>
-          <a
-            href={device.source_url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-sky-400 hover:underline"
-          >
-            Datenblatt / Quelle
-          </a>
         </div>
       )}
     </div>
