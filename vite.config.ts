@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Deployed to GitHub Pages under https://fl0wb0b.github.io/stringplaner/
+// Deployed to GitHub Pages under der Custom Domain https://planer.fl0wb0b.com/
 export default defineConfig({
-  base: "/stringplaner/",
+  base: "/",
   build: {
     rollupOptions: {
       output: {
@@ -30,8 +30,8 @@ export default defineConfig({
         description:
           "Herstellerunabhängiger PV-String-Rechner: prüft Voc/Vmp/Isc-Kompatibilität von PV-Strings mit MPPT-Ladereglern und Wechselrichtern.",
         lang: "de",
-        start_url: "/stringplaner/",
-        scope: "/stringplaner/",
+        start_url: "/",
+        scope: "/",
         display: "standalone",
         background_color: "#0f172a",
         theme_color: "#0f172a",

@@ -9,7 +9,7 @@ Kabelverlusten.
 Funktioniert wie der Victron String Calculator, unterstützt aber beliebige
 Geräte und Module (Victron, Huawei, SMA, Fronius, Deye, Growatt, JA Solar,
 Aiko, Trina, …). Rein clientseitig, offline-fähig, gehostet auf GitHub
-Pages: **https://fl0wb0b.github.io/stringplaner/**
+Pages: **https://planer.fl0wb0b.com/**
 
 ## Funktionsumfang
 
