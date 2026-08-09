@@ -62,9 +62,11 @@
 
 .powered-by {
   display: inline-block;
-  font-size: 0.6rem;
+  /* Tourney: futuristische Stencil-Schnitte à la Tesla-Robotaxi-Wordmark */
+  font-family: "Tourney", "Michroma", sans-serif;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.42em;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   background: linear-gradient(
     100deg,
