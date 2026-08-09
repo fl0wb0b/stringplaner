@@ -78,10 +78,10 @@ export function TrackerSection({
           </div>
           {result && <ResultPanel result={result} tracker={tracker} />}
           {selectedModule && (
-            <details>
-              <summary className="cursor-pointer text-sm font-medium text-slate-300">
+            <div>
+              <h3 className="mb-2 text-sm font-medium text-slate-300">
                 Spannungs-/Temperatur-Graph
-              </summary>
+              </h3>
               <VoltageChart
                 module={selectedModule}
                 modulesInSeries={config.modulesInSeries}
@@ -89,7 +89,7 @@ export function TrackerSection({
                 tempMin={tempMin}
                 tempMax={tempMax}
               />
-            </details>
+            </div>
           )}
         </div>
       )}

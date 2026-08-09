@@ -292,10 +292,10 @@ function App() {
                     <h2 className="card-title">Ergebnis</h2>
                     <ResultPanel result={variantResult} tracker={variantTracker} />
                     {selectedModule && (
-                      <details className="mt-3">
-                        <summary className="cursor-pointer text-sm font-medium text-slate-300">
+                      <div className="mt-4">
+                        <h3 className="mb-2 text-sm font-medium text-slate-300">
                           Spannungs-/Temperatur-Graph
-                        </summary>
+                        </h3>
                         <VoltageChart
                           module={selectedModule}
                           modulesInSeries={config.modulesInSeries}
@@ -303,7 +303,7 @@ function App() {
                           tempMin={config.tempMin}
                           tempMax={config.tempMax}
                         />
-                      </details>
+                      </div>
                     )}
                   </section>
                 ) : (
