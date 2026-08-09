@@ -91,7 +91,7 @@
 
 .powered-by {
   display: inline-block;
-  margin-top: 0.15rem;
+  margin-top: 0.6rem;
   animation: powered-wobble 3.6s ease-in-out infinite;
 }
 
