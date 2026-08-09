@@ -25,13 +25,19 @@ export function DeviceSelect({
   const device = inverters.find((i) => inverterSlug(i) === selectedSlug) ?? null;
   const tracker: MpptTracker | null = device?.trackers[trackerIndex] ?? null;
 
-  const manufacturers = [...new Set(inverters.map((i) => i.manufacturer))].sort((a, b) =>
-    a.localeCompare(b, "de"),
-  );
-  const modelsOf = (man: string) =>
-    inverters
+  // Balkon-Mikrowechselrichter (<900 W AC) stehen gesammelt am Listenende
+  const isMicro = (i: Inverter) =>
+    i.ac_power_nominal_w != null && i.ac_power_nominal_w < 900;
+
+  const manufacturersOf = (list: Inverter[]) =>
+    [...new Set(list.map((i) => i.manufacturer))].sort((a, b) => a.localeCompare(b, "de"));
+  const modelsOf = (list: Inverter[], man: string) =>
+    list
       .filter((i) => i.manufacturer === man)
       .sort((a, b) => a.model_name.localeCompare(b.model_name, "de", { numeric: true }));
+
+  const main = inverters.filter((i) => !isMicro(i));
+  const micro = inverters.filter(isMicro);
 
   return (
     <div className="space-y-3">
@@ -45,11 +51,20 @@ export function DeviceSelect({
           <option value="" disabled>
             Gerät wählen …
           </option>
-          {manufacturers.map((man) => (
+          {manufacturersOf(main).map((man) => (
             <optgroup key={man} label={man}>
-              {modelsOf(man).map((i) => (
+              {modelsOf(main, man).map((i) => (
                 <option key={inverterSlug(i)} value={inverterSlug(i)}>
                   {i.model_name} ({DEVICE_TYPE_LABEL[i.device_type]})
+                </option>
+              ))}
+            </optgroup>
+          ))}
+          {manufacturersOf(micro).map((man) => (
+            <optgroup key={`balkon-${man}`} label={`Balkon (<900 W) · ${man}`}>
+              {modelsOf(micro, man).map((i) => (
+                <option key={inverterSlug(i)} value={inverterSlug(i)}>
+                  {i.model_name} ({i.ac_power_nominal_w} W)
                 </option>
               ))}
             </optgroup>

@@ -49,3 +49,35 @@
     @apply mb-1.5 block text-sm font-medium text-slate-300;
   }
 }
+
+/* "powered by fl0wb0b" – futuristischer Wordmark mit blauem Licht-Sweep */
+@keyframes powered-sweep {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.powered-by {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    100deg,
+    #0369a1 0%,
+    #0ea5e9 40%,
+    #e0f2fe 50%,
+    #0ea5e9 60%,
+    #0369a1 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: powered-sweep 3.2s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.35));
+}

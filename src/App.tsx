@@ -179,6 +179,7 @@ function App() {
               <p className="text-sm text-slate-400">
                 PV-String-Rechner für MPPT-Laderegler &amp; Wechselrichter
               </p>
+              <span className="powered-by">Powered by fl0wb0b</span>
             </div>
           </div>
           <button
