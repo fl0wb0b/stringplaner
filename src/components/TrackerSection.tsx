@@ -81,20 +81,35 @@ export function TrackerSection({
                   : "Abweichendes Modul für diesen Tracker (Standard: Modul aus Schritt 2)"
               }
             />
-            {overrideModule ? (
-              <button
-                type="button"
-                onClick={() => onChange({ moduleSlug: null })}
-                className="mt-2 rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
-              >
-                Wieder Modul aus Schritt 2 verwenden
-              </button>
-            ) : (
-              mod && (
-                <p className="mt-1.5 text-sm text-slate-500">
-                  Verwendet: {mod.manufacturer} {mod.model_name}
-                </p>
-              )
+            {effectiveModule && (
+              <div className="mt-2 flex items-start justify-between gap-3 rounded-xl border border-sky-500/30 bg-sky-500/5 px-3 py-2.5 text-sm">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block rounded-full border border-sky-500/40 bg-sky-500/15 px-2 py-0.5 text-xs font-semibold text-sky-300">
+                      Verwendetes Modul
+                    </span>
+                    <span className="text-xs text-slate-500">
+                      {overrideModule ? "abweichend von Schritt 2" : "aus Schritt 2"}
+                    </span>
+                  </div>
+                  <div className="mt-1 font-medium text-slate-100">
+                    {effectiveModule.manufacturer} {effectiveModule.model_name}
+                  </div>
+                  <div className="mt-0.5 text-slate-400">
+                    {effectiveModule.power_stc} Wp · Voc {effectiveModule.voc} V · Imp{" "}
+                    {effectiveModule.imp} A
+                  </div>
+                </div>
+                {overrideModule && (
+                  <button
+                    type="button"
+                    onClick={() => onChange({ moduleSlug: null })}
+                    className="shrink-0 rounded-lg border border-slate-700 px-2.5 py-1 text-xs text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
+                  >
+                    Zurücksetzen
+                  </button>
+                )}
+              </div>
             )}
           </div>
           <div className="grid grid-cols-2 gap-3">
