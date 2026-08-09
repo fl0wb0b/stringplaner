@@ -11,7 +11,7 @@ import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 import { TRACKER_DOT } from "../lib/trackerColors";
-import { geizhalsSearchUrl, idealoSearchUrl, overvoltageAdviceFor } from "../lib/accessories";
+import { geizhalsSearchUrl, idealoSearchUrl, overvoltageAdviceForDevice } from "../lib/accessories";
 
 interface Props {
   device: Inverter;
@@ -63,12 +63,12 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
           : "Konfiguration zulässig";
 
   const deviceQuery = `${device.manufacturer} ${device.model_name}`;
-  // Immer eine Zeile pro aktivem Tracker – auch bei 1 String – damit die
-  // Einkaufshilfe nie kommentarlos leer wirkt.
-  const overvoltageAdvice = results.map((r) => ({
-    label: r.label,
-    advice: overvoltageAdviceFor(r.stringsParallel),
-  }));
+  // Bei genau 2 aktiven Trackern mit gleicher Stringzahl: ein gemeinsamer
+  // 2-MPP-Kasten statt zweier Einzelboxen. Sonst pro Tracker einzeln – immer
+  // mit Aussage, auch bei 1 String, damit die Einkaufshilfe nie leer wirkt.
+  const { items: overvoltageAdvice } = overvoltageAdviceForDevice(
+    results.map((r) => ({ label: r.label, stringsParallel: r.stringsParallel })),
+  );
 
   const plzYield = yieldForPlz(plz);
   const specificYield = plzYield?.value ?? DEFAULT_YIELD;

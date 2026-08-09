@@ -45,3 +45,42 @@ export function overvoltageAdviceFor(stringsParallel: number): OvervoltageAdvice
     text: `${stringsParallel} Strings – dafür gibt es in der Weidmüller-PVN-DC-CG-Reihe keine kombinierende Box (nur Einzelschutz je String ohne Zusammenführung); Strings einzeln geschützt an den Tracker führen oder Wechselrichter mit mehr MPPT-Eingängen wählen.`,
   };
 }
+
+// Wenn ein Gerät genau 2 MPPT-Tracker hat und BEIDE aktiv mit derselben
+// Stringzahl genutzt werden, deckt EIN "2MPP"-Kasten beide Eingänge ab –
+// sinnvoller als zwei baugleiche Einzelboxen zu empfehlen.
+const TWO_MPPT_ONE_STRING_EACH: OvervoltageAdvice = {
+  text: "Weidmüller PVI DC 1I 1O 2MPP SPD1 MC4 10 (3108230000) – ein Kasten für beide MPPT-Eingänge (je 1 String)",
+  productQuery: "Weidmüller PVI DC 1I 1O 2MPP SPD1 MC4 10 3108230000",
+};
+
+const TWO_MPPT_TWO_STRINGS_EACH: OvervoltageAdvice = {
+  text: "Weidmüller PVN DC 2I 1O 2MPP SPD2R CG 11 (2866330000) – ein Kasten für beide MPPT-Eingänge (je 2 Strings)",
+  productQuery: "Weidmüller PVN DC 2I 1O 2MPP SPD2R CG 11 2866330000",
+};
+
+export interface TrackerStrings {
+  label: string;
+  stringsParallel: number;
+}
+
+export interface DeviceOvervoltageAdvice {
+  combined: boolean; // true = eine Empfehlung für alle Tracker zusammen
+  items: Array<{ label: string; advice: OvervoltageAdvice }>;
+}
+
+// Betrachtet ALLE aktiven Tracker eines Geräts: bei genau 2 Trackern mit
+// gleicher Stringzahl wird ein gemeinsamer 2-MPP-Kasten empfohlen, sonst
+// pro Tracker einzeln (siehe overvoltageAdviceFor).
+export function overvoltageAdviceForDevice(trackers: TrackerStrings[]): DeviceOvervoltageAdvice {
+  if (trackers.length === 2 && trackers[0].stringsParallel === trackers[1].stringsParallel) {
+    const n = trackers[0].stringsParallel;
+    const label = `${trackers[0].label} + ${trackers[1].label}`;
+    if (n === 1) return { combined: true, items: [{ label, advice: TWO_MPPT_ONE_STRING_EACH }] };
+    if (n === 2) return { combined: true, items: [{ label, advice: TWO_MPPT_TWO_STRINGS_EACH }] };
+  }
+  return {
+    combined: false,
+    items: trackers.map((t) => ({ label: t.label, advice: overvoltageAdviceFor(t.stringsParallel) })),
+  };
+}
