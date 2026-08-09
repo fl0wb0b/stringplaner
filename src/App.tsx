@@ -99,9 +99,7 @@ function App() {
   // Nur bei MPPT-Ladereglern relevant — bei Wechselrichtern gibt es keine
   // Batterie, die Float-Spannung darf die Vmp-Prüfung dort nicht beeinflussen.
   const batteryFloatVoltage =
-    selectedDevice?.device_type === "mppt_charger"
-      ? (config.batteryFloatVoltage ?? undefined)
-      : undefined;
+    selectedDevice?.device_type === "mppt_charger" ? config.batteryFloatVoltage : undefined;
 
   const calcFor = (
     tracker: Inverter["trackers"][number],
@@ -311,9 +309,9 @@ function App() {
                     <NumberField
                       label="Batterie-Float-Spannung"
                       unit="V"
-                      value={config.batteryFloatVoltage ?? 0}
+                      value={config.batteryFloatVoltage}
                       min={0}
-                      step={0.5}
+                      step={0.1}
                       onChange={(v) => update({ batteryFloatVoltage: Math.max(0, v) })}
                     />
                   </div>

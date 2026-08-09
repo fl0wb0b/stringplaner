@@ -55,7 +55,8 @@ export interface ConfigState {
   crossSection: number; // mm²
   // Nur für MPPT-Laderegler relevant: Batterie-Float-/Erhaltungsspannung,
   // zusätzliche Untergrenze neben der Geräte-MPPT-Untergrenze (calc.ts).
-  batteryFloatVoltage: number | null;
+  // Default 53,6 V = typische Float-Spannung eines 48V-LiFePO4-Packs (16S).
+  batteryFloatVoltage: number;
 }
 
 export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
@@ -78,7 +79,7 @@ export const DEFAULT_CONFIG: ConfigState = {
   tempMax: 70,
   cableLength: 10,
   crossSection: 6,
-  batteryFloatVoltage: null,
+  batteryFloatVoltage: 53.6,
 };
 
 const STORAGE_KEY = "stringplaner:last-config";
@@ -115,7 +116,7 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
   p.set("tmax", String(c.tempMax));
   p.set("cl", String(c.cableLength));
   p.set("cs", String(c.crossSection));
-  if (c.batteryFloatVoltage != null) p.set("bfv", String(c.batteryFloatVoltage));
+  p.set("bfv", String(c.batteryFloatVoltage));
   return p.toString();
 }
 
@@ -167,7 +168,7 @@ export function decodeConfig(search: string): ConfigState | null {
     tempMax: num(p, "tmax", d.tempMax),
     cableLength: num(p, "cl", d.cableLength),
     crossSection: num(p, "cs", d.crossSection),
-    batteryFloatVoltage: p.has("bfv") ? num(p, "bfv", 0) : null,
+    batteryFloatVoltage: num(p, "bfv", d.batteryFloatVoltage),
   };
 }
 
