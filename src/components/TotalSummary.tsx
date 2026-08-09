@@ -210,6 +210,15 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
             >
               bei Geizhals vergleichen ↗
             </a>
+            <span className="text-slate-600">·</span>
+            <a
+              href={googleShoppingUrl(deviceQuery)}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sky-400 hover:underline"
+            >
+              Google Shopping ↗
+            </a>
           </div>
           {overvoltageAdvice.map(({ label, advice }) => (
             <div key={label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
