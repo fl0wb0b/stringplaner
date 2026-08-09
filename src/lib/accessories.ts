@@ -73,33 +73,82 @@ const FOUR_MPPT_BOX: OvervoltageAdvice = {
   productQuery: "Weidmüller PVN DC 2I 2O 4MPP SPD1R CG 11 2737610000",
 };
 
+const SIX_MPPT_BOX: OvervoltageAdvice = {
+  text: "Weidmüller PVN1M6I4SXFXV1O0TXPX10 (2737630000) – ein Kasten für 6 MPPT-Eingänge (kombiniert je 2 Strings auf 1 Ausgang)",
+  productQuery: "Weidmüller PVN1M6I4SXFXV1O0TXPX10 2737630000",
+};
+
+const TEN_MPPT_BOX: OvervoltageAdvice = {
+  text: "Weidmüller PVC DC 2I 2O 10MPP SPD1R CG 11 (3165160000) – ein Kasten für 10 MPPT-Eingänge (bis zu 2 Strings je Tracker)",
+  productQuery: "Weidmüller PVC DC 2I 2O 10MPP SPD1R CG 11 3165160000",
+};
+
+const TWELVE_MPPT_BOX: OvervoltageAdvice = {
+  text: "Weidmüller PVC DC 2I 2O 12MPP SPD1R CG 11 (3165170000) – ein Kasten für 12 MPPT-Eingänge (bis zu 2 Strings je Tracker)",
+  productQuery: "Weidmüller PVC DC 2I 2O 12MPP SPD1R CG 11 3165170000",
+};
+
+// Für Zerlegungs-Teilgruppen der Größe 2 wird immer die "bis zu 2 Strings"-
+// Variante verwendet (nicht die knappere Einzelstring-Box), da Teilgruppen
+// gemischte Stringzahlen (1 oder 2) enthalten können und die größere Box
+// beide Fälle sicher abdeckt.
+const SINGLE_BOX_BY_SIZE: Record<number, OvervoltageAdvice> = {
+  2: TWO_MPPT_TWO_STRINGS_EACH,
+  3: THREE_MPPT_BOX,
+  4: FOUR_MPPT_BOX,
+  6: SIX_MPPT_BOX,
+  10: TEN_MPPT_BOX,
+  12: TWELVE_MPPT_BOX,
+};
+
+// Zerlegt eine Tracker-Anzahl in vorhandene Kastengrößen (2/3/4/6/10/12),
+// wenn keine einzelne Box exakt passt – z.B. 5 Tracker -> ein 2MPP- + ein
+// 3MPP-Kasten statt fünf Einzelboxen. Deckt den praxisrelevanten Bereich ab;
+// darüber hinaus (kein sauberes Zerlegungsschema) lieber ehrlich pro Tracker
+// empfehlen als eine unpassende Kombination zu raten.
+const KNOWN_DECOMPOSITIONS: Record<number, number[]> = {
+  5: [2, 3],
+  7: [3, 4],
+  8: [4, 4],
+  9: [3, 3, 3],
+  11: [3, 4, 4],
+};
+
 export interface TrackerStrings {
   label: string;
   stringsParallel: number;
 }
 
 export interface DeviceOvervoltageAdvice {
-  combined: boolean; // true = eine Empfehlung für alle Tracker zusammen
+  combined: boolean; // true = eine oder mehrere Empfehlungen für Trackergruppen
   items: Array<{ label: string; advice: OvervoltageAdvice }>;
 }
 
-// Betrachtet ALLE aktiven Tracker eines Geräts: bei 2, 3 oder 4 Trackern mit
-// je höchstens 2 Strings wird ein gemeinsamer Kasten für alle MPPT-Eingänge
-// empfohlen, sonst pro Tracker einzeln (siehe overvoltageAdviceFor).
+// Betrachtet ALLE aktiven Tracker eines Geräts: bei 2 Trackern mit gleicher
+// Stringzahl, bei 3/4/6/10/12 Trackern (je höchstens 2 Strings) oder bei
+// Trackerzahlen, die sich sauber in solche Kastengrößen zerlegen lassen
+// (z.B. 5 = 2+3), wird ein gemeinsamer Kasten je Gruppe statt einer
+// Einzelbox pro Tracker empfohlen.
 export function overvoltageAdviceForDevice(trackers: TrackerStrings[]): DeviceOvervoltageAdvice {
-  const label = trackers.map((t) => t.label).join(" + ");
   const maxStrings = Math.max(...trackers.map((t) => t.stringsParallel));
+  const n = trackers.length;
+  const allLabel = trackers.map((t) => t.label).join(" + ");
 
-  if (trackers.length === 2 && trackers[0].stringsParallel === trackers[1].stringsParallel) {
-    const n = trackers[0].stringsParallel;
-    if (n === 1) return { combined: true, items: [{ label, advice: TWO_MPPT_ONE_STRING_EACH }] };
-    if (n === 2) return { combined: true, items: [{ label, advice: TWO_MPPT_TWO_STRINGS_EACH }] };
+  if (n === 2 && trackers[0].stringsParallel === trackers[1].stringsParallel && maxStrings <= 2) {
+    const advice = trackers[0].stringsParallel === 1 ? TWO_MPPT_ONE_STRING_EACH : TWO_MPPT_TWO_STRINGS_EACH;
+    return { combined: true, items: [{ label: allLabel, advice }] };
   }
-  if (trackers.length === 3 && maxStrings <= 2) {
-    return { combined: true, items: [{ label, advice: THREE_MPPT_BOX }] };
+  if (maxStrings <= 2 && SINGLE_BOX_BY_SIZE[n]) {
+    return { combined: true, items: [{ label: allLabel, advice: SINGLE_BOX_BY_SIZE[n] }] };
   }
-  if (trackers.length === 4 && maxStrings <= 2) {
-    return { combined: true, items: [{ label, advice: FOUR_MPPT_BOX }] };
+  if (maxStrings <= 2 && KNOWN_DECOMPOSITIONS[n]) {
+    let i = 0;
+    const items = KNOWN_DECOMPOSITIONS[n].map((size) => {
+      const group = trackers.slice(i, i + size);
+      i += size;
+      return { label: group.map((t) => t.label).join(" + "), advice: SINGLE_BOX_BY_SIZE[size] };
+    });
+    return { combined: true, items };
   }
   return {
     combined: false,
