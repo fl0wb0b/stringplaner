@@ -31,6 +31,13 @@ export default defineConfig({
         // accumulating them — matters most on iOS home-screen installs,
         // which rarely get a clean service-worker restart.
         cleanupOutdatedCaches: true,
+        // A new SW otherwise sits in "waiting" forever: registerType
+        // "autoUpdate" only makes the CLIENT react automatically once a new
+        // worker has activated — it does not make the worker itself call
+        // skipWaiting(). Without this, users get stuck on an old cached
+        // build until they manually clear site data.
+        skipWaiting: true,
+        clientsClaim: true,
       },
       manifest: {
         name: "Stringplaner",
