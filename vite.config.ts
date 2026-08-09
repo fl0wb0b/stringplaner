@@ -18,11 +18,19 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      // main.tsx registers the SW itself so it can force an update check
+      // on focus/visibilitychange — iOS home-screen apps otherwise rarely
+      // re-check for a new version on their own.
+      injectRegister: false,
       workbox: {
         // Cache the app shell and the static JSON device/module data for offline use.
         // The CEC module list is ~5 MB, so the default 2 MiB precache limit must be raised.
         globPatterns: ["**/*.{js,css,html,svg,png,json,woff2}"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        // Drop stale precache entries from previous deploys instead of
+        // accumulating them — matters most on iOS home-screen installs,
+        // which rarely get a clean service-worker restart.
+        cleanupOutdatedCaches: true,
       },
       manifest: {
         name: "Stringplaner",
