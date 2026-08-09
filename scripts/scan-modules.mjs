@@ -35,7 +35,9 @@ const num = (s) => Number.parseFloat(String(s).replace(",", "."));
 const ROW_PATTERNS = {
   power: /rated max(imum)? power|max(imum)? power\s*\(?pmax|nennleistung|leistung\s*\(?pmax|\bpmax\s*[\[(]/i,
   voc: /open circuit voltage|leerlaufspannung|\(voc\)|\bvoc\b/i,
-  vmp: /max(imum)? power voltage|voltage at max|mpp[- ]?spannung|\(vmp p?\)|\bvmpp?\b/i,
+  // Manche Hersteller (Trina) beschriften die Vmp-Zeile "Spannung im MPP-UMPP"
+  // (deutsches U-für-Spannung-Präfix statt V) mit umgekehrter Wortreihenfolge.
+  vmp: /max(imum)? power voltage|voltage at max|mpp[- ]?spannung|spannung\s+im\s+mpp|\(vmp p?\)|\bvmpp?\b|\bumpp\b/i,
   isc: /short circuit current|kurzschlussstrom|\(isc\)|\bisc\b/i,
   imp: /max(imum)? power current|current at max|mpp[- ]?strom|\(imp p?\)|\bimpp?\b/i,
 };
@@ -54,11 +56,22 @@ function findRow(lines, pattern, { min, max, count }) {
 }
 
 function findCoefficient(lines, keyPattern) {
+  const celsius = /%\s*\/?\s*(°?c|k|℃)/i;
   for (const line of lines) {
-    if (!keyPattern.test(line) || !/%\s*\/?\s*(°?c|k)/i.test(line)) continue;
-    // sign may be separated by a space ("- 0.22%/ °C") or a Unicode minus
-    const m = line.match(/([+\-−]?)\s*(\d+(?:[.,]\d+)?)\s*%/);
-    if (m) return num((m[1] === "−" ? "-" : m[1]) + m[2]);
+    // Two-column datasheets are flattened onto one physical text line by
+    // `pdftotext -layout` — an unrelated left-column value with its own "%"
+    // (e.g. "Bifaciality 70±5%") can precede the real "Temperature
+    // Coefficient of X ... %/°C" on the right. Slice from the keyword match
+    // onward so the number search can't pick up that earlier, unrelated %.
+    const keyMatch = keyPattern.exec(line);
+    if (!keyMatch) continue;
+    const rest = line.slice(keyMatch.index);
+    if (!celsius.test(rest)) continue;
+    // sign may be separated by a space ("- 0.22%/ °C"), a Unicode minus, or
+    // an en-/em-dash (pdftotext often renders the datasheet's typographic
+    // minus as one of these instead of a plain ASCII hyphen)
+    const m = rest.match(/([+\-−–—]?)\s*(\d+(?:[.,]\d+)?)\s*%/);
+    if (m) return num((/^[-−–—]$/.test(m[1]) ? "-" : m[1]) + m[2]);
   }
   return null;
 }
@@ -271,10 +284,46 @@ Pmax-Temperaturkoeffizient   -0,26 %/°C
 Aiko AIKO-A-MAH54Db
 `;
 
+// Trina-style DE-Layout: Vmp-Zeile heißt "Spannung im MPP-UMPP" (U- statt
+// V-Präfix, umgekehrte Wortreihenfolge), Koeffizienten-Vorzeichen als
+// En-Dash "–" statt ASCII-Minus, echte Werte aus einem realen Datenblatt.
+const FIXTURE_TRINA_DE = `
+DOPPELGLAS N-Typ i-TOPCon MODUL – Trina Solar Vertex S+ TSM-NEG9R.28
+ELEKTRISCHE DATEN (STC)                    NEG9R.28      NEG9R.28 NEG9R.28
+ Nominalleistung-PMAX (Wp)*                   440           445          450
+ Spannung im MPP-UMPP (V)                    44,0          44,3          44,6
+ Strom im MPP-IMPP (A)                       10,01         10,05        10,09
+ Leerlaufspannung-UOC (V)                     52,2          52,6         52,9
+ Kurzschlusstrom-ISC (A)                    10,67          10,71        10,74
+STC: Einstrahlung 1000 W/m2, Zelltemperatur 25 ºC.
+Temperaturkoeffizient von PMAX                        –0,29%/°C
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
+// Longi-style EN-Layout: Vmp/Voc-Zeilen normal, aber die Koeffizienten
+// nutzen das Einzelzeichen-Celsius-Glyph "℃" (U+2103) statt "°C", UND ein
+// zweispaltiges PDF-Layout stellt einen unabhängigen "70±5%"-Wert (Bifaciality,
+// linke Spalte) auf derselben physischen Zeile VOR den echten Voc-Koeffizienten
+// (rechte Spalte) – die Zahlensuche darf diesen nicht fälschlich aufgreifen.
+const FIXTURE_LONGI_EN = `
+Longi Solar LR7-54HVD-475M Simple design embodies modern style
+Maximum Power (Pmax/W)                    465          470              475
+Open Circuit Voltage (Voc/V)             40.20         40.31           40.42
+Short Circuit Current (Isc/A)            14.68         14.78           14.88
+Voltage at Maximum Power (Vmp/V)         33.18         33.29           33.40
+Current at Maximum Power (Imp/A)         14.02         14.13           14.23
+Temperature Coefficient of Isc                                                   +0.050%/℃
+Bifaciality                                                  70±5%                                                     Temperature Coefficient of Voc                                                 -0.200%/℃
+Fire Rating                                              IEC Class C                                                   Temperature Coefficient of Pmax                                                  -0.260%/℃
+`;
+
 if (process.argv.includes("--parse-test")) {
   const cases = [
     { name: "JA Solar (EN, mehrspaltig)", text: FIXTURE, url: "https://example.com/JAM54D40.pdf", expect: 3 },
     { name: "Aiko (DE, STC/NOCT-interleaved)", text: FIXTURE_AIKO, url: "https://example.com/AIKO-A-MAH54Db.pdf", expect: 3 },
+    { name: "Trina (DE, UMPP-Label, En-Dash-Vorzeichen)", text: FIXTURE_TRINA_DE, url: "https://example.com/TSM-NEG9R.28.pdf", expect: 3 },
+    { name: "Longi (EN, Unicode-Celsius, Spalten-Kollision)", text: FIXTURE_LONGI_EN, url: "https://example.com/LR7-54HVD.pdf", expect: 3 },
   ];
   let ok = true;
   for (const c of cases) {

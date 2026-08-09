@@ -68,9 +68,24 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
       18 Aiko-Neostar-Klassen (PR #1)
       - venturama: Produktseiten verlinken keine PDFs direkt (JS) → 0 Treffer
       - JA-Solar-/Sunman-PDFs vielfach ohne Textlayer → OCR weiterhin offen
-      - Trina/Longi: Tabellenlayout noch nicht unterstützt (Folge-Tuning)
       - Repo-Einstellung "Allow GitHub Actions to create and approve pull
         requests" muss manuell aktiviert werden, bis dahin PR manuell
+- [x] 5d: Trina/Longi-Parser-Tuning anhand der echten scan-debug-Logs (Job
+      93215789633) behoben: Vmp-Zeile "Spannung im MPP-UMPP" (Trina, U- statt
+      V-Präfix, umgekehrte Wortreihenfolge) erkannt; Temperaturkoeffizienten-
+      Suche fand bei zweispaltigen Layouts teils falsche Werte, weil
+      `pdftotext -layout` linke und rechte Spalte auf eine Zeile flacht (z.B.
+      Longi: "Bifaciality 70±5%" stand vor dem echten Voc-Koeffizienten auf
+      derselben Zeile) – Zahlensuche jetzt ab der Schlüsselwort-Position
+      statt über die ganze Zeile; Vorzeichen-Erkennung um En-/Em-Dash
+      erweitert (pdftotext rendert das Minus in einigen Datenblättern so statt
+      als ASCII-Hyphen); Celsius-Erkennung um das Einzelzeichen-Glyph "℃"
+      (U+2103) erweitert, das manche PDFs statt "°C" verwenden. Gegen echte
+      Datenblatt-Extrakte aus dem Scan-Log verifiziert, 2 neue Regressions-
+      Fixtures in `--parse-test` ergänzt. BNPI-dreifach-interleaved-Layout
+      (ein einzelnes Trina-Doppelglas-Blatt mit STC/NOCT/BNPI-Spalten) bleibt
+      offen – seltener Sonderfall, wird weiterhin sauber übersprungen statt
+      falsch geparst.
 
 ## Schritt 6: Feinschliff
 
