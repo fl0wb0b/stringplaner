@@ -11,10 +11,16 @@ import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 import { TRACKER_DOT } from "../lib/trackerColors";
+import { geizhalsSearchUrl, idealoSearchUrl, weidmuellerBoxFor } from "../lib/accessories";
 
 interface Props {
   device: Inverter;
-  results: Array<{ label: string; result: CalcResult; colorIndex: number }>;
+  results: Array<{
+    label: string;
+    result: CalcResult;
+    colorIndex: number;
+    stringsParallel: number;
+  }>;
   plz: string;
   onPlzChange: (v: string) => void;
 }
@@ -55,6 +61,13 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
         : worst === "warnung"
           ? "Zulässig, mit Warnung"
           : "Konfiguration zulässig";
+
+  const deviceQuery = `${device.manufacturer} ${device.model_name}`;
+  const combinerRecommendations = results
+    .map((r) => ({ label: r.label, box: weidmuellerBoxFor(r.stringsParallel) }))
+    .filter((r): r is { label: string; box: NonNullable<ReturnType<typeof weidmuellerBoxFor>> } =>
+      r.box !== null,
+    );
 
   const plzYield = yieldForPlz(plz);
   const specificYield = plzYield?.value ?? DEFAULT_YIELD;
@@ -164,6 +177,54 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
           : `Ohne gültige PLZ: Deutschland-Mittel ${fmt(DEFAULT_YIELD)} kWh/kWp·a`}
         {" – Überschlag für Südausrichtung ~30° Neigung mit typischer Monatsverteilung, keine Simulation."}
       </p>
+
+      <div className="border-t border-slate-800 pt-4">
+        <h3 className="mb-2 text-sm font-medium text-slate-300">Einkaufshilfe</h3>
+        <div className="space-y-2 text-sm">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-slate-400">
+              {device.manufacturer} {device.model_name}:
+            </span>
+            <a
+              href={idealoSearchUrl(deviceQuery)}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sky-400 hover:underline"
+            >
+              bei Idealo vergleichen ↗
+            </a>
+            <span className="text-slate-600">·</span>
+            <a
+              href={geizhalsSearchUrl(deviceQuery)}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sky-400 hover:underline"
+            >
+              bei Geizhals vergleichen ↗
+            </a>
+          </div>
+          {combinerRecommendations.map(({ label, box }) => (
+            <div key={label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="text-slate-400">{label} – Überspannungsschutz/Kombinierer:</span>
+              <a
+                href={box.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sky-400 hover:underline"
+              >
+                {box.name} ↗
+              </a>
+              {!box.exact && (
+                <span className="text-xs text-slate-600">(Such-Link, Eingänge vor Kauf prüfen)</span>
+              )}
+            </div>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-slate-500">
+          Provisionsfreie Links zu Preisvergleichsportalen – keine Kaufempfehlung, Angaben ohne
+          Gewähr.
+        </p>
+      </div>
     </div>
   );
 }

@@ -142,14 +142,27 @@ function App() {
     ? trackerResults
         .map((result, i) =>
           result
-            ? { label: selectedDevice!.trackers[i].tracker_label, result, colorIndex: i }
+            ? {
+                label: selectedDevice!.trackers[i].tracker_label,
+                result,
+                colorIndex: i,
+                stringsParallel: trackerConfigs[i].stringsParallel,
+              }
             : null,
         )
         .filter(
-          (r): r is { label: string; result: CalcResult; colorIndex: number } => r !== null,
+          (r): r is { label: string; result: CalcResult; colorIndex: number; stringsParallel: number } =>
+            r !== null,
         )
     : variantResult && variantTracker
-      ? [{ label: variantTracker.tracker_label, result: variantResult, colorIndex: 0 }]
+      ? [
+          {
+            label: variantTracker.tracker_label,
+            result: variantResult,
+            colorIndex: 0,
+            stringsParallel: config.stringsParallel,
+          },
+        ]
       : [];
 
   // Selecting the custom module for the first time seeds it with defaults.
