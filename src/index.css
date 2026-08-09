@@ -50,41 +50,67 @@
   }
 }
 
-/* "powered by fl0wb0b" – handgesprühter Graffiti-Tag wie beim
-   Tesla Robotaxi/Cybercab-Wordmark: Brush-Schrift, leichte Schieflage,
-   pulsierender Neon-Glow statt braver Firmenschrift. */
-@keyframes powered-neon {
+/* "powered by fl0wb0b" – wilder Graffiti-Sprühtag wie beim Tesla
+   Robotaxi/Cybercab-Wordmark: zackige Tag-Schrift, kippelige Schieflage,
+   flackerndes Neonlicht statt braver Firmenschrift. */
+@keyframes powered-flicker {
+  0%,
+  19%,
+  21%,
+  100% {
+    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.6))
+      drop-shadow(0 0 10px rgba(56, 189, 248, 0.4))
+      drop-shadow(0 0 22px rgba(14, 165, 233, 0.25));
+    opacity: 0.95;
+  }
+  20% {
+    filter: drop-shadow(0 0 1px rgba(56, 189, 248, 0.25));
+    opacity: 0.6;
+  }
+  45%,
+  55% {
+    filter: drop-shadow(0 0 5px rgba(186, 230, 253, 0.95))
+      drop-shadow(0 0 16px rgba(56, 189, 248, 0.7))
+      drop-shadow(0 0 32px rgba(14, 165, 233, 0.4));
+    opacity: 1;
+  }
+}
+
+@keyframes powered-wobble {
   0%,
   100% {
-    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.55))
-      drop-shadow(0 0 9px rgba(56, 189, 248, 0.35));
-    opacity: 0.92;
+    transform: rotate(-4deg) skewX(-6deg);
   }
-  50% {
-    filter: drop-shadow(0 0 6px rgba(125, 211, 252, 0.85))
-      drop-shadow(0 0 16px rgba(56, 189, 248, 0.55));
-    opacity: 1;
+  33% {
+    transform: rotate(-2deg) skewX(-4deg) translateY(-1px);
+  }
+  66% {
+    transform: rotate(-5.5deg) skewX(-7deg) translateY(0.5px);
   }
 }
 
 .powered-by {
   display: inline-block;
-  margin-top: 0.1rem;
-  transform: rotate(-2deg);
+  margin-top: 0.15rem;
+  animation: powered-wobble 3.6s ease-in-out infinite;
 }
 
 .powered-by__text {
-  font-family: "Caveat Brush", cursive;
-  font-size: 1.15rem;
+  font-family: "Sedgwick Ave Display", cursive;
+  font-size: 1.55rem;
   line-height: 1;
-  letter-spacing: 0.01em;
-  color: #7dd3fc;
-  animation: powered-neon 2.6s ease-in-out infinite;
+  letter-spacing: 0.02em;
+  color: #67e8f9;
+  animation: powered-flicker 3.2s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .powered-by {
+    animation: none;
+    transform: rotate(-3deg) skewX(-5deg);
+  }
   .powered-by__text {
     animation: none;
-    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
+    filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.55));
   }
 }
