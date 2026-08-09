@@ -118,6 +118,31 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-3K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 3000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-3K-SG05LP3-EU-SM2",
     "device_type": "hybrid",
     "ac_power_nominal_w": 3000,
@@ -143,6 +168,31 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-4K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 4000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-4K-SG05LP3-EU-SM2",
     "device_type": "hybrid",
     "ac_power_nominal_w": 4000,
@@ -162,6 +212,31 @@
         "v_mppt_max": 650,
         "v_max_absolute": 800,
         "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-5K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
         "max_strings_parallel": 1
       }
     ]
@@ -245,6 +320,31 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-6K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-6K-SG03LP1-EU",
     "device_type": "hybrid",
     "ac_power_nominal_w": 6000,
@@ -322,6 +422,56 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-7K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 7000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-8K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-8K-SG04LP3-EU",
     "device_type": "hybrid",
     "ac_power_nominal_w": 8000,
@@ -366,6 +516,56 @@
         "v_mppt_max": 650,
         "v_max_absolute": 800,
         "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-9K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 9000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-10K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
         "max_strings_parallel": 1
       }
     ]
@@ -422,6 +622,31 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-12K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 12000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 26,
+        "max_strings_parallel": 2
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-12K-SG04LP3-EU",
     "device_type": "hybrid",
     "ac_power_nominal_w": 12000,
@@ -467,6 +692,31 @@
         "v_max_absolute": 800,
         "i_max": 20,
         "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-15K-G06P3-EU-AM2",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 15000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/07/24/datasheet_sun315kg06p3_240724_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 120,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 26,
+        "max_strings_parallel": 2
       }
     ]
   },
