@@ -4,8 +4,10 @@ import { inverterSlug, loadInverters, loadModules, moduleSlug } from "./lib/data
 import type { Inverter, PVModule } from "./lib/types";
 import {
   CUSTOM_MODULE_SLUG,
+  DEFAULT_CONFIG,
   DEFAULT_CUSTOM_MODULE,
   DEFAULT_TRACKER_CONFIG,
+  clearStoredConfig,
   loadInitialConfig,
   persistConfig,
   type ConfigState,
@@ -26,6 +28,7 @@ function App() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [config, setConfig] = useState<ConfigState>(loadInitialConfig);
   const [copied, setCopied] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   useEffect(() => {
     loadModules().then(setModules).catch((e: Error) => setLoadError(e.message));
@@ -168,10 +171,17 @@ function App() {
     }
   };
 
+  const resetAll = () => {
+    clearStoredConfig();
+    setConfig(DEFAULT_CONFIG);
+    setResetDone(true);
+    setTimeout(() => setResetDone(false), 2000);
+  };
+
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 px-4 pt-3 pb-4 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <img
               src={`${import.meta.env.BASE_URL}icon.svg`}
@@ -188,13 +198,23 @@ function App() {
               </span>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={share}
-            className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
-          >
-            {copied ? "Link kopiert ✓" : "Konfiguration speichern"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={resetAll}
+              title="Konfiguration zurücksetzen"
+              className="rounded-xl border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
+            >
+              {resetDone ? "Zurückgesetzt ✓" : "Zurücksetzen"}
+            </button>
+            <button
+              type="button"
+              onClick={share}
+              className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
+            >
+              {copied ? "Link kopiert ✓" : "Konfiguration speichern"}
+            </button>
+          </div>
         </div>
       </header>
 

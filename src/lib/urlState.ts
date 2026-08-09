@@ -186,3 +186,14 @@ export function persistConfig(c: ConfigState, mode: "variants" | "independent"):
   const query = encodeConfig(c, mode);
   window.history.replaceState(null, "", `${window.location.pathname}?${query}`);
 }
+
+// Clears the saved configuration (localStorage + URL query) so the app
+// starts fresh, e.g. via a "Zurücksetzen" button.
+export function clearStoredConfig(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // storage unavailable — URL clear below still works
+  }
+  window.history.replaceState(null, "", window.location.pathname);
+}
