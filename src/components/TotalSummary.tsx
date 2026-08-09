@@ -1,6 +1,15 @@
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
-import { DEFAULT_YIELD, yieldForPlz } from "../lib/plzYield";
+import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 
 interface Props {
   device: Inverter;
@@ -50,6 +59,10 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
   const plzYield = yieldForPlz(plz);
   const specificYield = plzYield?.value ?? DEFAULT_YIELD;
   const annualKwh = (totalWp / 1000) * specificYield;
+  const monthlyData = monthlyYield(annualKwh).map((kwh, i) => ({
+    monat: MONTH_LABELS[i],
+    kwh: Math.round(kwh),
+  }));
 
   return (
     <div className="space-y-4">
@@ -118,11 +131,38 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
           </div>
         </div>
       </div>
+      <div>
+        <h3 className="mb-2 text-sm font-medium text-slate-300">
+          Ertragsverlauf über das Jahr
+        </h3>
+        <div className="h-56 w-full">
+          <ResponsiveContainer>
+            <BarChart data={monthlyData} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+              <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="monat" stroke="#94a3b8" tick={{ fontSize: 11 }} interval={0} />
+              <YAxis
+                stroke="#94a3b8"
+                tick={{ fontSize: 11 }}
+                width={44}
+                label={{ value: "kWh", position: "insideTopLeft", fill: "#94a3b8", fontSize: 11 }}
+              />
+              <Tooltip
+                cursor={{ fill: "rgba(56,189,248,0.08)" }}
+                contentStyle={{ background: "#1e293b", border: "1px solid #475569", borderRadius: 8 }}
+                labelStyle={{ color: "#e2e8f0" }}
+                formatter={(v: number) => [`${fmt(v)} kWh`, "Ertrag"]}
+              />
+              <Bar dataKey="kwh" fill="#38bdf8" radius={[3, 3, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       <p className="text-xs text-slate-500">
         {plzYield
           ? `Region ${plzYield.region}: ca. ${fmt(plzYield.value)} kWh/kWp·a`
           : `Ohne gültige PLZ: Deutschland-Mittel ${fmt(DEFAULT_YIELD)} kWh/kWp·a`}
-        {" – Überschlag für Südausrichtung ~30° Neigung, keine Simulation."}
+        {" – Überschlag für Südausrichtung ~30° Neigung mit typischer Monatsverteilung, keine Simulation."}
       </p>
     </div>
   );

@@ -6,8 +6,22 @@
     "ac_power_nominal_w": 5000,
     "source_url": "https://www.sma.de/produkte/solar-wechselrichter/sunny-boy-30-36-40-50-60",
     "trackers": [
-      { "tracker_label": "MPPT A", "v_mppt_min": 175, "v_mppt_max": 500, "v_max_absolute": 600, "i_max": 15, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT B", "v_mppt_min": 175, "v_mppt_max": 500, "v_max_absolute": 600, "i_max": 15, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 175,
+        "v_mppt_max": 500,
+        "v_max_absolute": 600,
+        "i_max": 15,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 175,
+        "v_mppt_max": 500,
+        "v_max_absolute": 600,
+        "i_max": 15,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -17,8 +31,22 @@
     "ac_power_nominal_w": 10000,
     "source_url": "https://www.sma.de/produkte/solar-wechselrichter/sunny-tripower-30-40-50-60-80-100",
     "trackers": [
-      { "tracker_label": "MPPT A", "v_mppt_min": 320, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 20, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT B", "v_mppt_min": 320, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 12, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 260,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 20,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 260,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -28,8 +56,22 @@
     "ac_power_nominal_w": 5000,
     "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-primo-gen24/fronius-primo-gen24-5-0",
     "trackers": [
-      { "tracker_label": "MPPT 1 (PV1)", "v_mppt_min": 65, "v_mppt_max": 530, "v_max_absolute": 600, "i_max": 22, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2 (PV2)", "v_mppt_min": 65, "v_mppt_max": 530, "v_max_absolute": 600, "i_max": 12, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 65,
+        "v_mppt_max": 530,
+        "v_max_absolute": 600,
+        "i_max": 22,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 65,
+        "v_mppt_max": 530,
+        "v_max_absolute": 600,
+        "i_max": 12,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -39,8 +81,22 @@
     "ac_power_nominal_w": 10000,
     "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-symo-gen24/fronius-symo-gen24-10-0",
     "trackers": [
-      { "tracker_label": "MPPT 1 (PV1)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 25, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2 (PV2)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 12.5, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 25,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -50,8 +106,22 @@
     "ac_power_nominal_w": 8000,
     "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-symo-gen24-plus/fronius-symo-gen24-8-0-plus",
     "trackers": [
-      { "tracker_label": "MPPT 1 (PV1)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 25, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2 (PV2)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 12.5, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 25,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -61,8 +131,22 @@
     "ac_power_nominal_w": 12000,
     "source_url": "https://www.fronius.com/de-de/germany/solarenergie/installateure-partner/technische-daten/alle-produkte/wechselrichter/fronius-symo-gen24-plus/fronius-symo-gen24-12-0-plus-sc",
     "trackers": [
-      { "tracker_label": "MPPT 1 (PV1)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 28, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2 (PV2)", "v_mppt_min": 80, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 14, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1 (PV1)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2 (PV2)",
+        "v_mppt_min": 80,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 14,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -72,8 +156,22 @@
     "ac_power_nominal_w": 10000,
     "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_EN.pdf",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 270, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 27, "max_strings_parallel": 3 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 270, "v_mppt_max": 800, "v_max_absolute": 1000, "i_max": 16.5, "max_strings_parallel": 3 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 270,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 27,
+        "max_strings_parallel": 3
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 270,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 16.5,
+        "max_strings_parallel": 3
+      }
     ]
   },
   {
@@ -83,8 +181,22 @@
     "ac_power_nominal_w": 6000,
     "source_url": "https://solar.huawei.com/en/products/sun2000-3-4-5-6-8-10ktl-m1/specs/",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 13.5, "max_strings_parallel": 1 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 13.5, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 13.5,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -94,8 +206,22 @@
     "ac_power_nominal_w": 8000,
     "source_url": "https://solar.huawei.com/en/products/sun2000-3-4-5-6-8-10ktl-m1/specs/",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 11, "max_strings_parallel": 1 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 980, "v_max_absolute": 1100, "i_max": 11, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 11,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 140,
+        "v_mppt_max": 980,
+        "v_max_absolute": 1100,
+        "i_max": 11,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -105,9 +231,30 @@
     "ac_power_nominal_w": 15000,
     "source_url": "https://en.sungrowpower.com/productDetail/5625/mv-power-converter-hybrid-inverter-sh15-20-25t",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 3", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -117,9 +264,30 @@
     "ac_power_nominal_w": 20000,
     "source_url": "https://en.sungrowpower.com/productDetail/5625/mv-power-converter-hybrid-inverter-sh15-20-25t",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 3", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -129,9 +297,30 @@
     "ac_power_nominal_w": 25000,
     "source_url": "https://en.sungrowpower.com/productDetail/5625/mv-power-converter-hybrid-inverter-sh15-20-25t",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 3", "v_mppt_min": 150, "v_mppt_max": 950, "v_max_absolute": 1000, "i_max": 30, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 950,
+        "v_max_absolute": 1000,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -141,8 +330,22 @@
     "ac_power_nominal_w": 10000,
     "source_url": "https://de.growatt.com/products/mod-3-10ktl3-xh",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 140, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 16, "max_strings_parallel": 1 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 140, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 16, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 140,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 16,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 140,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 16,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -152,8 +355,22 @@
     "ac_power_nominal_w": 17000,
     "source_url": "https://www.pvo-int.com/wp-content/uploads/2023/08/Datasheet_Growatt_MID_11_30KTL3-XH.pdf",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 160, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 32, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 160, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 32, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 160,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 32,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 160,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 32,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -163,9 +380,30 @@
     "ac_power_nominal_w": 25000,
     "source_url": "https://www.pvo-int.com/wp-content/uploads/2023/08/Datasheet_Growatt_MID_11_30KTL3-XH.pdf",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 160, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 32, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 160, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 32, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 3", "v_mppt_min": 160, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 32, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 160,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 32,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 160,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 32,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 160,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 32,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -175,8 +413,22 @@
     "ac_power_nominal_w": 12000,
     "source_url": "https://solar.huawei.com/en/products/sun2000-12-15-17-20-25ktl-m5/specs/",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 200, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 30, "max_strings_parallel": 2 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 200, "v_mppt_max": 1000, "v_max_absolute": 1100, "i_max": 30, "max_strings_parallel": 2 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 1000,
+        "v_max_absolute": 1100,
+        "i_max": 30,
+        "max_strings_parallel": 2
+      }
     ]
   },
   {
@@ -186,8 +438,22 @@
     "ac_power_nominal_w": 5000,
     "source_url": "https://www.growatt.com/products/min-2500-6000tl-x",
     "trackers": [
-      { "tracker_label": "MPPT 1", "v_mppt_min": 80, "v_mppt_max": 550, "v_max_absolute": 550, "i_max": 12.5, "max_strings_parallel": 1 },
-      { "tracker_label": "MPPT 2", "v_mppt_min": 80, "v_mppt_max": 550, "v_max_absolute": 550, "i_max": 12.5, "max_strings_parallel": 1 }
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 80,
+        "v_mppt_max": 550,
+        "v_max_absolute": 550,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 80,
+        "v_mppt_max": 550,
+        "v_max_absolute": 550,
+        "i_max": 12.5,
+        "max_strings_parallel": 1
+      }
     ]
   },
   {
@@ -197,8 +463,24 @@
     "ac_power_nominal_w": 800,
     "source_url": "https://www.hoymiles.com/products/hms-600w-700w-800w-900w-1000w-2t-wi-fi-integrated-eu.html",
     "trackers": [
-      { "tracker_label": "PV-Eingang 1", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 540 },
-      { "tracker_label": "PV-Eingang 2", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 540 }
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
     ]
   },
   {
@@ -208,10 +490,464 @@
     "ac_power_nominal_w": 2000,
     "source_url": "https://www.hoymiles.com/products/hms-1600-1800-2000-eu.html",
     "trackers": [
-      { "tracker_label": "PV-Eingang 1", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 670 },
-      { "tracker_label": "PV-Eingang 2", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 670 },
-      { "tracker_label": "PV-Eingang 3", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 670 },
-      { "tracker_label": "PV-Eingang 4", "v_mppt_min": 16, "v_mppt_max": 60, "v_max_absolute": 65, "i_max": 14, "max_strings_parallel": 1, "p_max_w": 670 }
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      }
+    ]
+  },
+  {
+    "manufacturer": "APsystems",
+    "model_name": "EZ1-M",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://emea.apsystems.com/diy/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 28,
+        "v_mppt_max": 45,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 730
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 28,
+        "v_mppt_max": 45,
+        "v_max_absolute": 60,
+        "i_max": 20,
+        "max_strings_parallel": 1,
+        "p_max_w": 730
+      }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HMS-1600-4T",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 1600,
+    "source_url": "https://www.hoymiles.com/products/microinverter/hms-series/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HMS-2000-4WB",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 2000,
+    "source_url": "https://www.hoymiles.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 3",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      },
+      {
+        "tracker_label": "PV-Eingang 4",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 670
+      }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HMS-800-2WB",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.hoymiles.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 60,
+        "v_max_absolute": 65,
+        "i_max": 14,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Hoymiles",
+    "model_name": "HF-800-WB",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.hoymiles.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang",
+        "v_mppt_min": 16,
+        "v_mppt_max": 96,
+        "v_max_absolute": 100,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 1040
+      }
+    ]
+  },
+  {
+    "manufacturer": "Marstek",
+    "model_name": "MST-MI0800W",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.marstekenergy.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 25,
+        "v_mppt_max": 55,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 25,
+        "v_mppt_max": 55,
+        "v_max_absolute": 60,
+        "i_max": 16,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Zendure",
+    "model_name": "Hyper 2000",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 1200,
+    "source_url": "https://zendure.de/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 16,
+        "v_mppt_max": 48,
+        "v_max_absolute": 55,
+        "i_max": 20.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 900
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 16,
+        "v_mppt_max": 48,
+        "v_max_absolute": 55,
+        "i_max": 20.5,
+        "max_strings_parallel": 1,
+        "p_max_w": 900
+      }
+    ]
+  },
+  {
+    "manufacturer": "Growatt",
+    "model_name": "NEO 800M-X",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://www.growatt.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 28,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 18,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 28,
+        "v_mppt_max": 60,
+        "v_max_absolute": 60,
+        "i_max": 18,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-M80G4-EU-Q0",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 800,
+    "source_url": "https://deye.com/",
+    "trackers": [
+      {
+        "tracker_label": "PV-Eingang 1",
+        "v_mppt_min": 25,
+        "v_mppt_max": 55,
+        "v_max_absolute": 60,
+        "i_max": 13,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      },
+      {
+        "tracker_label": "PV-Eingang 2",
+        "v_mppt_min": 25,
+        "v_mppt_max": 55,
+        "v_max_absolute": 60,
+        "i_max": 13,
+        "max_strings_parallel": 1,
+        "p_max_w": 540
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-12K-SG04LP3-EU",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 12000,
+    "source_url": "https://deye.com/product/sun-8-12k-sg04lp3/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 26,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "SMA",
+    "model_name": "Sunny Tripower 8.0 (STP8.0-3AV-40)",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.sma.de/produkte/solar-wechselrichter/sunny-tripower-80-100",
+    "trackers": [
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 260,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 20,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 260,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 12,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "SMA",
+    "model_name": "Sunny Tripower Hybrid X 12 (STPH12-60)",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 12000,
+    "source_url": "https://www.sma.de/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT A",
+        "v_mppt_min": 90,
+        "v_mppt_max": 850,
+        "v_max_absolute": 1000,
+        "i_max": 18,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      },
+      {
+        "tracker_label": "MPPT B",
+        "v_mppt_min": 90,
+        "v_mppt_max": 850,
+        "v_max_absolute": 1000,
+        "i_max": 18,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      },
+      {
+        "tracker_label": "MPPT C",
+        "v_mppt_min": 90,
+        "v_mppt_max": 850,
+        "v_max_absolute": 1000,
+        "i_max": 18,
+        "max_strings_parallel": 1,
+        "p_max_w": 6000
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Verto 17.5 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 17500,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Verto 25.0 Plus",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 25000,
+    "source_url": "https://www.fronius.com/",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      },
+      {
+        "tracker_label": "MPPT 3",
+        "v_mppt_min": 150,
+        "v_mppt_max": 870,
+        "v_max_absolute": 1000,
+        "i_max": 28,
+        "max_strings_parallel": 2
+      }
     ]
   }
 ]

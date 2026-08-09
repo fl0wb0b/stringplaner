@@ -220,7 +220,7 @@ function App() {
                     onChange={(v) => update({ tempMin: v })}
                   />
                   <NumberField
-                    label="Max. Modultemperatur"
+                    label="Max. Temperatur"
                     unit="°C"
                     value={config.tempMax}
                     onChange={(v) => update({ tempMax: v })}

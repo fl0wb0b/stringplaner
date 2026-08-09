@@ -47,3 +47,13 @@ export function yieldForPlz(plz: string): { value: number; region: string } | nu
   const zone = ZONES.find((z) => prefix >= z.from && prefix <= z.to);
   return zone ? { value: zone.yield, region: zone.region } : null;
 }
+
+// Typical monthly share of the annual PV yield in Germany (relative weights,
+// normalized at use). Coarse average over DWD irradiation statistics.
+const MONTH_WEIGHTS = [2.5, 4.5, 8, 10.5, 12, 12.5, 12.5, 11, 8.5, 5.5, 3, 2];
+export const MONTH_LABELS = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+export function monthlyYield(annualKwh: number): number[] {
+  const sum = MONTH_WEIGHTS.reduce((a, b) => a + b, 0);
+  return MONTH_WEIGHTS.map((w) => (annualKwh * w) / sum);
+}
