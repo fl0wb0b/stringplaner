@@ -59,7 +59,16 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
 - [x] 5b: Workflow `scan-modules.yml`: wöchentlicher Cron + manueller Trigger,
       öffnet einen Pull Request mit den Vorschlägen (Review-Schleuse, kein
       Auto-Merge); Bild-PDFs ohne Textlayer werden im Report gelistet (OCR offen)
-- [ ] 5c: Erster echter Scan-Lauf prüfen (Selektoren der Shopseiten ggf. anpassen)
+- [x] 5c: Erster echter Scan-Lauf geprüft und Parser nachgezogen: Aiko-Layout
+      (STC/NOCT-Spalten interleaved, Kurzlabels "Pmax [W]"), Modellcodes mit
+      Kleinbuchstaben, Koeffizienten-Vorzeichen mit Leerzeichen; Quellen:
+      solarhandel24, venturama, tepto, solarscouts → erster Vorschlags-PR mit
+      18 Aiko-Neostar-Klassen (PR #1)
+      - venturama: Produktseiten verlinken keine PDFs direkt (JS) → 0 Treffer
+      - JA-Solar-/Sunman-PDFs vielfach ohne Textlayer → OCR weiterhin offen
+      - Trina/Longi: Tabellenlayout noch nicht unterstützt (Folge-Tuning)
+      - Repo-Einstellung "Allow GitHub Actions to create and approve pull
+        requests" muss manuell aktiviert werden, bis dahin PR manuell
 
 ## Schritt 6: Feinschliff
 
