@@ -34,4 +34,8 @@ export interface Inverter {
   ac_power_nominal_w?: number; // string_inverter / hybrid only
   source_url: string; // required — provenance of the extracted values
   trackers: MpptTracker[];
+  // "independent": trackers are separate MPPT inputs, all usable at once (default).
+  // "variants": tracker entries are alternative configurations of ONE input
+  // (e.g. Victron battery-voltage variants) — exactly one can be selected.
+  tracker_mode?: "independent" | "variants";
 }

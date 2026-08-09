@@ -55,10 +55,12 @@ export function DeviceSelect({
         </select>
       </div>
 
-      {device && (
+      {device && device.tracker_mode === "variants" && (
         <div>
           <label className="mb-1 block text-sm font-medium text-slate-300">
-            Tracker / Eingang
+            {device.trackers.length > 1 && device.trackers[0].tracker_label.includes("Batterie")
+              ? "Batteriespannung"
+              : "Tracker / Eingang"}
           </label>
           <select
             value={trackerIndex}
@@ -74,7 +76,23 @@ export function DeviceSelect({
         </div>
       )}
 
-      {device && tracker && (
+      {device && device.tracker_mode !== "variants" && (
+        <div className="rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-slate-400">
+          <div>
+            {device.trackers.length} unabhängige MPPT-Eingänge – unten einzeln konfigurierbar
+          </div>
+          <a
+            href={device.source_url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sky-400 hover:underline"
+          >
+            Datenblatt / Quelle
+          </a>
+        </div>
+      )}
+
+      {device && device.tracker_mode === "variants" && tracker && (
         <div className="rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-slate-400">
           <div>
             MPPT-Fenster {tracker.v_mppt_min}–{tracker.v_mppt_max} V · max.{" "}
