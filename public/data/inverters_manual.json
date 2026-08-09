@@ -118,6 +118,56 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-3K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 3000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-4K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 4000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-5K-SG03LP1-EU",
     "device_type": "hybrid",
     "ac_power_nominal_w": 5000,
@@ -140,6 +190,56 @@
         "i_max": 13,
         "max_strings_parallel": 1,
         "p_max_w": 3250
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-5K-SG04LP3-EU",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/10/21/datasheet_sun-5-12k-sg04lp3_241021_en.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-5K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 5000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
       }
     ]
   },
@@ -172,6 +272,156 @@
   },
   {
     "manufacturer": "Deye",
+    "model_name": "SUN-6K-SG04LP3-EU",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/10/21/datasheet_sun-5-12k-sg04lp3_241021_en.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-6K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 6000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-8K-SG04LP3-EU",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/10/21/datasheet_sun-5-12k-sg04lp3_241021_en.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-8K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 8000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-10K-SG04LP3-EU",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2024/10/21/datasheet_sun-5-12k-sg04lp3_241021_en.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-10K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 10000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
     "model_name": "SUN-12K-SG04LP3-EU",
     "device_type": "hybrid",
     "ac_power_nominal_w": 12000,
@@ -191,6 +441,31 @@
         "v_mppt_max": 650,
         "v_max_absolute": 800,
         "i_max": 13,
+        "max_strings_parallel": 1
+      }
+    ]
+  },
+  {
+    "manufacturer": "Deye",
+    "model_name": "SUN-12K-SG05LP3-EU-SM2",
+    "device_type": "hybrid",
+    "ac_power_nominal_w": 12000,
+    "source_url": "https://www.deyeinverter.com/deyeinverter/2025/11/17/%E3%80%90B%E3%80%91Manual_SUN-4-12K-SG05LP3-EU-SM2_20251115_de.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
+        "max_strings_parallel": 1
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 650,
+        "v_max_absolute": 800,
+        "i_max": 20,
         "max_strings_parallel": 1
       }
     ]
