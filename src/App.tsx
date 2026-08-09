@@ -175,6 +175,7 @@ function App() {
     clearStoredConfig();
     setConfig(DEFAULT_CONFIG);
     setResetDone(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => setResetDone(false), 2000);
   };
 
@@ -203,14 +204,14 @@ function App() {
               type="button"
               onClick={resetAll}
               title="Konfiguration zurücksetzen"
-              className="rounded-xl border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
+              className="min-w-[146px] rounded-xl border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-slate-500 hover:text-slate-100"
             >
               {resetDone ? "Zurückgesetzt ✓" : "Zurücksetzen"}
             </button>
             <button
               type="button"
               onClick={share}
-              className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
+              className="min-w-[164px] rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
             >
               {copied ? "Link kopiert ✓" : "Konfiguration speichern"}
             </button>
