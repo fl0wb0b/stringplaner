@@ -63,6 +63,14 @@ function App() {
   const updateTracker = (index: number, patch: Partial<TrackerConfig>) => {
     setConfig((c) => {
       const next = trackerConfigs.map((t, i) => (i === index ? { ...t, ...patch } : t));
+      // When a tracker is switched on without a module yet, preset the module
+      // from the nearest already configured tracker (usually the one above).
+      if (patch.enabled && !next[index].moduleSlug) {
+        const donor =
+          [...next.slice(0, index)].reverse().find((t) => t.moduleSlug) ??
+          next.find((t, i) => i !== index && t.moduleSlug);
+        if (donor) next[index] = { ...next[index], moduleSlug: donor.moduleSlug };
+      }
       return { ...c, trackers: next };
     });
   };
