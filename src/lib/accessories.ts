@@ -59,6 +59,20 @@ const TWO_MPPT_TWO_STRINGS_EACH: OvervoltageAdvice = {
   productQuery: "Weidmüller PVN DC 2I 1O 2MPP SPD2R CG 11 2866330000",
 };
 
+// Ab 3 MPPT gibt es in der CG-Reihe nur noch "2 Eingänge/2 Ausgänge je MPP"-
+// Kästen (Einzelschutz je Eingang, keine echte 1:1-Kombinierbox, aber ein
+// Gehäuse für alle Tracker zusammen – deckt 1 ODER 2 Strings je Tracker ab,
+// da pro MPP-Zweig 2 geschützte Eingänge zur Verfügung stehen).
+const THREE_MPPT_BOX: OvervoltageAdvice = {
+  text: "Weidmüller PVN DC 2I 2O 3MPP SPD1R CG 11 (2975540000) – ein Kasten für alle 3 MPPT-Eingänge (bis zu 2 Strings je Tracker)",
+  productQuery: "Weidmüller PVN DC 2I 2O 3MPP SPD1R CG 11 2975540000",
+};
+
+const FOUR_MPPT_BOX: OvervoltageAdvice = {
+  text: "Weidmüller PVN DC 2I 2O 4MPP SPD1R CG 11 (2737610000) – ein Kasten für alle 4 MPPT-Eingänge (bis zu 2 Strings je Tracker)",
+  productQuery: "Weidmüller PVN DC 2I 2O 4MPP SPD1R CG 11 2737610000",
+};
+
 export interface TrackerStrings {
   label: string;
   stringsParallel: number;
@@ -69,15 +83,23 @@ export interface DeviceOvervoltageAdvice {
   items: Array<{ label: string; advice: OvervoltageAdvice }>;
 }
 
-// Betrachtet ALLE aktiven Tracker eines Geräts: bei genau 2 Trackern mit
-// gleicher Stringzahl wird ein gemeinsamer 2-MPP-Kasten empfohlen, sonst
-// pro Tracker einzeln (siehe overvoltageAdviceFor).
+// Betrachtet ALLE aktiven Tracker eines Geräts: bei 2, 3 oder 4 Trackern mit
+// je höchstens 2 Strings wird ein gemeinsamer Kasten für alle MPPT-Eingänge
+// empfohlen, sonst pro Tracker einzeln (siehe overvoltageAdviceFor).
 export function overvoltageAdviceForDevice(trackers: TrackerStrings[]): DeviceOvervoltageAdvice {
+  const label = trackers.map((t) => t.label).join(" + ");
+  const maxStrings = Math.max(...trackers.map((t) => t.stringsParallel));
+
   if (trackers.length === 2 && trackers[0].stringsParallel === trackers[1].stringsParallel) {
     const n = trackers[0].stringsParallel;
-    const label = `${trackers[0].label} + ${trackers[1].label}`;
     if (n === 1) return { combined: true, items: [{ label, advice: TWO_MPPT_ONE_STRING_EACH }] };
     if (n === 2) return { combined: true, items: [{ label, advice: TWO_MPPT_TWO_STRINGS_EACH }] };
+  }
+  if (trackers.length === 3 && maxStrings <= 2) {
+    return { combined: true, items: [{ label, advice: THREE_MPPT_BOX }] };
+  }
+  if (trackers.length === 4 && maxStrings <= 2) {
+    return { combined: true, items: [{ label, advice: FOUR_MPPT_BOX }] };
   }
   return {
     combined: false,
