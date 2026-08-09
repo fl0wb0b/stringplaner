@@ -12,8 +12,10 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
 - [x] Tailwind CSS v4 (`@tailwindcss/vite`)
 - [x] `vite-plugin-pwa` Grundkonfiguration (Manifest, Service Worker)
 - [x] GitHub Actions: Build + Deploy auf GitHub Pages bei Push auf `main`
-- [ ] PWA-Icons (192/512 px, maskable) erzeugen und einbinden
-- [ ] GitHub Pages in den Repo-Settings auf "GitHub Actions" umstellen (manuell)
+- [x] PWA-Icons (192/512 px + apple-touch-icon) aus icon.svg gerendert und
+      in Manifest/index.html eingebunden
+- [x] GitHub Pages in den Repo-Settings auf "GitHub Actions" umstellen (manuell
+      erledigt; Custom Domain planer.fl0wb0b.com eingerichtet)
 
 ## Schritt 2: Datenbeschaffung
 
