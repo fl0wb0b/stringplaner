@@ -2,10 +2,14 @@
 // Überspannungsschutz-/Kombinierer-Empfehlung (Weidmüller PVN DC, CG-Steckverbinder)
 // je nach Anzahl paralleler Strings an einem Tracker.
 //
-// Nur Boxen mit einer im Weidmüller-Shop/Geizhals bestätigten Artikelnummer werden
-// konkret verlinkt (aktuell: 2 Strings -> 1 kombinierter Ausgang). Für andere
-// Stringzahlen gibt es keine zuverlässig verifizierte "N Eingänge -> 1 Ausgang"-CG-
-// Variante, daher dort nur ein allgemeiner Such-Link statt einer geratenen Artikelnummer.
+// Datenstand anhand der vollständigen Weidmüller-eShop-Filterliste "Anschlussart
+// String" (CG-Steckverbinder, alle MPP-/Eingangszahlen, siehe Chat): in der CG-Reihe
+// gibt es NUR für 2 Strings eine echte "2 Eingänge -> 1 Ausgang"-Kombinierer-Box (pro
+// MPP-Tracker, unabhängig davon wie viele MPP-Tracker das Gerät insgesamt hat).
+// Ab 3 Strings existieren zwar "3I/3O"-Boxen, die führen die Strings aber NICHT
+// zusammen (3 Eingänge -> 3 separate Ausgänge, nur Einzelschutz je String) – dafür
+// braucht es keinen Kombinierer, sondern schlicht so viele geschützte Einzeleingänge
+// wie Strings, oder eine andere Lösung (Wechselrichter mit mehr MPPT, Verteiler).
 
 export function geizhalsSearchUrl(query: string): string {
   return `https://geizhals.de/?fs=${encodeURIComponent(query)}`;
@@ -18,28 +22,26 @@ export function idealoSearchUrl(query: string): string {
 export interface WeidmuellerBox {
   name: string;
   url: string;
-  exact: boolean; // false = allgemeiner Such-Link, keine konkrete Artikelnummer verifiziert
+  note: string;
 }
 
-const WEIDMUELLER_CG_COMBINER: Record<number, WeidmuellerBox> = {
-  // SPD2R (Typ 2, steckbares Schutzmodul) passend zur SPD2R-Variante des 2-MPP-
-  // Pendants (2866330000) – konsistente Schutzklasse. Geizhals-Direktlink noch
-  // offen (Artikel-ID nicht verifiziert), bis dahin der bestätigte Weidmüller-Shop-Link.
-  2: {
-    name: "Weidmüller PVN DC 2I 1O 1MPP SPD2R CG 11 (2791950000)",
-    url: "https://eshop.weidmueller.com/de/pvn-dc-2i-1o-1mpp-spd2r-cg-11/p/2791950000",
-    exact: true,
-  },
+// SPD2R (Typ II, steckbares Schutzmodul) – konsistent zur SPD2R-Variante des
+// 2-MPP-Pendants (2866330000). Bestätigt im Weidmüller eShop-Filter "CG".
+const TWO_STRING_COMBINER: WeidmuellerBox = {
+  name: "Weidmüller PVN DC 2I 1O 1MPP SPD2R CG 11 (2791950000)",
+  url: "https://eshop.weidmueller.com/de/pvn-dc-2i-1o-1mpp-spd2r-cg-11/p/2791950000",
+  note: "kombiniert 2 Strings auf 1 geschützten Ausgang",
 };
 
-// stringsParallel < 2: kein Kombinierer nötig (nur ein String, kein Zusammenführen).
+// stringsParallel < 2: kein Kombinierer nötig (nur ein String).
+// stringsParallel === 2: einzige echte "N->1"-Kombinierer-Box der CG-Reihe.
+// stringsParallel >= 3: es gibt keine kombinierende CG-Box (nur Einzelschutz je
+// String ohne Zusammenführung) – daher kein Produktlink, nur Hinweis.
 export function weidmuellerBoxFor(stringsParallel: number): WeidmuellerBox | null {
-  if (stringsParallel < 2) return null;
-  return (
-    WEIDMUELLER_CG_COMBINER[stringsParallel] ?? {
-      name: `Weidmüller PVN DC (${stringsParallel} Strings, CG)`,
-      url: geizhalsSearchUrl("Weidmüller PVN DC CG Kombinierer Überspannungsschutz"),
-      exact: false,
-    }
-  );
+  return stringsParallel === 2 ? TWO_STRING_COMBINER : null;
+}
+
+export function noCombinerNote(stringsParallel: number): string | null {
+  if (stringsParallel < 3) return null;
+  return `${stringsParallel} Strings: In der Weidmüller-PVN-DC-CG-Reihe gibt es dafür keine kombinierende Box (nur Einzelschutz je String ohne Zusammenführung) – Strings einzeln geschützt an den Tracker führen oder Wechselrichter mit mehr MPPT-Eingängen wählen.`;
 }

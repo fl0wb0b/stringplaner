@@ -11,7 +11,12 @@ import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 import { TRACKER_DOT } from "../lib/trackerColors";
-import { geizhalsSearchUrl, idealoSearchUrl, weidmuellerBoxFor } from "../lib/accessories";
+import {
+  geizhalsSearchUrl,
+  idealoSearchUrl,
+  noCombinerNote,
+  weidmuellerBoxFor,
+} from "../lib/accessories";
 
 interface Props {
   device: Inverter;
@@ -68,6 +73,9 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
     .filter((r): r is { label: string; box: NonNullable<ReturnType<typeof weidmuellerBoxFor>> } =>
       r.box !== null,
     );
+  const noCombinerNotes = results
+    .map((r) => ({ label: r.label, note: noCombinerNote(r.stringsParallel) }))
+    .filter((r): r is { label: string; note: string } => r.note !== null);
 
   const plzYield = yieldForPlz(plz);
   const specificYield = plzYield?.value ?? DEFAULT_YIELD;
@@ -214,10 +222,13 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
               >
                 {box.name} ↗
               </a>
-              {!box.exact && (
-                <span className="text-xs text-slate-600">(Such-Link, Eingänge vor Kauf prüfen)</span>
-              )}
+              <span className="text-xs text-slate-600">({box.note})</span>
             </div>
+          ))}
+          {noCombinerNotes.map(({ label, note }) => (
+            <p key={label} className="text-xs text-slate-500">
+              {label}: {note}
+            </p>
           ))}
         </div>
         <p className="mt-2 text-xs text-slate-500">
