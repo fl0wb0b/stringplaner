@@ -51,7 +51,7 @@ export function NumberField({
 
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-300">
+      <span className="field-label">
         {label}
         {unit ? <span className="text-slate-500"> ({unit})</span> : null}
       </span>
@@ -61,7 +61,7 @@ export function NumberField({
             type="button"
             aria-label={`${label} verringern`}
             onClick={() => nudge(-1)}
-            className="rounded-l-lg border border-r-0 border-slate-600 bg-slate-800 px-3 text-lg text-slate-300 select-none hover:border-sky-500 hover:text-sky-400 active:bg-slate-700"
+            className="rounded-l-xl border border-r-0 border-slate-700 bg-slate-800/80 px-3.5 text-lg text-slate-300 transition-colors select-none hover:text-sky-400 active:bg-slate-700"
           >
             −
           </button>
@@ -91,8 +91,8 @@ export function NumberField({
               e.currentTarget.blur();
             }
           }}
-          className={`w-full border border-slate-600 bg-slate-800 px-3 py-2 text-center tabular-nums text-slate-100 focus:border-sky-500 focus:outline-none ${
-            stepper ? "rounded-none" : "rounded-lg"
+          className={`w-full border border-slate-700 bg-slate-800/80 px-3 py-2.5 text-center tabular-nums text-slate-100 transition-colors focus:border-sky-500 focus:outline-none ${
+            stepper ? "rounded-none" : "rounded-xl"
           }`}
         />
         {stepper && (
@@ -100,7 +100,7 @@ export function NumberField({
             type="button"
             aria-label={`${label} erhöhen`}
             onClick={() => nudge(1)}
-            className="rounded-r-lg border border-l-0 border-slate-600 bg-slate-800 px-3 text-lg text-slate-300 select-none hover:border-sky-500 hover:text-sky-400 active:bg-slate-700"
+            className="rounded-r-xl border border-l-0 border-slate-700 bg-slate-800/80 px-3.5 text-lg text-slate-300 transition-colors select-none hover:text-sky-400 active:bg-slate-700"
           >
             +
           </button>

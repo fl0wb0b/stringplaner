@@ -31,8 +31,10 @@ export function TrackerSection({
 }: Props) {
   return (
     <div
-      className={`rounded-xl border p-4 ${
-        config.enabled ? "border-slate-600 bg-slate-800/30" : "border-slate-800 bg-slate-900"
+      className={`rounded-2xl border p-4 transition-colors ${
+        config.enabled
+          ? "border-sky-500/40 bg-slate-900/70 shadow-lg shadow-black/20"
+          : "border-slate-800 bg-slate-900/40"
       }`}
     >
       <label className="flex cursor-pointer items-center gap-3">
@@ -40,7 +42,7 @@ export function TrackerSection({
           type="checkbox"
           checked={config.enabled}
           onChange={(e) => onChange({ enabled: e.target.checked })}
-          className="h-5 w-5 accent-sky-500"
+          className="h-5 w-5 rounded accent-sky-500"
         />
         <span className="font-semibold text-slate-100">{tracker.tracker_label}</span>
         <span className="text-sm text-slate-400">

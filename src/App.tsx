@@ -133,8 +133,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-dvh bg-slate-900 text-slate-100">
-      <header className="border-b border-slate-700 px-4 py-4">
+    <div className="min-h-dvh">
+      <header className="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 px-4 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -152,14 +152,14 @@ function App() {
           <button
             type="button"
             onClick={share}
-            className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-slate-200 hover:border-sky-500"
+            className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
           >
             {copied ? "Link kopiert ✓" : "Teilen"}
           </button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-6 px-4 py-6">
+      <main className="mx-auto max-w-3xl space-y-5 px-4 py-6">
         {loadError && (
           <div className="rounded-lg border border-red-500/40 bg-red-500/15 px-4 py-3 text-sm text-red-400">
             Daten konnten nicht geladen werden: {loadError}
@@ -170,8 +170,8 @@ function App() {
           !loadError && <p className="text-slate-400">Lade Modul- und Gerätedaten …</p>
         ) : (
           <>
-            <section className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
-              <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+            <section className="card">
+              <h2 className="card-title">
                 Gerät
               </h2>
               <DeviceSelect
@@ -183,8 +183,8 @@ function App() {
               />
             </section>
 
-            <section className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
-              <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+            <section className="card">
+              <h2 className="card-title">
                 Standort &amp; Verkabelung
               </h2>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -244,8 +244,8 @@ function App() {
               </section>
             ) : (
               <section className="space-y-4">
-                <div className="rounded-xl border border-slate-800 bg-slate-800/20 p-4">
-                  <h2 className="mb-3 text-sm font-semibold tracking-wide text-slate-400 uppercase">
+                <div className="card">
+                  <h2 className="card-title">
                     String-Konfiguration
                   </h2>
                   <div className="space-y-4">

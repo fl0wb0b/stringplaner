@@ -41,7 +41,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
 
   return (
     <div className="relative">
-      <label className="mb-1 block text-sm font-medium text-slate-300">PV-Modul</label>
+      <label className="field-label">PV-Modul</label>
       <input
         type="search"
         value={query}
@@ -51,10 +51,10 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
         }}
         onFocus={() => setOpen(true)}
         placeholder="Hersteller oder Modell suchen …"
-        className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-sky-500 focus:outline-none"
+        className="field"
       />
       {selected && (
-        <div className="mt-2 rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm">
+        <div className="mt-2 rounded-xl border border-sky-500/30 bg-sky-500/5 px-3 py-2.5 text-sm">
           <div className="font-medium text-slate-100">
             {selected.manufacturer} {selected.model_name}
           </div>
@@ -67,7 +67,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
       {open && resultIdxs.length > 0 && (
         <div
           ref={listRef}
-          className="absolute z-20 mt-1 max-h-72 w-full overflow-y-auto rounded-lg border border-slate-600 bg-slate-800 shadow-xl"
+          className="absolute z-20 mt-1.5 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-700 bg-slate-800 shadow-2xl shadow-black/50"
         >
           <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
             {virtualizer.getVirtualItems().map((row) => {
@@ -81,7 +81,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
                     setOpen(false);
                     setQuery("");
                   }}
-                  className="absolute left-0 top-0 w-full px-3 py-1.5 text-left hover:bg-slate-700"
+                  className="absolute left-0 top-0 w-full px-3 py-1.5 text-left transition-colors hover:bg-slate-700/80"
                   style={{ transform: `translateY(${row.start}px)`, height: row.size }}
                 >
                   <div className="truncate text-sm text-slate-100">
@@ -97,7 +97,7 @@ export function ModuleSearch({ modules, selected, onSelect }: Props) {
         </div>
       )}
       {open && query.trim().length >= 2 && resultIdxs.length === 0 && (
-        <div className="absolute z-20 mt-1 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-slate-400 shadow-xl">
+        <div className="absolute z-20 mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm text-slate-400 shadow-2xl shadow-black/50">
           Keine Treffer
         </div>
       )}

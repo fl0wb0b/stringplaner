@@ -37,7 +37,7 @@ export function TotalSummary({ device, results }: Props) {
         : "Gesamtstatus: alle Tracker zulässig";
 
   return (
-    <div className={`rounded-xl border px-4 py-3 ${STATUS_STYLE[worst]}`}>
+    <div className={`rounded-2xl border px-4 py-3.5 shadow-lg shadow-black/20 ${STATUS_STYLE[worst]}`}>
       <div className="font-semibold">{text}</div>
       <div className="mt-1 text-sm">
         Gesamt-PV-Leistung: <span className="font-semibold tabular-nums">{fmt(totalWp)} Wp</span>

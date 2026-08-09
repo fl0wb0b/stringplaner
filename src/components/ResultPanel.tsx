@@ -76,13 +76,13 @@ export function ResultPanel({ result: r, tracker }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className={`rounded-lg border px-4 py-3 text-sm font-semibold ${banner.cls}`}>
+      <div className={`rounded-xl border px-4 py-3 text-sm font-semibold ${banner.cls}`}>
         {banner.text}
       </div>
-      <div className="overflow-x-auto rounded-lg border border-slate-700">
+      <div className="overflow-x-auto rounded-xl border border-slate-800">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-700 bg-slate-800/60 text-left text-slate-400">
+            <tr className="border-b border-slate-800 bg-slate-800/50 text-left text-xs tracking-wide text-slate-400 uppercase">
               <th className="px-3 py-2 font-medium">Prüfung</th>
               <th className="px-3 py-2 font-medium">Wert</th>
               <th className="px-3 py-2 font-medium">Grenze</th>
@@ -91,9 +91,9 @@ export function ResultPanel({ result: r, tracker }: Props) {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.label} className="border-b border-slate-800 last:border-0">
+              <tr key={row.label} className="border-b border-slate-800/60 transition-colors last:border-0 hover:bg-slate-800/30">
                 <td className="px-3 py-2 text-slate-200">{row.label}</td>
-                <td className="px-3 py-2 tabular-nums text-slate-100">{row.value}</td>
+                <td className="px-3 py-2 font-medium tabular-nums text-slate-100">{row.value}</td>
                 <td className="px-3 py-2 tabular-nums text-slate-400">{row.limit}</td>
                 <td className="px-3 py-2">
                   <StatusBadge status={row.status} />
