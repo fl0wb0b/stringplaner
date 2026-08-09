@@ -1087,11 +1087,11 @@
     "model_name": "Symo 10.0-3-M (klassisch)",
     "device_type": "string_inverter",
     "ac_power_nominal_w": 10000,
-    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_EN.pdf",
+    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_DE.pdf",
     "trackers": [
       {
         "tracker_label": "MPPT 1",
-        "v_mppt_min": 270,
+        "v_mppt_min": 200,
         "v_mppt_max": 800,
         "v_max_absolute": 1000,
         "i_max": 27,
@@ -1099,7 +1099,7 @@
       },
       {
         "tracker_label": "MPPT 2",
-        "v_mppt_min": 270,
+        "v_mppt_min": 200,
         "v_mppt_max": 800,
         "v_max_absolute": 1000,
         "i_max": 16.5,
@@ -1109,10 +1109,35 @@
   },
   {
     "manufacturer": "Fronius",
-    "model_name": "Symo 20.0-3-M",
+    "model_name": "Symo 12.5-3-M",
     "device_type": "string_inverter",
-    "ac_power_nominal_w": 20000,
-    "source_url": "https://geizhals.de/",
+    "ac_power_nominal_w": 12500,
+    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_DE.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 27,
+        "max_strings_parallel": 3
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 16.5,
+        "max_strings_parallel": 3
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo 15.0-3-M",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 15000,
+    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_DE.pdf",
     "trackers": [
       {
         "tracker_label": "MPPT 1",
@@ -1120,17 +1145,65 @@
         "v_mppt_max": 800,
         "v_max_absolute": 1000,
         "i_max": 33,
-        "max_strings_parallel": 2,
-        "p_max_w": 15000
+        "max_strings_parallel": 3
       },
       {
         "tracker_label": "MPPT 2",
         "v_mppt_min": 200,
         "v_mppt_max": 800,
         "v_max_absolute": 1000,
+        "i_max": 27,
+        "max_strings_parallel": 3
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo 17.5-3-M",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 17500,
+    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_DE.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
         "i_max": 33,
-        "max_strings_parallel": 2,
-        "p_max_w": 15000
+        "max_strings_parallel": 3
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 27,
+        "max_strings_parallel": 3
+      }
+    ]
+  },
+  {
+    "manufacturer": "Fronius",
+    "model_name": "Symo 20.0-3-M",
+    "device_type": "string_inverter",
+    "ac_power_nominal_w": 20000,
+    "source_url": "https://www.fronius.com/en/~/downloads/Solar%20Energy/Datasheets/SE_DS_Fronius_Symo_DE.pdf",
+    "trackers": [
+      {
+        "tracker_label": "MPPT 1",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 33,
+        "max_strings_parallel": 3
+      },
+      {
+        "tracker_label": "MPPT 2",
+        "v_mppt_min": 200,
+        "v_mppt_max": 800,
+        "v_max_absolute": 1000,
+        "i_max": 27,
+        "max_strings_parallel": 3
       }
     ]
   },
