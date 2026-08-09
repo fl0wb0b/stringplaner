@@ -19,6 +19,12 @@ export function idealoSearchUrl(query: string): string {
   return `https://www.idealo.de/preisvergleich/MainSearchProductCategory.html?q=${encodeURIComponent(query)}`;
 }
 
+// Fallback für Nischenartikel (z.B. Weidmüller-Boxen), die Geizhals/Idealo
+// oft nicht listen – Google Shopping findet dort praktisch immer Händler.
+export function googleShoppingUrl(query: string): string {
+  return `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(query)}`;
+}
+
 export interface OvervoltageAdvice {
   text: string;
   productQuery?: string; // gesetzt, wenn ein konkretes Produkt existiert (für Preisvergleichs-Links)

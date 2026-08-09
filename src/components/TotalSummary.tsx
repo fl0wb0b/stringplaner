@@ -11,7 +11,12 @@ import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
 import { TRACKER_DOT } from "../lib/trackerColors";
-import { geizhalsSearchUrl, idealoSearchUrl, overvoltageAdviceForDevice } from "../lib/accessories";
+import {
+  geizhalsSearchUrl,
+  googleShoppingUrl,
+  idealoSearchUrl,
+  overvoltageAdviceForDevice,
+} from "../lib/accessories";
 
 interface Props {
   device: Inverter;
@@ -229,6 +234,17 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
                     className="text-sky-400 hover:underline"
                   >
                     bei Geizhals ↗
+                  </a>
+                  {/* Nischenartikel wie Kombinierer-Boxen listet Geizhals oft
+                      nicht – Google Shopping als verlässlicher dritter Weg. */}
+                  <span className="text-slate-600">·</span>
+                  <a
+                    href={googleShoppingUrl(advice.productQuery)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sky-400 hover:underline"
+                  >
+                    Google Shopping ↗
                   </a>
                 </>
               )}
