@@ -10,6 +10,7 @@ import {
 import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
 import { DEFAULT_YIELD, MONTH_LABELS, monthlyYield, yieldForPlz } from "../lib/plzYield";
+import { TRACKER_DOT } from "../lib/trackerColors";
 
 interface Props {
   device: Inverter;
@@ -24,7 +25,6 @@ const STATUS_STYLE: Record<CheckStatus, string> = {
   fehler: "bg-red-500/15 text-red-400 border-red-500/40",
 };
 
-const BAR_COLORS = ["bg-sky-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"];
 
 const fmt = (v: number, digits = 0) =>
   v.toLocaleString("de-DE", { maximumFractionDigits: digits });
@@ -83,7 +83,7 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
               {results.map((r, i) => (
                 <div
                   key={r.label}
-                  className={BAR_COLORS[i % BAR_COLORS.length]}
+                  className={TRACKER_DOT[i % TRACKER_DOT.length]}
                   style={{ width: `${(r.result.powerTotal / totalWp) * 100}%` }}
                 />
               ))}
@@ -92,7 +92,7 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
               {results.map((r, i) => (
                 <span key={r.label} className="flex items-center gap-1.5">
                   <span
-                    className={`inline-block h-2 w-2 rounded-full ${BAR_COLORS[i % BAR_COLORS.length]}`}
+                    className={`inline-block h-2 w-2 rounded-full ${TRACKER_DOT[i % TRACKER_DOT.length]}`}
                   />
                   {r.label}: {fmt(r.result.powerTotal)} Wp
                 </span>
@@ -147,12 +147,12 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
                 label={{ value: "kWh", position: "insideTopLeft", fill: "#94a3b8", fontSize: 11 }}
               />
               <Tooltip
-                cursor={{ fill: "rgba(56,189,248,0.08)" }}
+                cursor={{ fill: "rgba(250,204,21,0.08)" }}
                 contentStyle={{ background: "#1e293b", border: "1px solid #475569", borderRadius: 8 }}
                 labelStyle={{ color: "#e2e8f0" }}
                 formatter={(v: number) => [`${fmt(v)} kWh`, "Ertrag"]}
               />
-              <Bar dataKey="kwh" fill="#38bdf8" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="kwh" fill="#facc15" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

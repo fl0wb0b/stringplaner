@@ -1,12 +1,14 @@
 import type { CalcResult } from "../lib/calc";
 import type { MpptTracker, PVModule } from "../lib/types";
 import type { TrackerConfig } from "../lib/urlState";
+import { TRACKER_BORDER, TRACKER_DOT } from "../lib/trackerColors";
 import { NumberField } from "./NumberField";
 import { ResultPanel } from "./ResultPanel";
 import { VoltageChart } from "./VoltageChart";
 
 interface Props {
   tracker: MpptTracker;
+  index: number; // color index, matches the distribution bar in the total summary
   config: TrackerConfig;
   module: PVModule | null; // global module from step 2
   result: CalcResult | null;
@@ -19,6 +21,7 @@ interface Props {
 // result table and voltage/temperature chart. The module comes from step 2.
 export function TrackerSection({
   tracker,
+  index,
   config,
   module: mod,
   result,
@@ -30,7 +33,7 @@ export function TrackerSection({
     <div
       className={`rounded-2xl border p-4 transition-colors ${
         config.enabled
-          ? "border-sky-500/40 bg-slate-900/70 shadow-lg shadow-black/20"
+          ? `${TRACKER_BORDER[index % TRACKER_BORDER.length]} bg-slate-900/70 shadow-lg shadow-black/20`
           : "border-slate-800 bg-slate-900/40"
       }`}
     >
@@ -41,11 +44,19 @@ export function TrackerSection({
           onChange={(e) => onChange({ enabled: e.target.checked })}
           className="h-5 w-5 rounded accent-sky-500"
         />
+        <span
+          className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ${TRACKER_DOT[index % TRACKER_DOT.length]}`}
+        />
         <span className="font-semibold text-slate-100">{tracker.tracker_label}</span>
         <span className="text-sm text-slate-400">
           {tracker.v_mppt_min}–{tracker.v_mppt_max} V · max. {tracker.v_max_absolute} V ·{" "}
           {tracker.i_max} A
         </span>
+        {config.enabled && result && (
+          <span className="ml-auto text-sm font-semibold tabular-nums text-slate-200">
+            {result.powerTotal.toLocaleString("de-DE", { maximumFractionDigits: 0 })} Wp
+          </span>
+        )}
       </label>
 
       {config.enabled && (

@@ -253,6 +253,7 @@ function App() {
                     <TrackerSection
                       key={tracker.tracker_label}
                       tracker={tracker}
+                      index={i}
                       config={trackerConfigs[i]}
                       module={selectedModule}
                       result={trackerResults[i]}
