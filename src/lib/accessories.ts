@@ -21,12 +21,13 @@ export function idealoSearchUrl(query: string): string {
 
 export interface OvervoltageAdvice {
   text: string;
-  url?: string; // gesetzt, wenn ein konkretes Produkt existiert
+  productQuery?: string; // gesetzt, wenn ein konkretes Produkt existiert (für Preisvergleichs-Links)
 }
 
 // Liefert für JEDE Stringzahl eine Aussage (auch 1 String) – die Einkaufshilfe
 // soll nie kommentarlos leer bleiben, nur weil die Konfiguration nicht genau
-// 2 Strings hat.
+// 2 Strings hat. Verlinkt wird – wie beim Wechselrichter selbst – auf
+// Preisvergleichsportale (Idealo/Geizhals), nicht auf den Hersteller-Shop.
 export function overvoltageAdviceFor(stringsParallel: number): OvervoltageAdvice {
   if (stringsParallel <= 1) {
     return { text: "1 String – kein Kombinierer nötig, einfacher Überspannungsschutz reicht." };
@@ -34,7 +35,7 @@ export function overvoltageAdviceFor(stringsParallel: number): OvervoltageAdvice
   if (stringsParallel === 2) {
     return {
       text: "Weidmüller PVN DC 2I 1O 1MPP SPD2R CG 11 (2791950000) – kombiniert 2 Strings auf 1 geschützten Ausgang",
-      url: "https://eshop.weidmueller.com/de/pvn-dc-2i-1o-1mpp-spd2r-cg-11/p/2791950000",
+      productQuery: "Weidmüller PVN DC 2I 1O 1MPP SPD2R CG 11 2791950000",
     };
   }
   return {

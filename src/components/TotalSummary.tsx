@@ -206,18 +206,29 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
           </div>
           {overvoltageAdvice.map(({ label, advice }) => (
             <div key={label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="text-slate-400">{label} – Überspannungsschutz:</span>
-              {advice.url ? (
-                <a
-                  href={advice.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sky-400 hover:underline"
-                >
-                  {advice.text} ↗
-                </a>
-              ) : (
-                <span className="text-xs text-slate-500">{advice.text}</span>
+              <span className="text-slate-400">
+                {label} – Überspannungsschutz: {advice.text}
+              </span>
+              {advice.productQuery && (
+                <>
+                  <a
+                    href={idealoSearchUrl(advice.productQuery)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sky-400 hover:underline"
+                  >
+                    bei Idealo ↗
+                  </a>
+                  <span className="text-slate-600">·</span>
+                  <a
+                    href={geizhalsSearchUrl(advice.productQuery)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sky-400 hover:underline"
+                  >
+                    bei Geizhals ↗
+                  </a>
+                </>
               )}
             </div>
           ))}
