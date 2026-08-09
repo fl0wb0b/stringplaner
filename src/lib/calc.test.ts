@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculate, stringVocAtTemp, type CalcInput } from "./calc";
+import { calculate, stringCurrentAtTemp, stringVocAtTemp, type CalcInput } from "./calc";
 import type { MpptTracker, PVModule } from "./types";
 
 // Round numbers chosen so expected values are hand-computable.
@@ -136,5 +136,43 @@ describe("stringVocAtTemp", () => {
 
   it("returns STC Voc at 25°C", () => {
     expect(stringVocAtTemp(testModule, 2, 25)).toBeCloseTo(80, 9);
+  });
+});
+
+describe("stringCurrentAtTemp", () => {
+  it("matches the cold/hot current from calculate()", () => {
+    const r = calculate(baseInput);
+    expect(stringCurrentAtTemp(testModule, 2, -10)).toBeCloseTo(r.iCold, 9);
+    expect(stringCurrentAtTemp(testModule, 2, 70)).toBeCloseTo(r.iHot, 9);
+  });
+
+  it("returns STC Imp at 25°C", () => {
+    expect(stringCurrentAtTemp(testModule, 2, 25)).toBeCloseTo(20, 9);
+  });
+});
+
+describe("calculate — MPPT-Ladereglerbatterie (batteryFloatVoltage)", () => {
+  it("ignores battery float voltage when unset (inverter case)", () => {
+    const r = calculate(baseInput);
+    expect(r.checks.vmpMin).toBe("ok");
+  });
+
+  it("fails Vmp check when float voltage exceeds tracker's own MPPT minimum", () => {
+    // vmpHotCorrected ≈ 54.15 V (see hot-Vmp test above); float voltage above that fails
+    const r = calculate({ ...baseInput, batteryFloatVoltage: 55 });
+    expect(r.checks.vmpMin).toBe("fehler");
+    expect(r.accepted).toBe(false);
+  });
+
+  it("passes when float voltage is below both vmpHotCorrected and v_mppt_min", () => {
+    const r = calculate({ ...baseInput, batteryFloatVoltage: 30 });
+    expect(r.checks.vmpMin).toBe("ok");
+  });
+
+  it("does not let a low float voltage weaken the tracker's own MPPT minimum", () => {
+    const tracker = { ...testTracker, v_mppt_min: 55 };
+    // float voltage far below v_mppt_min must not override the device limit
+    const r = calculate({ ...baseInput, tracker, batteryFloatVoltage: 20 });
+    expect(r.checks.vmpMin).toBe("fehler");
   });
 });

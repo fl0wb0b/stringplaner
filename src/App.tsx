@@ -21,6 +21,7 @@ import { ResultPanel } from "./components/ResultPanel";
 import { TotalSummary } from "./components/TotalSummary";
 import { TrackerSection } from "./components/TrackerSection";
 import { VoltageChart } from "./components/VoltageChart";
+import { CurrentChart } from "./components/CurrentChart";
 
 function App() {
   const [modules, setModules] = useState<PVModule[] | null>(null);
@@ -95,6 +96,13 @@ function App() {
   const moduleForTracker = (tc: TrackerConfig): PVModule | null =>
     tc.moduleSlug ? (moduleBySlug.get(tc.moduleSlug) ?? null) : selectedModule;
 
+  // Nur bei MPPT-Ladereglern relevant — bei Wechselrichtern gibt es keine
+  // Batterie, die Float-Spannung darf die Vmp-Prüfung dort nicht beeinflussen.
+  const batteryFloatVoltage =
+    selectedDevice?.device_type === "mppt_charger"
+      ? (config.batteryFloatVoltage ?? undefined)
+      : undefined;
+
   const calcFor = (
     tracker: Inverter["trackers"][number],
     series: number,
@@ -111,6 +119,7 @@ function App() {
           tempMax: config.tempMax,
           cableLength: config.cableLength,
           crossSection: config.crossSection,
+          batteryFloatVoltage,
         })
       : null;
 
@@ -297,6 +306,18 @@ function App() {
                     onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
                   />
                 </div>
+                {selectedDevice?.device_type === "mppt_charger" && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <NumberField
+                      label="Batterie-Float-Spannung"
+                      unit="V"
+                      value={config.batteryFloatVoltage ?? 0}
+                      min={0}
+                      step={0.5}
+                      onChange={(v) => update({ batteryFloatVoltage: Math.max(0, v) })}
+                    />
+                  </div>
+                )}
               </div>
             </section>
 
@@ -320,6 +341,7 @@ function App() {
                       result={trackerResults[i]}
                       tempMin={config.tempMin}
                       tempMax={config.tempMax}
+                      batteryFloatVoltage={batteryFloatVoltage}
                       onChange={(patch) => updateTracker(i, patch)}
                     />
                   ))}
@@ -350,19 +372,38 @@ function App() {
                     </div>
                     {variantResult && variantTracker ? (
                       <>
-                        <ResultPanel result={variantResult} tracker={variantTracker} />
+                        <ResultPanel
+                          result={variantResult}
+                          tracker={variantTracker}
+                          batteryFloatVoltage={batteryFloatVoltage}
+                        />
                         {selectedModule && (
-                          <div>
-                            <h3 className="mb-2 text-sm font-medium text-slate-300">
-                              Spannungs-/Temperatur-Graph
-                            </h3>
-                            <VoltageChart
-                              module={selectedModule}
-                              modulesInSeries={config.modulesInSeries}
-                              tracker={variantTracker}
-                              tempMin={config.tempMin}
-                              tempMax={config.tempMax}
-                            />
+                          <div className="space-y-4">
+                            <div>
+                              <h3 className="mb-2 text-sm font-medium text-slate-300">
+                                Spannungs-/Temperatur-Graph
+                              </h3>
+                              <VoltageChart
+                                module={selectedModule}
+                                modulesInSeries={config.modulesInSeries}
+                                tracker={variantTracker}
+                                tempMin={config.tempMin}
+                                tempMax={config.tempMax}
+                                batteryFloatVoltage={batteryFloatVoltage}
+                              />
+                            </div>
+                            <div>
+                              <h3 className="mb-2 text-sm font-medium text-slate-300">
+                                Strom-/Temperatur-Graph
+                              </h3>
+                              <CurrentChart
+                                module={selectedModule}
+                                stringsParallel={config.stringsParallel}
+                                tracker={variantTracker}
+                                tempMin={config.tempMin}
+                                tempMax={config.tempMax}
+                              />
+                            </div>
                           </div>
                         )}
                       </>

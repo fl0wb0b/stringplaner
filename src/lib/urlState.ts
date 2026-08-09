@@ -53,6 +53,9 @@ export interface ConfigState {
   tempMax: number;
   cableLength: number; // m, one-way
   crossSection: number; // mm²
+  // Nur für MPPT-Laderegler relevant: Batterie-Float-/Erhaltungsspannung,
+  // zusätzliche Untergrenze neben der Geräte-MPPT-Untergrenze (calc.ts).
+  batteryFloatVoltage: number | null;
 }
 
 export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
@@ -75,6 +78,7 @@ export const DEFAULT_CONFIG: ConfigState = {
   tempMax: 70,
   cableLength: 10,
   crossSection: 6,
+  batteryFloatVoltage: null,
 };
 
 const STORAGE_KEY = "stringplaner:last-config";
@@ -111,6 +115,7 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
   p.set("tmax", String(c.tempMax));
   p.set("cl", String(c.cableLength));
   p.set("cs", String(c.crossSection));
+  if (c.batteryFloatVoltage != null) p.set("bfv", String(c.batteryFloatVoltage));
   return p.toString();
 }
 
@@ -162,6 +167,7 @@ export function decodeConfig(search: string): ConfigState | null {
     tempMax: num(p, "tmax", d.tempMax),
     cableLength: num(p, "cl", d.cableLength),
     crossSection: num(p, "cs", d.crossSection),
+    batteryFloatVoltage: p.has("bfv") ? num(p, "bfv", 0) : null,
   };
 }
 

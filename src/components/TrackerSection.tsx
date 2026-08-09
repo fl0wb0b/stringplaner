@@ -7,6 +7,7 @@ import { ModuleSearch } from "./ModuleSearch";
 import { NumberField } from "./NumberField";
 import { ResultPanel } from "./ResultPanel";
 import { VoltageChart } from "./VoltageChart";
+import { CurrentChart } from "./CurrentChart";
 
 interface Props {
   tracker: MpptTracker;
@@ -18,6 +19,7 @@ interface Props {
   result: CalcResult | null;
   tempMin: number;
   tempMax: number;
+  batteryFloatVoltage?: number; // nur bei MPPT-Ladereglern gesetzt
   onChange: (patch: Partial<TrackerConfig>) => void;
 }
 
@@ -35,6 +37,7 @@ export function TrackerSection({
   result,
   tempMin,
   tempMax,
+  batteryFloatVoltage,
   onChange,
 }: Props) {
   const effectiveModule = overrideModule ?? mod;
@@ -128,19 +131,36 @@ export function TrackerSection({
               onChange={(v) => onChange({ stringsParallel: Math.max(1, Math.trunc(v)) })}
             />
           </div>
-          {result && <ResultPanel result={result} tracker={tracker} />}
+          {result && (
+            <ResultPanel result={result} tracker={tracker} batteryFloatVoltage={batteryFloatVoltage} />
+          )}
           {effectiveModule ? (
-            <div>
-              <h3 className="mb-2 text-sm font-medium text-slate-300">
-                Spannungs-/Temperatur-Graph
-              </h3>
-              <VoltageChart
-                module={effectiveModule}
-                modulesInSeries={config.modulesInSeries}
-                tracker={tracker}
-                tempMin={tempMin}
-                tempMax={tempMax}
-              />
+            <div className="space-y-4">
+              <div>
+                <h3 className="mb-2 text-sm font-medium text-slate-300">
+                  Spannungs-/Temperatur-Graph
+                </h3>
+                <VoltageChart
+                  module={effectiveModule}
+                  modulesInSeries={config.modulesInSeries}
+                  tracker={tracker}
+                  tempMin={tempMin}
+                  tempMax={tempMax}
+                  batteryFloatVoltage={batteryFloatVoltage}
+                />
+              </div>
+              <div>
+                <h3 className="mb-2 text-sm font-medium text-slate-300">
+                  Strom-/Temperatur-Graph
+                </h3>
+                <CurrentChart
+                  module={effectiveModule}
+                  stringsParallel={config.stringsParallel}
+                  tracker={tracker}
+                  tempMin={tempMin}
+                  tempMax={tempMax}
+                />
+              </div>
             </div>
           ) : (
             <p className="text-sm text-slate-500">Modul in Schritt 2 wählen.</p>

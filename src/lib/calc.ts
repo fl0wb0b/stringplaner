@@ -16,6 +16,11 @@ export interface CalcInput {
   tempMax: number; // °C, hottest expected cell temperature (DE default ≈ 70)
   cableLength: number; // m, one-way run (doubled internally for both conductors)
   crossSection: number; // mm²
+  // MPPT-Laderegler (Victron etc.): Batterie-Float-/Erhaltungsspannung. Der
+  // Laderegler kann nur regeln, solange die PV-Spannung darüber liegt —
+  // zusätzlich zur Geräte-MPPT-Untergrenze relevant, unabhängig davon.
+  // Bei Wechselrichtern nicht gesetzt.
+  batteryFloatVoltage?: number;
 }
 
 export interface CalcResult {
@@ -57,12 +62,17 @@ export function calculate(input: CalcInput): CalcResult {
   const powerRatio =
     tracker.p_max_w != null && tracker.p_max_w > 0 ? powerTotal / tracker.p_max_w : null;
 
+  // Bei MPPT-Ladereglern muss die PV-Spannung zusätzlich zur Geräte-Untergrenze
+  // auch über der Batterie-Float-Spannung liegen, sonst kann der Regler den
+  // Ladevorgang nicht mehr führen — die höhere der beiden Grenzen entscheidet.
+  const vmpMinEffective = Math.max(tracker.v_mppt_min, input.batteryFloatVoltage ?? 0);
+
   const checks = {
     vocMax: (vocCold <= tracker.v_max_absolute ? "ok" : "fehler") as CheckStatus,
     currentMax: (iCold <= tracker.i_max && stringsParallel <= tracker.max_strings_parallel
       ? "ok"
       : "fehler") as CheckStatus,
-    vmpMin: (vmpHotCorrected > tracker.v_mppt_min ? "ok" : "fehler") as CheckStatus,
+    vmpMin: (vmpHotCorrected > vmpMinEffective ? "ok" : "fehler") as CheckStatus,
     powerRatio: (powerRatio != null && powerRatio > 1.3 ? "warnung" : "ok") as CheckStatus,
   };
 
@@ -97,4 +107,10 @@ export function stringVocAtTemp(m: PVModule, modulesInSeries: number, temp: numb
 
 export function stringVmpAtTemp(m: PVModule, modulesInSeries: number, temp: number): number {
   return m.vmp * (1 + (m.temp_coeff_voc / 100) * (temp - 25)) * modulesInSeries;
+}
+
+// Array current as a function of temperature — same formula as iCold/iHot in
+// calculate(), used by the Current/Temperatur chart.
+export function stringCurrentAtTemp(m: PVModule, stringsParallel: number, temp: number): number {
+  return (m.imp + m.temp_coeff_isc * -(25 - temp)) * stringsParallel;
 }

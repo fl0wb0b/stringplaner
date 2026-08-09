@@ -18,11 +18,21 @@ interface Props {
   tracker: MpptTracker;
   tempMin: number;
   tempMax: number;
+  // MPPT-Laderegler: Batterie-Float-Spannung, falls gesetzt als zusätzliche
+  // Untergrenze eingezeichnet (siehe calc.ts vmpMinEffective).
+  batteryFloatVoltage?: number;
 }
 
 // Voc/Vmp string voltage over temperature with the tracker limits as
 // reference lines — the visual counterpart to the table (TASKS.md 4b).
-export function VoltageChart({ module: m, modulesInSeries, tracker, tempMin, tempMax }: Props) {
+export function VoltageChart({
+  module: m,
+  modulesInSeries,
+  tracker,
+  tempMin,
+  tempMax,
+  batteryFloatVoltage,
+}: Props) {
   const from = Math.min(-30, Math.floor(tempMin / 5) * 5 - 5);
   const to = Math.max(85, Math.ceil(tempMax / 5) * 5 + 5);
   const data = [];
@@ -76,6 +86,19 @@ export function VoltageChart({ module: m, modulesInSeries, tracker, tempMin, tem
             strokeDasharray="6 3"
             label={{ value: `MPPT min. ${tracker.v_mppt_min} V`, fill: "#94a3b8", fontSize: 11, position: "insideBottomRight" }}
           />
+          {batteryFloatVoltage != null && (
+            <ReferenceLine
+              y={batteryFloatVoltage}
+              stroke="#c98500"
+              strokeDasharray="6 3"
+              label={{
+                value: `Batterie-Float ${batteryFloatVoltage} V`,
+                fill: "#c98500",
+                fontSize: 11,
+                position: "insideBottomLeft",
+              }}
+            />
+          )}
           <ReferenceLine x={tempMin} stroke="#64748b" strokeDasharray="2 4" />
           <ReferenceLine x={tempMax} stroke="#64748b" strokeDasharray="2 4" />
           {/* Blau/Orange: CVD-validiertes Paar (ΔE 26,8 protan auf #0f172a) —

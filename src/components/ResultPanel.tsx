@@ -4,6 +4,7 @@ import type { MpptTracker } from "../lib/types";
 interface Props {
   result: CalcResult;
   tracker: MpptTracker;
+  batteryFloatVoltage?: number; // nur bei MPPT-Ladereglern gesetzt
 }
 
 const STATUS_STYLE: Record<CheckStatus, string> = {
@@ -31,7 +32,10 @@ function StatusBadge({ status }: { status: CheckStatus }) {
 const fmt = (v: number, digits = 1) =>
   v.toLocaleString("de-DE", { maximumFractionDigits: digits, minimumFractionDigits: 0 });
 
-export function ResultPanel({ result: r, tracker }: Props) {
+export function ResultPanel({ result: r, tracker, batteryFloatVoltage }: Props) {
+  // Muss mit vmpMinEffective in calc.ts übereinstimmen — sonst zeigt die
+  // Tabelle eine Grenze an, gegen die gar nicht geprüft wurde.
+  const vmpMinEffective = Math.max(tracker.v_mppt_min, batteryFloatVoltage ?? 0);
   const rows: Array<{
     label: string;
     value: string;
@@ -53,7 +57,10 @@ export function ResultPanel({ result: r, tracker }: Props) {
     {
       label: "MPP-Spannung bei Hitze (inkl. Kabelverlust)",
       value: `${fmt(r.vmpHotCorrected)} V (−${fmt(r.cableDrop, 2)} V Kabel)`,
-      limit: `> ${fmt(tracker.v_mppt_min)} V`,
+      limit:
+        vmpMinEffective > tracker.v_mppt_min
+          ? `> ${fmt(vmpMinEffective)} V (Batterie-Float)`
+          : `> ${fmt(tracker.v_mppt_min)} V`,
       status: r.checks.vmpMin,
     },
     {
