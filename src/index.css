@@ -50,36 +50,41 @@
   }
 }
 
-/* "powered by fl0wb0b" – futuristischer Wordmark mit blauem Licht-Sweep */
-@keyframes powered-sweep {
-  0% {
-    background-position: -200% center;
-  }
+/* "powered by fl0wb0b" – handgesprühter Graffiti-Tag wie beim
+   Tesla Robotaxi/Cybercab-Wordmark: Brush-Schrift, leichte Schieflage,
+   pulsierender Neon-Glow statt braver Firmenschrift. */
+@keyframes powered-neon {
+  0%,
   100% {
-    background-position: 200% center;
+    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.55))
+      drop-shadow(0 0 9px rgba(56, 189, 248, 0.35));
+    opacity: 0.92;
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(125, 211, 252, 0.85))
+      drop-shadow(0 0 16px rgba(56, 189, 248, 0.55));
+    opacity: 1;
   }
 }
 
 .powered-by {
   display: inline-block;
-  /* Tourney: futuristische Stencil-Schnitte à la Tesla-Robotaxi-Wordmark */
-  font-family: "Tourney", "Michroma", sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  background: linear-gradient(
-    100deg,
-    #0369a1 0%,
-    #0ea5e9 40%,
-    #e0f2fe 50%,
-    #0ea5e9 60%,
-    #0369a1 100%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: powered-sweep 3.2s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.35));
+  margin-top: 0.1rem;
+  transform: rotate(-2deg);
+}
+
+.powered-by__text {
+  font-family: "Caveat Brush", cursive;
+  font-size: 1.15rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: #7dd3fc;
+  animation: powered-neon 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .powered-by__text {
+    animation: none;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
+  }
 }
