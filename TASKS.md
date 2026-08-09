@@ -50,7 +50,18 @@ neue Erkenntnisse als Unterpunkte ergänzen. Referenziert aus CLAUDE.md.
       (stabile Slugs `manufacturer__model_name`), localStorage-Fallback,
       Teilen-Button (Clipboard)
 
-## Schritt 5: Feinschliff
+## Schritt 5: Datenpflege-Automatik
+
+- [x] 5a: Datenblatt-Scanner (`scripts/scan-modules.mjs`): scannt konfigurierte
+      Quellen (`data-sources/module_sources.json`) nach Datenblatt-PDFs,
+      extrahiert STC-Tabellen (pdftotext), validiert (Vmp×Imp≈Pmax u.a.)
+      und schlägt neue Module vor
+- [x] 5b: Workflow `scan-modules.yml`: wöchentlicher Cron + manueller Trigger,
+      öffnet einen Pull Request mit den Vorschlägen (Review-Schleuse, kein
+      Auto-Merge); Bild-PDFs ohne Textlayer werden im Report gelistet (OCR offen)
+- [ ] 5c: Erster echter Scan-Lauf prüfen (Selektoren der Shopseiten ggf. anpassen)
+
+## Schritt 6: Feinschliff
 
 - [ ] Offline-Caching der JSON-Daten prüfen (iOS Safari + Android Chrome)
 - [ ] "Zum Home-Bildschirm"-Test auf iPhone/iPad

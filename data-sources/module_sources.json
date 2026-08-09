@@ -1,0 +1,18 @@
+[
+  {
+    "name": "solarhandel24",
+    "type": "page",
+    "url": "https://solarhandel24.de/collections/solarmodule",
+    "follow_pattern": "/products/[a-z0-9-]+",
+    "pdf_pattern": "/cdn/shop/files/[^\"' ]+\\.pdf",
+    "max_pages": 40
+  },
+  {
+    "name": "venturama",
+    "type": "page",
+    "url": "https://venturama-solar.de/pv-module/",
+    "follow_pattern": "venturama-solar\\.de/produkt/[a-z0-9-]+",
+    "pdf_pattern": "https://[^\"' ]+\\.pdf",
+    "max_pages": 40
+  }
+]

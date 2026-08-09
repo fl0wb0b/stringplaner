@@ -1,0 +1,33 @@
+name: Scan module datasheets
+
+on:
+  schedule:
+    - cron: "43 5 * * 1" # weekly, Monday 05:43 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Parser self-test
+        run: node scripts/scan-modules.mjs --parse-test
+      - name: Scan sources
+        run: node scripts/scan-modules.mjs
+      - name: Open pull request with proposals
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: scan/module-proposals
+          title: "Modul-Scan: neue Datenblatt-Extraktionen"
+          commit-message: "feat(data): automatisch extrahierte Module aus Datenblatt-Scan"
+          body-path: scan-report.md
+          add-paths: public/data/modules_manual.json
+          delete-branch: true

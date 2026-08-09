@@ -172,7 +172,7 @@ function App() {
             onClick={share}
             className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 active:bg-sky-600"
           >
-            {copied ? "Link kopiert ✓" : "Teilen"}
+            {copied ? "Link kopiert ✓" : "Konfiguration speichern"}
           </button>
         </div>
       </header>
