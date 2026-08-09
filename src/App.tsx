@@ -65,54 +65,36 @@ function App() {
 
   const update = (patch: Partial<ConfigState>) => setConfig((c) => ({ ...c, ...patch }));
 
+  const selectedModule = config.moduleSlug
+    ? (moduleBySlug.get(config.moduleSlug) ?? null)
+    : null;
+
   // Keep the per-tracker config array aligned with the selected device.
   const trackerConfigs: TrackerConfig[] = useMemo(() => {
     if (!selectedDevice || !isIndependent) return [];
     return selectedDevice.trackers.map(
-      (_, i) =>
-        config.trackers[i] ?? {
-          ...DEFAULT_TRACKER_CONFIG,
-          enabled: i === 0,
-          // carry over a module chosen before switching devices
-          moduleSlug: i === 0 ? (config.trackers[0]?.moduleSlug ?? config.moduleSlug) : null,
-        },
+      (_, i) => config.trackers[i] ?? { ...DEFAULT_TRACKER_CONFIG, enabled: i === 0 },
     );
-  }, [selectedDevice, isIndependent, config.trackers, config.moduleSlug]);
+  }, [selectedDevice, isIndependent, config.trackers]);
 
   const updateTracker = (index: number, patch: Partial<TrackerConfig>) => {
-    setConfig((c) => {
-      const next = trackerConfigs.map((t, i) => (i === index ? { ...t, ...patch } : t));
-      // When a tracker is switched on without a module yet, preset the module
-      // from the nearest already configured tracker (usually the one above).
-      if (patch.enabled && !next[index].moduleSlug) {
-        const donor =
-          [...next.slice(0, index)].reverse().find((t) => t.moduleSlug) ??
-          next.find((t, i) => i !== index && t.moduleSlug);
-        if (donor) next[index] = { ...next[index], moduleSlug: donor.moduleSlug };
-      }
-      return { ...c, trackers: next };
-    });
+    setConfig((c) => ({
+      ...c,
+      trackers: trackerConfigs.map((t, i) => (i === index ? { ...t, ...patch } : t)),
+    }));
   };
 
   const selectDevice = (slug: string) => {
     setConfig((c) => ({ ...c, deviceSlug: slug, trackerIndex: 0, trackers: [] }));
   };
 
-  // --- variants mode (single input, e.g. Victron battery-voltage variants) ---
-  const selectedModule = config.moduleSlug ? (moduleBySlug.get(config.moduleSlug) ?? null) : null;
-  const variantTracker =
-    !isIndependent && selectedDevice
-      ? (selectedDevice.trackers[
-          Math.min(config.trackerIndex, selectedDevice.trackers.length - 1)
-        ] ?? null)
-      : null;
-  const variantResult =
-    selectedModule && variantTracker
+  const calcFor = (tracker: Inverter["trackers"][number], series: number, parallel: number) =>
+    selectedModule
       ? calculate({
           module: selectedModule,
-          modulesInSeries: config.modulesInSeries,
-          stringsParallel: config.stringsParallel,
-          tracker: variantTracker,
+          modulesInSeries: series,
+          stringsParallel: parallel,
+          tracker,
           tempMin: config.tempMin,
           tempMax: config.tempMax,
           cableLength: config.cableLength,
@@ -120,79 +102,34 @@ function App() {
         })
       : null;
 
-  // --- independent mode: one result per enabled tracker ---
-  const trackerResults: Array<{
-    label: string;
-    module: PVModule | null;
-    result: CalcResult | null;
-  }> = isIndependent
-    ? trackerConfigs.map((tc, i) => {
-        const tracker = selectedDevice!.trackers[i];
-        const mod = tc.enabled && tc.moduleSlug ? (moduleBySlug.get(tc.moduleSlug) ?? null) : null;
-        const result =
-          tc.enabled && mod
-            ? calculate({
-                module: mod,
-                modulesInSeries: tc.modulesInSeries,
-                stringsParallel: tc.stringsParallel,
-                tracker,
-                tempMin: config.tempMin,
-                tempMax: config.tempMax,
-                cableLength: config.cableLength,
-                crossSection: config.crossSection,
-              })
-            : null;
-        return { label: tracker.tracker_label, module: mod, result };
-      })
-    : [];
-  const completeResults = trackerResults
-    .filter((r) => r.result)
-    .map((r) => ({ label: r.label, result: r.result! }));
+  // variants devices (e.g. Victron battery-voltage variants): one input
+  const variantTracker =
+    !isIndependent && selectedDevice
+      ? (selectedDevice.trackers[
+          Math.min(config.trackerIndex, selectedDevice.trackers.length - 1)
+        ] ?? null)
+      : null;
+  const variantResult = variantTracker
+    ? calcFor(variantTracker, config.modulesInSeries, config.stringsParallel)
+    : null;
 
-  // Rarely changed inputs live in a collapsed card; the summary line shows the active values.
-  const conditionsCard = (
-    <details className="card">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
-        <span className="card-title" style={{ marginBottom: 0 }}>
-          Standort &amp; Verkabelung
-        </span>
-        <span className="text-sm tabular-nums text-slate-500">
-          {config.tempMin} bis {config.tempMax} °C · {config.cableLength} m ·{" "}
-          {config.crossSection} mm²
-        </span>
-      </summary>
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <NumberField
-          label="Min. Temperatur"
-          unit="°C"
-          value={config.tempMin}
-          onChange={(v) => update({ tempMin: v })}
-        />
-        <NumberField
-          label="Max. Modultemperatur"
-          unit="°C"
-          value={config.tempMax}
-          onChange={(v) => update({ tempMax: v })}
-        />
-        <NumberField
-          label="Kabellänge einfach"
-          unit="m"
-          value={config.cableLength}
-          min={0}
-          step={0.5}
-          onChange={(v) => update({ cableLength: Math.max(0, v) })}
-        />
-        <NumberField
-          label="Kabelquerschnitt"
-          unit="mm²"
-          value={config.crossSection}
-          min={0.5}
-          step={0.5}
-          onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
-        />
-      </div>
-    </details>
-  );
+  // independent devices: one result per enabled tracker
+  const trackerResults: Array<CalcResult | null> = isIndependent
+    ? trackerConfigs.map((tc, i) =>
+        tc.enabled
+          ? calcFor(selectedDevice!.trackers[i], tc.modulesInSeries, tc.stringsParallel)
+          : null,
+      )
+    : [];
+  const completeResults = isIndependent
+    ? trackerResults
+        .map((result, i) =>
+          result ? { label: selectedDevice!.trackers[i].tracker_label, result } : null,
+        )
+        .filter((r): r is { label: string; result: CalcResult } => r !== null)
+    : variantResult && variantTracker
+      ? [{ label: variantTracker.tracker_label, result: variantResult }]
+      : [];
 
   // Selecting the custom module for the first time seeds it with defaults.
   const pickModule = (slug: string): Partial<ConfigState> =>
@@ -251,8 +188,9 @@ function App() {
           !loadError && <p className="text-slate-400">Lade Modul- und Gerätedaten …</p>
         ) : (
           <>
+            {/* 1 — Gerät */}
             <section className="card">
-              <h2 className="card-title">Gerät</h2>
+              <h2 className="card-title">Wechselrichter / MPPT</h2>
               <DeviceSelect
                 inverters={inverters}
                 selectedSlug={config.deviceSlug}
@@ -262,52 +200,72 @@ function App() {
               />
             </section>
 
-            {isIndependent && selectedDevice ? (
-              <section className="space-y-4">
-                {selectedDevice.trackers.map((tracker, i) => (
-                  <TrackerSection
-                    key={tracker.tracker_label}
-                    tracker={tracker}
-                    config={trackerConfigs[i]}
-                    modules={modules}
-                    selectedModule={trackerResults[i]?.module ?? null}
-                    result={trackerResults[i]?.result ?? null}
-                    tempMin={config.tempMin}
-                    tempMax={config.tempMax}
-                    custom={config.custom}
-                    onChange={(patch) => updateTracker(i, patch)}
-                    onSelectModule={(slug) => {
-                      if (slug === CUSTOM_MODULE_SLUG && !config.custom)
-                        setConfig((c) => ({ ...c, custom: DEFAULT_CUSTOM_MODULE }));
-                      updateTracker(i, { moduleSlug: slug });
-                    }}
-                    onCustomChange={updateCustom}
+            {/* 2 — Modul + Randbedingungen */}
+            <section className="card">
+              <h2 className="card-title">Modul</h2>
+              <div className="space-y-4">
+                <ModulePicker
+                  modules={modules}
+                  selectedSlug={config.moduleSlug}
+                  selectedModule={selectedModule}
+                  custom={config.custom}
+                  onSelect={(slug) => update(pickModule(slug))}
+                  onCustomChange={updateCustom}
+                />
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <NumberField
+                    label="Min. Temperatur"
+                    unit="°C"
+                    value={config.tempMin}
+                    onChange={(v) => update({ tempMin: v })}
                   />
-                ))}
-                {conditionsCard}
-                {completeResults.length > 0 ? (
-                  <TotalSummary device={selectedDevice} results={completeResults} />
-                ) : (
-                  <p className="text-sm text-slate-500">
-                    Mindestens einen Tracker aktivieren und ein Modul wählen.
-                  </p>
-                )}
-              </section>
-            ) : (
-              <section className="space-y-4">
-                <div className="card">
-                  <h2 className="card-title">
-                    String-Konfiguration
-                  </h2>
-                  <div className="space-y-4">
-                    <ModulePicker
-                      modules={modules}
-                      selectedSlug={config.moduleSlug}
-                      selectedModule={selectedModule}
-                      custom={config.custom}
-                      onSelect={(slug) => update(pickModule(slug))}
-                      onCustomChange={updateCustom}
+                  <NumberField
+                    label="Max. Modultemperatur"
+                    unit="°C"
+                    value={config.tempMax}
+                    onChange={(v) => update({ tempMax: v })}
+                  />
+                  <NumberField
+                    label="Kabellänge einfach"
+                    unit="m"
+                    value={config.cableLength}
+                    min={0}
+                    step={0.5}
+                    onChange={(v) => update({ cableLength: Math.max(0, v) })}
+                  />
+                  <NumberField
+                    label="Kabelquerschnitt"
+                    unit="mm²"
+                    value={config.crossSection}
+                    min={0.5}
+                    step={0.5}
+                    onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* 3 — Tracker / Strings */}
+            {selectedDevice ? (
+              isIndependent ? (
+                <section className="space-y-4">
+                  {selectedDevice.trackers.map((tracker, i) => (
+                    <TrackerSection
+                      key={tracker.tracker_label}
+                      tracker={tracker}
+                      config={trackerConfigs[i]}
+                      module={selectedModule}
+                      result={trackerResults[i]}
+                      tempMin={config.tempMin}
+                      tempMax={config.tempMax}
+                      onChange={(patch) => updateTracker(i, patch)}
                     />
+                  ))}
+                </section>
+              ) : (
+                <section className="card">
+                  <h2 className="card-title">String</h2>
+                  <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-3">
                       <NumberField
                         label="Module in Serie"
@@ -328,33 +286,46 @@ function App() {
                         }
                       />
                     </div>
-                  </div>
-                </div>
-                {conditionsCard}
-                {variantResult && variantTracker ? (
-                  <section className="card">
-                    <h2 className="card-title">Ergebnis</h2>
-                    <ResultPanel result={variantResult} tracker={variantTracker} />
-                    {selectedModule && (
-                      <div className="mt-4">
-                        <h3 className="mb-2 text-sm font-medium text-slate-300">
-                          Spannungs-/Temperatur-Graph
-                        </h3>
-                        <VoltageChart
-                          module={selectedModule}
-                          modulesInSeries={config.modulesInSeries}
-                          tracker={variantTracker}
-                          tempMin={config.tempMin}
-                          tempMax={config.tempMax}
-                        />
-                      </div>
+                    {variantResult && variantTracker ? (
+                      <>
+                        <ResultPanel result={variantResult} tracker={variantTracker} />
+                        {selectedModule && (
+                          <div>
+                            <h3 className="mb-2 text-sm font-medium text-slate-300">
+                              Spannungs-/Temperatur-Graph
+                            </h3>
+                            <VoltageChart
+                              module={selectedModule}
+                              modulesInSeries={config.modulesInSeries}
+                              tracker={variantTracker}
+                              tempMin={config.tempMin}
+                              tempMax={config.tempMax}
+                            />
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-sm text-slate-500">Modul in Schritt 2 wählen.</p>
                     )}
-                  </section>
-                ) : (
-                  <p className="text-sm text-slate-500">
-                    Modul und Gerät wählen, um die Prüfung zu starten.
-                  </p>
-                )}
+                  </div>
+                </section>
+              )
+            ) : (
+              <p className="text-sm text-slate-500">
+                Gerät und Modul wählen, um die Prüfung zu starten.
+              </p>
+            )}
+
+            {/* 4 — Gesamtleistung */}
+            {selectedDevice && completeResults.length > 0 && (
+              <section className="card">
+                <h2 className="card-title">Gesamtleistung</h2>
+                <TotalSummary
+                  device={selectedDevice}
+                  results={completeResults}
+                  plz={config.plz}
+                  onPlzChange={(v) => update({ plz: v })}
+                />
               </section>
             )}
           </>

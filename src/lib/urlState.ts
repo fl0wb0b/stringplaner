@@ -31,7 +31,6 @@ export const DEFAULT_CUSTOM_MODULE: CustomModuleValues = {
 
 export interface TrackerConfig {
   enabled: boolean;
-  moduleSlug: string | null;
   modulesInSeries: number;
   stringsParallel: number;
 }
@@ -46,6 +45,7 @@ export interface ConfigState {
   // independent mode, aligned with device.trackers
   trackers: TrackerConfig[];
   custom: CustomModuleValues | null;
+  plz: string; // German postal code for the simple annual-yield estimate
   tempMin: number;
   tempMax: number;
   cableLength: number; // m, one-way
@@ -54,7 +54,6 @@ export interface ConfigState {
 
 export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
   enabled: false,
-  moduleSlug: null,
   modulesInSeries: 2,
   stringsParallel: 1,
 };
@@ -67,6 +66,7 @@ export const DEFAULT_CONFIG: ConfigState = {
   stringsParallel: 1,
   trackers: [],
   custom: null,
+  plz: "",
   tempMin: -10,
   tempMax: 70,
   cableLength: 10,
@@ -82,10 +82,10 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
   if (mode === "independent" && c.trackers.length) {
     c.trackers.forEach((t, i) => {
       p.set(`e${i}`, t.enabled ? "1" : "0");
-      if (t.moduleSlug) p.set(`m${i}`, t.moduleSlug);
       p.set(`s${i}`, String(t.modulesInSeries));
       p.set(`p${i}`, String(t.stringsParallel));
     });
+    if (c.moduleSlug) p.set("m", c.moduleSlug);
   } else {
     if (c.moduleSlug) p.set("m", c.moduleSlug);
     p.set("t", String(c.trackerIndex));
@@ -101,6 +101,7 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
     p.set("ctv", String(c.custom.temp_coeff_voc));
     p.set("cti", String(c.custom.temp_coeff_isc_pct));
   }
+  if (c.plz) p.set("plz", c.plz);
   p.set("tmin", String(c.tempMin));
   p.set("tmax", String(c.tempMax));
   p.set("cl", String(c.cableLength));
@@ -125,7 +126,6 @@ export function decodeConfig(search: string): ConfigState | null {
     if (!p.has(`e${i}`) && !p.has(`m${i}`) && !p.has(`s${i}`)) break;
     trackers.push({
       enabled: p.get(`e${i}`) !== "0",
-      moduleSlug: p.get(`m${i}`),
       modulesInSeries: posInt(num(p, `s${i}`, 2)),
       stringsParallel: posInt(num(p, `p${i}`, 1)),
     });
@@ -133,7 +133,8 @@ export function decodeConfig(search: string): ConfigState | null {
 
   return {
     deviceSlug: p.get("d"),
-    moduleSlug: p.get("m"),
+    // old multi-tracker links carried the module per tracker (m0) — fall back to it
+    moduleSlug: p.get("m") ?? p.get("m0"),
     trackerIndex: Math.max(0, Math.trunc(num(p, "t", d.trackerIndex))),
     modulesInSeries: posInt(num(p, "s", d.modulesInSeries)),
     stringsParallel: posInt(num(p, "p", d.stringsParallel)),
@@ -149,6 +150,7 @@ export function decodeConfig(search: string): ConfigState | null {
           temp_coeff_isc_pct: num(p, "cti", DEFAULT_CUSTOM_MODULE.temp_coeff_isc_pct),
         }
       : null,
+    plz: p.get("plz") ?? "",
     tempMin: num(p, "tmin", d.tempMin),
     tempMax: num(p, "tmax", d.tempMax),
     cableLength: num(p, "cl", d.cableLength),

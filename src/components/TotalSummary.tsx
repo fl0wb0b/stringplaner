@@ -1,9 +1,12 @@
 import type { CalcResult, CheckStatus } from "../lib/calc";
 import type { Inverter } from "../lib/types";
+import { DEFAULT_YIELD, yieldForPlz } from "../lib/plzYield";
 
 interface Props {
   device: Inverter;
   results: Array<{ label: string; result: CalcResult }>;
+  plz: string;
+  onPlzChange: (v: string) => void;
 }
 
 const STATUS_STYLE: Record<CheckStatus, string> = {
@@ -12,18 +15,19 @@ const STATUS_STYLE: Record<CheckStatus, string> = {
   fehler: "bg-red-500/15 text-red-400 border-red-500/40",
 };
 
+const BAR_COLORS = ["bg-sky-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"];
+
 const fmt = (v: number, digits = 0) =>
   v.toLocaleString("de-DE", { maximumFractionDigits: digits });
 
-// Aggregate over all enabled independent trackers: total installed DC power,
-// DC/AC ratio, worst-of overall status.
-export function TotalSummary({ device, results }: Props) {
+// Step 4: total installed power over all active trackers, per-tracker share,
+// DC/AC ratio with oversizing warning, and a simple annual-yield estimate.
+export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
   if (!results.length) return null;
 
   const totalWp = results.reduce((a, r) => a + r.result.powerTotal, 0);
   const acW = device.ac_power_nominal_w;
   const dcAcRatio = acW ? totalWp / acW : null;
-  // Oversizing check on device level — catches trackers without their own p_max_w
   const oversized = dcAcRatio != null && dcAcRatio > 1.3;
 
   const worst: CheckStatus = results.some((r) => r.result.overallStatus === "fehler")
@@ -34,35 +38,92 @@ export function TotalSummary({ device, results }: Props) {
 
   const text =
     worst === "fehler"
-      ? "Gesamtstatus: NICHT zulässig – mindestens ein Tracker verletzt eine Grenze"
+      ? "NICHT zulässig – mindestens ein Tracker verletzt eine Grenze"
       : oversized
-        ? `Gesamtstatus: zulässig, mit Warnung – Überdimensionierung ${Math.round(
+        ? `Zulässig, mit Warnung – Überdimensionierung ${Math.round(
             dcAcRatio! * 100,
           )} % der AC-Nennleistung (> 130 % empfohlen)`
         : worst === "warnung"
-          ? "Gesamtstatus: zulässig, mit Warnung"
-          : "Gesamtstatus: alle Tracker zulässig";
+          ? "Zulässig, mit Warnung"
+          : "Konfiguration zulässig";
+
+  const plzYield = yieldForPlz(plz);
+  const specificYield = plzYield?.value ?? DEFAULT_YIELD;
+  const annualKwh = (totalWp / 1000) * specificYield;
 
   return (
-    <div className={`rounded-2xl border px-4 py-3.5 shadow-lg shadow-black/20 ${STATUS_STYLE[worst]}`}>
-      <div className="font-semibold">{text}</div>
-      <div className="mt-1 text-sm">
-        Gesamt-PV-Leistung: <span className="font-semibold tabular-nums">{fmt(totalWp)} Wp</span>
-        {" über "}
-        {results.length} Tracker
-        {dcAcRatio != null && (
+    <div className="space-y-4">
+      <div className={`rounded-xl border px-4 py-3 text-sm font-semibold ${STATUS_STYLE[worst]}`}>
+        {text}
+      </div>
+
+      <div>
+        <div className="mb-1 flex items-baseline justify-between">
+          <span className="text-sm text-slate-400">Gesamt-PV-Leistung</span>
+          <span className="text-lg font-semibold tabular-nums text-slate-100">
+            {fmt(totalWp)} Wp
+          </span>
+        </div>
+        {results.length > 1 && (
           <>
-            {" · DC/AC-Verhältnis "}
-            <span className="tabular-nums">
-              {dcAcRatio.toLocaleString("de-DE", { maximumFractionDigits: 2 })}
-            </span>{" "}
-            ({fmt(acW!)} W AC)
+            <div className="flex h-3 w-full overflow-hidden rounded-full bg-slate-800">
+              {results.map((r, i) => (
+                <div
+                  key={r.label}
+                  className={BAR_COLORS[i % BAR_COLORS.length]}
+                  style={{ width: `${(r.result.powerTotal / totalWp) * 100}%` }}
+                />
+              ))}
+            </div>
+            <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+              {results.map((r, i) => (
+                <span key={r.label} className="flex items-center gap-1.5">
+                  <span
+                    className={`inline-block h-2 w-2 rounded-full ${BAR_COLORS[i % BAR_COLORS.length]}`}
+                  />
+                  {r.label}: {fmt(r.result.powerTotal)} Wp
+                </span>
+              ))}
+            </div>
           </>
         )}
+        {dcAcRatio != null && (
+          <p className="mt-2 text-sm text-slate-400">
+            DC/AC-Verhältnis{" "}
+            <span className="tabular-nums text-slate-200">
+              {dcAcRatio.toLocaleString("de-DE", { maximumFractionDigits: 2 })}
+            </span>{" "}
+            bei {fmt(acW!)} W AC-Nennleistung
+          </p>
+        )}
       </div>
-      <div className="mt-1 text-xs opacity-80">
-        {results.map((r) => `${r.label}: ${fmt(r.result.powerTotal)} Wp`).join(" · ")}
+
+      <div className="grid grid-cols-2 items-end gap-3">
+        <label className="block">
+          <span className="field-label">Postleitzahl (Standort)</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            maxLength={5}
+            value={plz}
+            onChange={(e) => onPlzChange(e.target.value.replace(/\D/g, ""))}
+            placeholder="z.B. 80331"
+            className="field text-center tabular-nums"
+          />
+        </label>
+        <div className="rounded-xl border border-slate-700 bg-slate-800/40 px-3 py-2.5 text-center">
+          <div className="text-xs text-slate-400">Jahresertrag (überschlägig)</div>
+          <div className="text-lg font-semibold tabular-nums text-slate-100">
+            {fmt(annualKwh)} kWh
+          </div>
+        </div>
       </div>
+      <p className="text-xs text-slate-500">
+        {plzYield
+          ? `Region ${plzYield.region}: ca. ${fmt(plzYield.value)} kWh/kWp·a`
+          : `Ohne gültige PLZ: Deutschland-Mittel ${fmt(DEFAULT_YIELD)} kWh/kWp·a`}
+        {" – Überschlag für Südausrichtung ~30° Neigung, keine Simulation."}
+      </p>
     </div>
   );
 }
