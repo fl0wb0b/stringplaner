@@ -30,6 +30,10 @@
 @layer components {
   .card {
     @apply rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-lg shadow-black/20;
+    /* feiner Lichtrand oben gibt den Karten Tiefe, ohne laut zu werden */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 10px 15px -3px rgba(0, 0, 0, 0.2);
   }
 
   .card-title {

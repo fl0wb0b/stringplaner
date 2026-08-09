@@ -38,16 +38,19 @@ export function VoltageChart({ module: m, modulesInSeries, tracker, tempMin, tem
     <div className="h-80 w-full">
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 10, right: 16, bottom: 4, left: 0 }}>
-          <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
+          {/* Grid als solide Haarlinie eine Stufe über dem Surface — gestrichelt
+              bleibt den echten Grenzlinien vorbehalten (dataviz-Regel). */}
+          <CartesianGrid stroke="#1e293b" />
           <XAxis
             dataKey="t"
-            stroke="#94a3b8"
-            tick={{ fontSize: 12 }}
+            stroke="#334155"
+            interval={2}
+            tick={{ fontSize: 12, fill: "#94a3b8" }}
             label={{ value: "Temperatur (°C)", position: "insideBottom", offset: -2, fill: "#94a3b8", fontSize: 12 }}
           />
           <YAxis
-            stroke="#94a3b8"
-            tick={{ fontSize: 12 }}
+            stroke="#334155"
+            tick={{ fontSize: 12, fill: "#94a3b8" }}
             width={44}
             label={{ value: "V", position: "insideTopLeft", fill: "#94a3b8", fontSize: 12 }}
           />
@@ -56,7 +59,11 @@ export function VoltageChart({ module: m, modulesInSeries, tracker, tempMin, tem
             labelStyle={{ color: "#e2e8f0" }}
             labelFormatter={(t) => `${t} °C`}
           />
-          <Legend wrapperStyle={{ fontSize: 12 }} />
+          {/* Legendentext in Text-Ink, Farbe trägt nur der Marker (dataviz-Regel) */}
+          <Legend
+            wrapperStyle={{ fontSize: 12 }}
+            formatter={(value: string) => <span style={{ color: "#94a3b8" }}>{value}</span>}
+          />
           <ReferenceLine
             y={tracker.v_max_absolute}
             stroke="#ef4444"
@@ -65,14 +72,16 @@ export function VoltageChart({ module: m, modulesInSeries, tracker, tempMin, tem
           />
           <ReferenceLine
             y={tracker.v_mppt_min}
-            stroke="#38bdf8"
+            stroke="#94a3b8"
             strokeDasharray="6 3"
-            label={{ value: `MPPT min. ${tracker.v_mppt_min} V`, fill: "#38bdf8", fontSize: 11, position: "insideBottomRight" }}
+            label={{ value: `MPPT min. ${tracker.v_mppt_min} V`, fill: "#94a3b8", fontSize: 11, position: "insideBottomRight" }}
           />
           <ReferenceLine x={tempMin} stroke="#64748b" strokeDasharray="2 4" />
           <ReferenceLine x={tempMax} stroke="#64748b" strokeDasharray="2 4" />
-          <Line type="monotone" dataKey="voc" name="Voc (String)" stroke="#f59e0b" dot={false} strokeWidth={2} />
-          <Line type="monotone" dataKey="vmp" name="Vmp (String)" stroke="#22c55e" dot={false} strokeWidth={2} />
+          {/* Blau/Orange: CVD-validiertes Paar (ΔE 26,8 protan auf #0f172a) —
+              das frühere Amber/Grün kollabierte bei Rot-Grün-Blindheit (ΔE 5,7). */}
+          <Line type="monotone" dataKey="voc" name="Voc (String)" stroke="#3987e5" dot={false} strokeWidth={2} />
+          <Line type="monotone" dataKey="vmp" name="Vmp (String)" stroke="#d95926" dot={false} strokeWidth={2} />
         </LineChart>
       </ResponsiveContainer>
     </div>

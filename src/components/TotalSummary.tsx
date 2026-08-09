@@ -93,7 +93,8 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
         </div>
         {results.length > 1 && (
           <>
-            <div className="flex h-3 w-full overflow-hidden rounded-full bg-slate-800">
+            {/* 2px Surface-Lücke zwischen Segmenten statt Rahmen (dataviz-Spacer-Regel) */}
+            <div className="flex h-3 w-full gap-[2px] overflow-hidden rounded-full bg-slate-800">
               {results.map((r) => (
                 <div
                   key={r.label}
@@ -152,11 +153,12 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
         <div className="h-56 w-full">
           <ResponsiveContainer>
             <BarChart data={monthlyData} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-              <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="monat" stroke="#94a3b8" tick={{ fontSize: 11 }} interval={0} />
+              {/* solide Haarlinie statt gestrichelt — Dashing ist Grenzlinien vorbehalten */}
+              <CartesianGrid stroke="#1e293b" vertical={false} />
+              <XAxis dataKey="monat" stroke="#334155" tick={{ fontSize: 11, fill: "#94a3b8" }} interval={0} />
               <YAxis
-                stroke="#94a3b8"
-                tick={{ fontSize: 11 }}
+                stroke="#334155"
+                tick={{ fontSize: 11, fill: "#94a3b8" }}
                 width={44}
                 label={{ value: "kWh", position: "insideTopLeft", fill: "#94a3b8", fontSize: 11 }}
               />
@@ -166,7 +168,7 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
                 labelStyle={{ color: "#e2e8f0" }}
                 formatter={(v: number) => [`${fmt(v)} kWh`, "Ertrag"]}
               />
-              <Bar dataKey="kwh" fill="#facc15" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="kwh" fill="#facc15" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
