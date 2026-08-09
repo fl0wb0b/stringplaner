@@ -30,8 +30,7 @@ jobs:
           for f in scan-debug/*Datenblatt*.txt scan-debug/*data*sheet*.txt; do
             [ -e "$f" ] || continue
             echo "::group::$f"
-            head -c 6000 "$f"
-            echo ""
+            grep -inE 'leistung|spannung|strom|voltage|current|power|voc|isc|imp|vmp|pmax|koeffizient|coefficient|temperatur|stc|noct' "$f" | head -80
             echo "::endgroup::"
           done
       - name: Upload extracted texts (debug)
