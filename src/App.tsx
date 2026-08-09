@@ -3,15 +3,18 @@ import { calculate, type CalcResult } from "./lib/calc";
 import { inverterSlug, loadInverters, loadModules, moduleSlug } from "./lib/data";
 import type { Inverter, PVModule } from "./lib/types";
 import {
+  CUSTOM_MODULE_SLUG,
+  DEFAULT_CUSTOM_MODULE,
   DEFAULT_TRACKER_CONFIG,
   loadInitialConfig,
   persistConfig,
   type ConfigState,
+  type CustomModuleValues,
   type TrackerConfig,
 } from "./lib/urlState";
 import { DeviceFinder } from "./components/DeviceFinder";
 import { DeviceSelect } from "./components/DeviceSelect";
-import { ModuleSearch } from "./components/ModuleSearch";
+import { ModulePicker } from "./components/ModulePicker";
 import { NumberField } from "./components/NumberField";
 import { ResultPanel } from "./components/ResultPanel";
 import { TotalSummary } from "./components/TotalSummary";
@@ -33,8 +36,24 @@ function App() {
   const moduleBySlug = useMemo(() => {
     const map = new Map<string, PVModule>();
     for (const m of modules ?? []) map.set(moduleSlug(m), m);
+    if (config.custom) {
+      const c = config.custom;
+      map.set(CUSTOM_MODULE_SLUG, {
+        manufacturer: "Eigene Werte",
+        model_name: `${c.power_stc} Wp`,
+        power_stc: c.power_stc,
+        voc: c.voc,
+        vmp: c.vmp,
+        isc: c.isc,
+        imp: c.imp,
+        temp_coeff_voc: c.temp_coeff_voc,
+        temp_coeff_pmax: -0.3,
+        temp_coeff_isc: (c.temp_coeff_isc_pct * c.isc) / 100,
+        source: "manual",
+      });
+    }
     return map;
-  }, [modules]);
+  }, [modules, config.custom]);
 
   const selectedDevice =
     (inverters ?? []).find((i) => inverterSlug(i) === config.deviceSlug) ?? null;
@@ -176,6 +195,15 @@ function App() {
     </details>
   );
 
+  // Selecting the custom module for the first time seeds it with defaults.
+  const pickModule = (slug: string): Partial<ConfigState> =>
+    slug === CUSTOM_MODULE_SLUG && !config.custom
+      ? { moduleSlug: slug, custom: DEFAULT_CUSTOM_MODULE }
+      : { moduleSlug: slug };
+
+  const updateCustom = (patch: Partial<CustomModuleValues>) =>
+    setConfig((c) => ({ ...c, custom: { ...(c.custom ?? DEFAULT_CUSTOM_MODULE), ...patch } }));
+
   const share = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -274,10 +302,13 @@ function App() {
                 <div className="card">
                   <h2 className="card-title">String-Konfiguration</h2>
                   <div className="space-y-4">
-                    <ModuleSearch
+                    <ModulePicker
                       modules={modules}
-                      selected={selectedModule}
-                      onSelect={(m) => update({ moduleSlug: moduleSlug(m) })}
+                      selectedSlug={config.moduleSlug}
+                      selectedModule={selectedModule}
+                      custom={config.custom}
+                      onSelect={(slug) => update(pickModule(slug))}
+                      onCustomChange={updateCustom}
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <NumberField
@@ -351,7 +382,14 @@ function App() {
                     result={trackerResults[i]?.result ?? null}
                     tempMin={config.tempMin}
                     tempMax={config.tempMax}
+                    custom={config.custom}
                     onChange={(patch) => updateTracker(i, patch)}
+                    onSelectModule={(slug) => {
+                      if (slug === CUSTOM_MODULE_SLUG && !config.custom)
+                        setConfig((c) => ({ ...c, custom: DEFAULT_CUSTOM_MODULE }));
+                      updateTracker(i, { moduleSlug: slug });
+                    }}
+                    onCustomChange={updateCustom}
                   />
                 ))}
                 {conditionsCard}
@@ -370,10 +408,13 @@ function App() {
                     String-Konfiguration
                   </h2>
                   <div className="space-y-4">
-                    <ModuleSearch
+                    <ModulePicker
                       modules={modules}
-                      selected={selectedModule}
-                      onSelect={(m) => update({ moduleSlug: moduleSlug(m) })}
+                      selectedSlug={config.moduleSlug}
+                      selectedModule={selectedModule}
+                      custom={config.custom}
+                      onSelect={(slug) => update(pickModule(slug))}
+                      onCustomChange={updateCustom}
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <NumberField

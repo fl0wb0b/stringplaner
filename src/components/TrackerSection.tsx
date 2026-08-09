@@ -1,7 +1,7 @@
 import type { CalcResult } from "../lib/calc";
 import type { MpptTracker, PVModule } from "../lib/types";
-import type { TrackerConfig } from "../lib/urlState";
-import { ModuleSearch } from "./ModuleSearch";
+import type { CustomModuleValues, TrackerConfig } from "../lib/urlState";
+import { ModulePicker } from "./ModulePicker";
 import { NumberField } from "./NumberField";
 import { ResultPanel } from "./ResultPanel";
 import { VoltageChart } from "./VoltageChart";
@@ -14,7 +14,10 @@ interface Props {
   result: CalcResult | null;
   tempMin: number;
   tempMax: number;
+  custom: CustomModuleValues | null;
   onChange: (patch: Partial<TrackerConfig>) => void;
+  onSelectModule: (slug: string) => void;
+  onCustomChange: (patch: Partial<CustomModuleValues>) => void;
 }
 
 // One independent MPPT input: enable toggle, its own module + string layout,
@@ -27,7 +30,10 @@ export function TrackerSection({
   result,
   tempMin,
   tempMax,
+  custom,
   onChange,
+  onSelectModule,
+  onCustomChange,
 }: Props) {
   return (
     <div
@@ -53,12 +59,13 @@ export function TrackerSection({
 
       {config.enabled && (
         <div className="mt-4 space-y-4">
-          <ModuleSearch
+          <ModulePicker
             modules={modules}
-            selected={selectedModule}
-            onSelect={(m) =>
-              onChange({ moduleSlug: `${m.manufacturer}__${m.model_name}` })
-            }
+            selectedSlug={config.moduleSlug}
+            selectedModule={selectedModule}
+            custom={custom}
+            onSelect={onSelectModule}
+            onCustomChange={onCustomChange}
           />
           <div className="grid grid-cols-2 gap-3">
             <NumberField

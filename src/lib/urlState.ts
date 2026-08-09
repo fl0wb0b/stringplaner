@@ -7,6 +7,28 @@
 // Global: d, tmin, tmax, cl, cs. Old links using m/t/s/p on independent
 // devices are mapped onto the tracker t.
 
+export interface CustomModuleValues {
+  power_stc: number;
+  voc: number;
+  vmp: number;
+  isc: number;
+  imp: number;
+  temp_coeff_voc: number; // %/°C
+  temp_coeff_isc_pct: number; // %/°C (datasheet style; converted to A/°C for calc)
+}
+
+export const CUSTOM_MODULE_SLUG = "custom";
+
+export const DEFAULT_CUSTOM_MODULE: CustomModuleValues = {
+  power_stc: 450,
+  voc: 39.3,
+  vmp: 32.8,
+  isc: 14.5,
+  imp: 13.7,
+  temp_coeff_voc: -0.25,
+  temp_coeff_isc_pct: 0.045,
+};
+
 export interface TrackerConfig {
   enabled: boolean;
   moduleSlug: string | null;
@@ -24,6 +46,7 @@ export interface ConfigState {
   stringsParallel: number;
   // independent mode, aligned with device.trackers
   trackers: TrackerConfig[];
+  custom: CustomModuleValues | null;
   tempMin: number;
   tempMax: number;
   cableLength: number; // m, one-way
@@ -45,6 +68,7 @@ export const DEFAULT_CONFIG: ConfigState = {
   modulesInSeries: 2,
   stringsParallel: 1,
   trackers: [],
+  custom: null,
   tempMin: -10,
   tempMax: 70,
   cableLength: 10,
@@ -70,6 +94,15 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
     p.set("t", String(c.trackerIndex));
     p.set("s", String(c.modulesInSeries));
     p.set("p", String(c.stringsParallel));
+  }
+  if (c.custom) {
+    p.set("cw", String(c.custom.power_stc));
+    p.set("cvo", String(c.custom.voc));
+    p.set("cvm", String(c.custom.vmp));
+    p.set("cis", String(c.custom.isc));
+    p.set("cim", String(c.custom.imp));
+    p.set("ctv", String(c.custom.temp_coeff_voc));
+    p.set("cti", String(c.custom.temp_coeff_isc_pct));
   }
   p.set("tmin", String(c.tempMin));
   p.set("tmax", String(c.tempMax));
@@ -109,6 +142,17 @@ export function decodeConfig(search: string): ConfigState | null {
     modulesInSeries: posInt(num(p, "s", d.modulesInSeries)),
     stringsParallel: posInt(num(p, "p", d.stringsParallel)),
     trackers,
+    custom: p.has("cw")
+      ? {
+          power_stc: num(p, "cw", DEFAULT_CUSTOM_MODULE.power_stc),
+          voc: num(p, "cvo", DEFAULT_CUSTOM_MODULE.voc),
+          vmp: num(p, "cvm", DEFAULT_CUSTOM_MODULE.vmp),
+          isc: num(p, "cis", DEFAULT_CUSTOM_MODULE.isc),
+          imp: num(p, "cim", DEFAULT_CUSTOM_MODULE.imp),
+          temp_coeff_voc: num(p, "ctv", DEFAULT_CUSTOM_MODULE.temp_coeff_voc),
+          temp_coeff_isc_pct: num(p, "cti", DEFAULT_CUSTOM_MODULE.temp_coeff_isc_pct),
+        }
+      : null,
     tempMin: num(p, "tmin", d.tempMin),
     tempMax: num(p, "tmax", d.tempMax),
     cableLength: num(p, "cl", d.cableLength),
