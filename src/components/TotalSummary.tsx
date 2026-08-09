@@ -14,7 +14,7 @@ import { TRACKER_DOT } from "../lib/trackerColors";
 
 interface Props {
   device: Inverter;
-  results: Array<{ label: string; result: CalcResult }>;
+  results: Array<{ label: string; result: CalcResult; colorIndex: number }>;
   plz: string;
   onPlzChange: (v: string) => void;
 }
@@ -80,19 +80,19 @@ export function TotalSummary({ device, results, plz, onPlzChange }: Props) {
         {results.length > 1 && (
           <>
             <div className="flex h-3 w-full overflow-hidden rounded-full bg-slate-800">
-              {results.map((r, i) => (
+              {results.map((r) => (
                 <div
                   key={r.label}
-                  className={TRACKER_DOT[i % TRACKER_DOT.length]}
+                  className={TRACKER_DOT[r.colorIndex % TRACKER_DOT.length]}
                   style={{ width: `${(r.result.powerTotal / totalWp) * 100}%` }}
                 />
               ))}
             </div>
             <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
-              {results.map((r, i) => (
+              {results.map((r) => (
                 <span key={r.label} className="flex items-center gap-1.5">
                   <span
-                    className={`inline-block h-2 w-2 rounded-full ${TRACKER_DOT[i % TRACKER_DOT.length]}`}
+                    className={`inline-block h-2 w-2 rounded-full ${TRACKER_DOT[r.colorIndex % TRACKER_DOT.length]}`}
                   />
                   {r.label}: {fmt(r.result.powerTotal)} Wp
                 </span>

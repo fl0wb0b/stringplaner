@@ -138,11 +138,15 @@ function App() {
   const completeResults = isIndependent
     ? trackerResults
         .map((result, i) =>
-          result ? { label: selectedDevice!.trackers[i].tracker_label, result } : null,
+          result
+            ? { label: selectedDevice!.trackers[i].tracker_label, result, colorIndex: i }
+            : null,
         )
-        .filter((r): r is { label: string; result: CalcResult } => r !== null)
+        .filter(
+          (r): r is { label: string; result: CalcResult; colorIndex: number } => r !== null,
+        )
     : variantResult && variantTracker
-      ? [{ label: variantTracker.tracker_label, result: variantResult }]
+      ? [{ label: variantTracker.tracker_label, result: variantResult, colorIndex: 0 }]
       : [];
 
   // Selecting the custom module for the first time seeds it with defaults.
