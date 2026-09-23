@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { calculate, type CalcResult } from "./lib/calc";
+import { calculate, defaultFloatVoltage, type CalcResult } from "./lib/calc";
 import { inverterSlug, loadInverters, loadModules, moduleSlug } from "./lib/data";
-import type { Inverter, PVModule } from "./lib/types";
+import type { Inverter, MpptTracker, PVModule } from "./lib/types";
 import {
   CUSTOM_MODULE_SLUG,
   DEFAULT_CONFIG,
@@ -89,20 +89,42 @@ function App() {
   };
 
   const selectDevice = (slug: string) => {
-    setConfig((c) => ({ ...c, deviceSlug: slug, trackerIndex: 0, trackers: [] }));
+    setConfig((c) => ({
+      ...c,
+      deviceSlug: slug,
+      trackerIndex: 0,
+      trackers: [],
+      batteryFloatOverride: null,
+    }));
   };
 
   // per-tracker module override (e.g. Anlagen-Erweiterung); null slug = Modul aus Schritt 2
   const moduleForTracker = (tc: TrackerConfig): PVModule | null =>
     tc.moduleSlug ? (moduleBySlug.get(tc.moduleSlug) ?? null) : selectedModule;
 
+  // variants devices (e.g. Victron battery-voltage variants): one input
+  const variantTracker =
+    !isIndependent && selectedDevice
+      ? (selectedDevice.trackers[
+          Math.min(config.trackerIndex, selectedDevice.trackers.length - 1)
+        ] ?? null)
+      : null;
+
   // Nur bei MPPT-Ladereglern relevant — bei Wechselrichtern gibt es keine
   // Batterie, die Float-Spannung darf die Vmp-Prüfung dort nicht beeinflussen.
-  const batteryFloatVoltage =
-    selectedDevice?.device_type === "mppt_charger" ? config.batteryFloatVoltage : undefined;
+  // Ohne manuelle Eingabe folgt sie der Batterie-Nennspannung des Trackers
+  // (12-V-Variante → 13,4 V, nicht pauschal 53,6 V).
+  const floatVoltageFor = (tracker: MpptTracker | null | undefined): number | undefined => {
+    if (selectedDevice?.device_type !== "mppt_charger") return undefined;
+    if (config.batteryFloatOverride != null) return config.batteryFloatOverride;
+    return tracker?.battery_voltage_nominal != null
+      ? defaultFloatVoltage(tracker.battery_voltage_nominal)
+      : undefined;
+  };
+  const displayedFloatVoltage = floatVoltageFor(variantTracker ?? selectedDevice?.trackers[0]);
 
   const calcFor = (
-    tracker: Inverter["trackers"][number],
+    tracker: MpptTracker,
     series: number,
     parallel: number,
     mod: PVModule | null = selectedModule,
@@ -117,17 +139,10 @@ function App() {
           tempMax: config.tempMax,
           cableLength: config.cableLength,
           crossSection: config.crossSection,
-          batteryFloatVoltage,
+          batteryFloatVoltage: floatVoltageFor(tracker),
         })
       : null;
 
-  // variants devices (e.g. Victron battery-voltage variants): one input
-  const variantTracker =
-    !isIndependent && selectedDevice
-      ? (selectedDevice.trackers[
-          Math.min(config.trackerIndex, selectedDevice.trackers.length - 1)
-        ] ?? null)
-      : null;
   const variantResult = variantTracker
     ? calcFor(variantTracker, config.modulesInSeries, config.stringsParallel)
     : null;
@@ -258,7 +273,7 @@ function App() {
                 selectedSlug={config.deviceSlug}
                 trackerIndex={config.trackerIndex}
                 onSelectDevice={selectDevice}
-                onSelectTracker={(i) => update({ trackerIndex: i })}
+                onSelectTracker={(i) => update({ trackerIndex: i, batteryFloatOverride: null })}
               />
             </section>
 
@@ -304,15 +319,15 @@ function App() {
                     onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
                   />
                 </div>
-                {selectedDevice?.device_type === "mppt_charger" && (
+                {displayedFloatVoltage != null && (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     <NumberField
                       label="Batterie-Float-Spannung"
                       unit="V"
-                      value={config.batteryFloatVoltage}
+                      value={displayedFloatVoltage}
                       min={0}
                       step={0.1}
-                      onChange={(v) => update({ batteryFloatVoltage: Math.max(0, v) })}
+                      onChange={(v) => update({ batteryFloatOverride: Math.max(0, v) })}
                     />
                   </div>
                 )}
@@ -339,7 +354,7 @@ function App() {
                       result={trackerResults[i]}
                       tempMin={config.tempMin}
                       tempMax={config.tempMax}
-                      batteryFloatVoltage={batteryFloatVoltage}
+                      batteryFloatVoltage={floatVoltageFor(tracker)}
                       onChange={(patch) => updateTracker(i, patch)}
                     />
                   ))}
@@ -373,7 +388,7 @@ function App() {
                         <ResultPanel
                           result={variantResult}
                           tracker={variantTracker}
-                          batteryFloatVoltage={batteryFloatVoltage}
+                          batteryFloatVoltage={floatVoltageFor(variantTracker)}
                         />
                         {selectedModule && (
                           <div className="space-y-4">
@@ -387,7 +402,7 @@ function App() {
                                 tracker={variantTracker}
                                 tempMin={config.tempMin}
                                 tempMax={config.tempMax}
-                                batteryFloatVoltage={batteryFloatVoltage}
+                                batteryFloatVoltage={floatVoltageFor(variantTracker)}
                               />
                             </div>
                             <div>

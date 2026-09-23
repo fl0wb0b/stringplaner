@@ -94,6 +94,16 @@ const round = (x, digits) => {
 const modules = [];
 const seen = new Set();
 let skipped = 0;
+let implausible = 0;
+
+// Plausibility filter for known CEC data errors, e.g. alpha_sc entered as
+// ≈6.4 A/°C (→ negative cold current in calc) or Imp > Isc. Such rows are
+// dropped rather than "repaired" — the correct value cannot be inferred.
+// Crystalline silicon: alpha_sc ≈ +0.02…0.1 %/°C, beta_oc < 0.
+function isPlausible({ voc, vmp, isc, imp, alpha_sc, beta_oc }) {
+  const alphaPct = (alpha_sc / isc) * 100;
+  return vmp < voc && imp <= isc && beta_oc < 0 && alphaPct > 0 && alphaPct <= 0.2;
+}
 
 // rows 2 and 3 are units / SAM variable names
 for (const line of lines.slice(3)) {
@@ -117,6 +127,10 @@ for (const line of lines.slice(3)) {
   const values = [power_stc, voc, vmp, isc, imp, alpha_sc, beta_oc, gamma_pmp];
   if (values.some((v) => !Number.isFinite(v)) || voc <= 0 || vmp <= 0 || isc <= 0) {
     skipped++;
+    continue;
+  }
+  if (!isPlausible({ voc, vmp, isc, imp, alpha_sc, beta_oc })) {
+    implausible++;
     continue;
   }
 
@@ -155,4 +169,7 @@ modules.sort(
 
 await mkdir(dirname(OUT_PATH), { recursive: true });
 await writeFile(OUT_PATH, JSON.stringify(modules));
-console.log(`Wrote ${modules.length} modules to ${OUT_PATH} (${skipped} rows skipped)`);
+console.log(
+  `Wrote ${modules.length} modules to ${OUT_PATH} ` +
+    `(${skipped} rows skipped, ${implausible} implausible rows dropped)`,
+);

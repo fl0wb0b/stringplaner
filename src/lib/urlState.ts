@@ -55,8 +55,10 @@ export interface ConfigState {
   crossSection: number; // mm²
   // Nur für MPPT-Laderegler relevant: Batterie-Float-/Erhaltungsspannung,
   // zusätzliche Untergrenze neben der Geräte-MPPT-Untergrenze (calc.ts).
-  // Default 53,6 V = typische Float-Spannung eines 48V-LiFePO4-Packs (16S).
-  batteryFloatVoltage: number;
+  // null = automatisch aus der Batterie-Nennspannung des gewählten Trackers
+  // (defaultFloatVoltage, z.B. 12 V → 13,4 V, 48 V → 53,6 V); wird bei
+  // Geräte-/Variantenwechsel wieder auf null gesetzt.
+  batteryFloatOverride: number | null;
 }
 
 export const DEFAULT_TRACKER_CONFIG: TrackerConfig = {
@@ -79,7 +81,7 @@ export const DEFAULT_CONFIG: ConfigState = {
   tempMax: 70,
   cableLength: 10,
   crossSection: 6,
-  batteryFloatVoltage: 53.6,
+  batteryFloatOverride: null,
 };
 
 const STORAGE_KEY = "stringplaner:last-config";
@@ -116,7 +118,9 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
   p.set("tmax", String(c.tempMax));
   p.set("cl", String(c.cableLength));
   p.set("cs", String(c.crossSection));
-  p.set("bfv", String(c.batteryFloatVoltage));
+  // "bf" statt des alten "bfv": alte Links trugen pauschal 53,6 V auch für
+  // 12/24-V-Varianten — die werden bewusst ignoriert (→ Automatik).
+  if (c.batteryFloatOverride != null) p.set("bf", String(c.batteryFloatOverride));
   return p.toString();
 }
 
@@ -168,7 +172,7 @@ export function decodeConfig(search: string): ConfigState | null {
     tempMax: num(p, "tmax", d.tempMax),
     cableLength: num(p, "cl", d.cableLength),
     crossSection: num(p, "cs", d.crossSection),
-    batteryFloatVoltage: num(p, "bfv", d.batteryFloatVoltage),
+    batteryFloatOverride: p.has("bf") ? Math.max(0, num(p, "bf", 0)) : null,
   };
 }
 
@@ -177,7 +181,13 @@ export function loadInitialConfig(): ConfigState {
   if (fromUrl) return fromUrl;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return { ...DEFAULT_CONFIG, ...(JSON.parse(stored) as Partial<ConfigState>) };
+    if (stored) {
+      // alte Stände enthalten batteryFloatVoltage (pauschal 53,6 V) — verwerfen
+      const { batteryFloatVoltage: _legacy, ...rest } = JSON.parse(stored) as Partial<ConfigState> & {
+        batteryFloatVoltage?: unknown;
+      };
+      return { ...DEFAULT_CONFIG, ...rest };
+    }
   } catch {
     // corrupt storage — fall through to defaults
   }

@@ -114,6 +114,7 @@ interface MpptTracker {
   i_max: number;                 // A, max. Eingangsstrom
   max_strings_parallel: number;  // Standard 1 bei reinen MPPT-Ladereglern
   p_max_w?: number;              // optional, manche Geräte begrenzen PV-Watt zusätzlich
+  battery_voltage_nominal?: number; // nur mppt_charger: 12/24/36/48 V, Default-Float-Spannung (3,35 V/Zelle LiFePO4)
 }
 ```
 

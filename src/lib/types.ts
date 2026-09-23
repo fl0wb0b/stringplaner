@@ -25,6 +25,7 @@ export interface MpptTracker {
   i_max: number; // A, max input current
   max_strings_parallel: number; // default 1 for plain MPPT chargers
   p_max_w?: number; // optional additional PV power cap
+  battery_voltage_nominal?: number; // V, MPPT chargers only: 12/24/36/48 V battery system
 }
 
 export interface Inverter {

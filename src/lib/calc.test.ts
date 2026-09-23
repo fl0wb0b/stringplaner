@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { calculate, stringCurrentAtTemp, stringVocAtTemp, type CalcInput } from "./calc";
+import {
+  calculate,
+  defaultFloatVoltage,
+  stringCurrentAtTemp,
+  stringVocAtTemp,
+  type CalcInput,
+} from "./calc";
 import type { MpptTracker, PVModule } from "./types";
 
 // Round numbers chosen so expected values are hand-computable.
@@ -174,5 +180,35 @@ describe("calculate — MPPT-Ladereglerbatterie (batteryFloatVoltage)", () => {
     // float voltage far below v_mppt_min must not override the device limit
     const r = calculate({ ...baseInput, tracker, batteryFloatVoltage: 20 });
     expect(r.checks.vmpMin).toBe("fehler");
+  });
+});
+
+describe("defaultFloatVoltage — follows the battery system voltage", () => {
+  it("maps nominal 12/24/36/48 V to LiFePO4 float voltages", () => {
+    expect(defaultFloatVoltage(12)).toBe(13.4);
+    expect(defaultFloatVoltage(24)).toBe(26.8);
+    expect(defaultFloatVoltage(36)).toBe(40.2);
+    expect(defaultFloatVoltage(48)).toBe(53.6);
+  });
+
+  it("accepts a single module on a 12 V variant (regression: fixed 53.6 V float)", () => {
+    const tracker12V: MpptTracker = {
+      tracker_label: "PV (12V-Batterie)",
+      v_mppt_min: 13,
+      v_mppt_max: 75,
+      v_max_absolute: 75,
+      i_max: 15,
+      max_strings_parallel: 2,
+      battery_voltage_nominal: 12,
+    };
+    const r = calculate({
+      ...baseInput,
+      tracker: tracker12V,
+      modulesInSeries: 1,
+      stringsParallel: 1,
+      batteryFloatVoltage: defaultFloatVoltage(12),
+    });
+    expect(r.checks.vmpMin).toBe("ok");
+    expect(r.accepted).toBe(true);
   });
 });

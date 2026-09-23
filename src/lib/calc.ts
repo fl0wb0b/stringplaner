@@ -100,6 +100,14 @@ export function calculate(input: CalcInput): CalcResult {
   };
 }
 
+// Typical LiFePO4 float voltage for a nominal battery system voltage:
+// 3.35 V per cell, 4 cells per 12 V (12 V → 13.4 V, 48 V → 53.6 V).
+export const LFP_FLOAT_VOLTS_PER_CELL = 3.35;
+
+export function defaultFloatVoltage(batteryVoltageNominal: number): number {
+  return Number(((batteryVoltageNominal / 3) * LFP_FLOAT_VOLTS_PER_CELL).toFixed(1));
+}
+
 // String voltages as a function of temperature — used by the V/T chart (TASKS.md 4b).
 export function stringVocAtTemp(m: PVModule, modulesInSeries: number, temp: number): number {
   return m.voc * (1 + (m.temp_coeff_voc / 100) * (temp - 25)) * modulesInSeries;

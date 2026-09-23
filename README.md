@@ -117,7 +117,8 @@ sind willkommen (Pull Request oder Issue). Neue Geräte kommen in
       "v_max_absolute": 1100,        // V, absolute Maximalspannung (Geräteschutz)
       "i_max": 22,                   // A, max. Eingangsstrom
       "max_strings_parallel": 2,
-      "p_max_w": 9000                // optional: PV-Leistungsgrenze pro Tracker
+      "p_max_w": 9000,               // optional: PV-Leistungsgrenze pro Tracker
+      "battery_voltage_nominal": 48  // nur MPPT-Laderegler: Batterie-Nennspannung (V), bestimmt Default-Float-Spannung
     }
   ]
 }
