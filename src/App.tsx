@@ -319,6 +319,12 @@ function App() {
                     onChange={(v) => update({ crossSection: Math.max(0.5, v) })}
                   />
                 </div>
+                {config.tempMin >= config.tempMax && (
+                  <p className="text-sm text-amber-400">
+                    Min. Temperatur muss unter der max. Temperatur liegen – Ergebnisse sind so
+                    nicht aussagekräftig.
+                  </p>
+                )}
                 {displayedFloatVoltage != null && (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     <NumberField

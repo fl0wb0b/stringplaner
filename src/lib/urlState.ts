@@ -176,9 +176,28 @@ export function decodeConfig(search: string): ConfigState | null {
   };
 }
 
+// Values from URL/localStorage bypass the UI field limits — clamp them the
+// same way (cs = 0 would give an infinite cable drop, cl < 0 a negative one).
+export function sanitizeConfig(c: ConfigState): ConfigState {
+  const finite = (v: unknown, fallback: number) =>
+    typeof v === "number" && Number.isFinite(v) ? v : fallback;
+  const d = DEFAULT_CONFIG;
+  return {
+    ...c,
+    tempMin: finite(c.tempMin, d.tempMin),
+    tempMax: finite(c.tempMax, d.tempMax),
+    cableLength: Math.max(0, finite(c.cableLength, d.cableLength)),
+    crossSection: Math.max(0.5, finite(c.crossSection, d.crossSection)),
+    modulesInSeries: posInt(finite(c.modulesInSeries, d.modulesInSeries)),
+    stringsParallel: posInt(finite(c.stringsParallel, d.stringsParallel)),
+    trackerIndex: Math.max(0, Math.trunc(finite(c.trackerIndex, d.trackerIndex))),
+    trackers: Array.isArray(c.trackers) ? c.trackers : [],
+  };
+}
+
 export function loadInitialConfig(): ConfigState {
   const fromUrl = decodeConfig(window.location.search);
-  if (fromUrl) return fromUrl;
+  if (fromUrl) return sanitizeConfig(fromUrl);
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -186,7 +205,7 @@ export function loadInitialConfig(): ConfigState {
       const { batteryFloatVoltage: _legacy, ...rest } = JSON.parse(stored) as Partial<ConfigState> & {
         batteryFloatVoltage?: unknown;
       };
-      return { ...DEFAULT_CONFIG, ...rest };
+      return sanitizeConfig({ ...DEFAULT_CONFIG, ...rest });
     }
   } catch {
     // corrupt storage — fall through to defaults
