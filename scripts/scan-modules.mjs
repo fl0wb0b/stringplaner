@@ -16,7 +16,7 @@
  * Image-only PDFs (no text layer) are skipped and listed in the report.
  */
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -349,6 +349,7 @@ const knownPowerKeys = new Set(
 const accepted = [];
 const report = { scanned: 0, skipped: [], rejected: [], sources: {} };
 const tmp = mkdtempSync(join(tmpdir(), "modscan-"));
+process.on("exit", () => rmSync(tmp, { recursive: true, force: true }));
 
 for (const source of sources) {
   let pdfUrls = [];
