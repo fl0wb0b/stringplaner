@@ -95,7 +95,9 @@ export function encodeConfig(c: ConfigState, mode: "variants" | "independent"): 
       p.set(`p${i}`, String(t.stringsParallel));
       if (t.moduleSlug) p.set(`m${i}`, t.moduleSlug);
     });
-    if (c.moduleSlug) p.set("m", c.moduleSlug);
+    // m always present (empty = no global module): without it decodeConfig reads
+    // m0 as an old link's global module and the tracker-0 override is lost.
+    p.set("m", c.moduleSlug ?? "");
   } else {
     if (c.moduleSlug) p.set("m", c.moduleSlug);
     p.set("t", String(c.trackerIndex));
@@ -147,7 +149,7 @@ export function decodeConfig(search: string): ConfigState | null {
   return {
     deviceSlug: p.get("d"),
     // old multi-tracker links carried the module per tracker (m0) — fall back to it
-    moduleSlug: p.get("m") ?? p.get("m0"),
+    moduleSlug: p.has("m") ? p.get("m") || null : p.get("m0"),
     trackerIndex: Math.max(0, Math.trunc(num(p, "t", d.trackerIndex))),
     modulesInSeries: posInt(num(p, "s", d.modulesInSeries)),
     stringsParallel: posInt(num(p, "p", d.stringsParallel)),
