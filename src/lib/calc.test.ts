@@ -74,6 +74,29 @@ describe("calculate", () => {
     expect(r.checks.currentMax).toBe("fehler");
   });
 
+  it("checks the hottest operating current, not the coldest", () => {
+    // I_cold = 19.65 A would pass i_max = 20, but I_hot = 20.45 A does not.
+    const tracker = { ...testTracker, i_max: 20 };
+    const r = calculate({ ...baseInput, tracker });
+    expect(r.iCheckIsIsc).toBe(false);
+    expect(r.iCheck).toBeCloseTo(20.45, 6);
+    expect(r.checks.currentMax).toBe("fehler");
+    expect(r.accepted).toBe(false);
+  });
+
+  it("checks hot Isc against i_max for MPPT chargers", () => {
+    // Isc_hot = (11 + 0.005 × 45) × 2 = 22.45 > 22; the same input on an
+    // inverter only checks Imp_hot = 20.45 and passes.
+    const charger = calculate({ ...baseInput, deviceType: "mppt_charger" });
+    expect(charger.iCheckIsIsc).toBe(true);
+    expect(charger.iCheck).toBeCloseTo(22.45, 6);
+    expect(charger.checks.currentMax).toBe("fehler");
+    expect(charger.accepted).toBe(false);
+
+    const inverter = calculate({ ...baseInput, deviceType: "string_inverter" });
+    expect(inverter.checks.currentMax).toBe("ok");
+  });
+
   it("computes hot Vmp with cable voltage drop", () => {
     // Vmp_hot_raw = 32 × (1 + (-0.3/100)×45) × 2 = 32 × 0.865 × 2 = 55.36
     // dropFactor = (2 × 10 × 0.0178) / 6 = 0.0593333…

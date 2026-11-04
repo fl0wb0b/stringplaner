@@ -49,8 +49,8 @@ export function ResultPanel({ result: r, tracker, batteryFloatVoltage }: Props) 
       status: r.checks.vocMax,
     },
     {
-      label: "Strom bei Kälte",
-      value: `${fmt(r.iCold)} A`,
+      label: r.iCheckIsIsc ? "Max. Kurzschlussstrom (Isc)" : "Max. Betriebsstrom (Imp)",
+      value: `${fmt(r.iCheck)} A`,
       limit: `≤ ${fmt(tracker.i_max)} A, max. ${tracker.max_strings_parallel} Strings`,
       status: r.checks.currentMax,
     },

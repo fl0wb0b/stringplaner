@@ -164,10 +164,19 @@ entspricht Victrons tatsächlicher Logik, keine Vermutung.**
    `Voc_cold = Voc_STC × (1 + temp_coeff_voc/100 × (tempMin - 25)) × modulesInSeries`
    → Prüfung: `Voc_cold ≤ tracker.v_max_absolute`
 
-2. **Stromprüfung bei Kälte** (Impp steigt leicht bei Kälte, ebenfalls **ohne**
-   Korrektur):
-   `I_cold = (Impp_STC + tempCoeffIsc_absolut × -(25 - tempMin)) × stringsParallel`
-   → Prüfung: `I_cold ≤ tracker.i_max` UND `stringsParallel ≤ tracker.max_strings_parallel`
+2. **Stromprüfung im ungünstigsten Fall** (ohne Zusatzkorrektur). Der
+   Isc-Koeffizient ist positiv, der Strom steigt also bei **Hitze**, nicht bei
+   Kälte – geprüft wird das Maximum über `tempMin` und `tempMax`:
+   `I(t) = (I_base + tempCoeffIsc_absolut × (t - 25)) × stringsParallel`
+   `I_check = max(I(tempMin), I(tempMax))`
+   - `mppt_charger` (Victron): `I_base = Isc_STC`. Victron-Datenblätter nennen
+     als einzige PV-Stromgrenze den max. Kurzschlussstrom; `i_max` ist dort
+     ein Isc-Limit.
+   - Wechselrichter/Hybrid: `I_base = Impp_STC`; `i_max` ist der max.
+     Betriebs-Eingangsstrom. (Deren separates Isc-Limit ist nicht im
+     Datenmodell und wird nicht geprüft.)
+   → Prüfung: `I_check ≤ tracker.i_max` UND `stringsParallel ≤ tracker.max_strings_parallel`
+   (`I_cold` mit Impp bleibt als Anzeige-/Diagrammwert erhalten.)
 
 3. **Vmp-Hitze-Korrektur MIT Kabel-Spannungsabfall** (einzige Stelle, an der
    Victron tatsächlich eine Korrektur anwendet – physikalisch begründet, kein
