@@ -118,6 +118,7 @@ function App() {
           cableLength: config.cableLength,
           crossSection: config.crossSection,
           batteryFloatVoltage,
+          deviceType: selectedDevice?.device_type,
         })
       : null;
 

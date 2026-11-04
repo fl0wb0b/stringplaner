@@ -1,7 +1,7 @@
 // String sizing calculation core — pure functions only, no UI logic.
 // Spec: CLAUDE.md section 6 (verified against Victron's VE-MPPT-Calc logic).
 
-import type { MpptTracker, PVModule } from "./types";
+import type { DeviceType, MpptTracker, PVModule } from "./types";
 
 export const COPPER_RESISTIVITY = 0.0178; // Ω·mm²/m, fixed constant per spec
 
@@ -21,6 +21,8 @@ export interface CalcInput {
   // zusätzlich zur Geräte-MPPT-Untergrenze relevant, unabhängig davon.
   // Bei Wechselrichtern nicht gesetzt.
   batteryFloatVoltage?: number;
+  // Bestimmt, was tracker.i_max bedeutet (siehe iCheck in calculate()).
+  deviceType?: DeviceType;
 }
 
 export interface CalcResult {
@@ -30,6 +32,8 @@ export interface CalcResult {
   vmpHotCorrected: number; // V, after cable voltage drop
   cableDrop: number; // V
   iHot: number; // A, array current at tempMax
+  iCheck: number; // A, worst-case current compared against tracker.i_max
+  iCheckIsIsc: boolean; // true: iCheck is short-circuit current (MPPT chargers)
   powerTotal: number; // Wp installed
   powerRatio: number | null; // null when tracker has no p_max_w
   checks: {
@@ -58,6 +62,17 @@ export function calculate(input: CalcInput): CalcResult {
   const cableDrop = cableDropFactor * iHot;
   const vmpHotCorrected = vmpHotRaw - cableDrop;
 
+  // Strombelastung im ungünstigsten Fall über den Temperaturbereich: Der
+  // Isc-Koeffizient ist positiv, der Strom steigt also bei Hitze (nicht bei
+  // Kälte). Math.max deckt auch Datensätze mit negativem Koeffizienten ab.
+  // Victron-Laderegler nennen im Datenblatt als einzige PV-Stromgrenze den
+  // max. Kurzschlussstrom – dort ist i_max ein Isc-Limit. Bei Wechselrichtern
+  // ist i_max der max. Betriebs-Eingangsstrom und wird gegen Imp geprüft.
+  const iCheckIsIsc = input.deviceType === "mppt_charger";
+  const iBase = iCheckIsIsc ? m.isc : m.imp;
+  const iAt = (t: number) => (iBase + m.temp_coeff_isc * (t - 25)) * stringsParallel;
+  const iCheck = Math.max(iAt(tempMin), iAt(tempMax));
+
   const powerTotal = m.power_stc * modulesInSeries * stringsParallel;
   const powerRatio =
     tracker.p_max_w != null && tracker.p_max_w > 0 ? powerTotal / tracker.p_max_w : null;
@@ -69,7 +84,7 @@ export function calculate(input: CalcInput): CalcResult {
 
   const checks = {
     vocMax: (vocCold <= tracker.v_max_absolute ? "ok" : "fehler") as CheckStatus,
-    currentMax: (iCold <= tracker.i_max && stringsParallel <= tracker.max_strings_parallel
+    currentMax: (iCheck <= tracker.i_max &&stringsParallel <= tracker.max_strings_parallel
       ? "ok"
       : "fehler") as CheckStatus,
     vmpMin: (vmpHotCorrected > vmpMinEffective ? "ok" : "fehler") as CheckStatus,
@@ -92,6 +107,8 @@ export function calculate(input: CalcInput): CalcResult {
     vmpHotCorrected,
     cableDrop,
     iHot,
+    iCheck,
+    iCheckIsIsc,
     powerTotal,
     powerRatio,
     checks,
