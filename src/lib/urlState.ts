@@ -129,6 +129,48 @@ function num(p: URLSearchParams, key: string, fallback: number): number {
 
 const posInt = (v: number) => Math.max(1, Math.trunc(v));
 
+const finite = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
+
+function customOk(m: unknown): m is CustomModuleValues {
+  if (!m || typeof m !== "object") return false;
+  const c = m as CustomModuleValues;
+  return (
+    finite(c.power_stc) && c.power_stc > 0 &&
+    finite(c.vmp) && c.vmp > 0 && finite(c.voc) && c.voc > c.vmp &&
+    finite(c.imp) && c.imp > 0 && finite(c.isc) && c.isc > c.imp &&
+    finite(c.temp_coeff_voc) && c.temp_coeff_voc < 0 &&
+    finite(c.temp_coeff_isc_pct) && c.temp_coeff_isc_pct > 0
+  );
+}
+
+/**
+ * Physikalisch unmögliche Werte aus URL oder localStorage feldweise auf die
+ * Standardwerte zurücksetzen. Ein negativer Kabelquerschnitt machte aus dem
+ * Kabelverlust einen Spannungsgewinn (cs=-6 -> falsches "zulässig"), cs=0
+ * ergab Infinity (Audit 04.11., Property-Tests 08.11.). Der Rest des Links
+ * bleibt nutzbar.
+ */
+function sanitize(c: ConfigState): ConfigState {
+  const d = DEFAULT_CONFIG;
+  const int = (v: unknown, min: number, f: number) =>
+    finite(v) && Number.isInteger(v) && v >= min ? v : f;
+  const temps = finite(c.tempMin) && finite(c.tempMax) && c.tempMin <= c.tempMax;
+  return {
+    ...c,
+    trackerIndex: int(c.trackerIndex, 0, d.trackerIndex),
+    modulesInSeries: int(c.modulesInSeries, 1, d.modulesInSeries),
+    stringsParallel: int(c.stringsParallel, 1, d.stringsParallel),
+    trackers: Array.isArray(c.trackers) ? c.trackers.slice(0, MAX_TRACKERS) : d.trackers,
+    custom: c.custom == null ? null : customOk(c.custom) ? c.custom : { ...DEFAULT_CUSTOM_MODULE },
+    tempMin: temps ? c.tempMin : d.tempMin,
+    tempMax: temps ? c.tempMax : d.tempMax,
+    cableLength: finite(c.cableLength) && c.cableLength >= 0 ? c.cableLength : d.cableLength,
+    crossSection: finite(c.crossSection) && c.crossSection > 0 ? c.crossSection : d.crossSection,
+    batteryFloatVoltage:
+      finite(c.batteryFloatVoltage) && c.batteryFloatVoltage > 0 ? c.batteryFloatVoltage : d.batteryFloatVoltage,
+  };
+}
+
 export function decodeConfig(search: string): ConfigState | null {
   const p = new URLSearchParams(search);
   if (![...p.keys()].length) return null;
@@ -146,7 +188,7 @@ export function decodeConfig(search: string): ConfigState | null {
     });
   }
 
-  return {
+  return sanitize({
     deviceSlug: p.get("d"),
     // old multi-tracker links carried the module per tracker (m0) — fall back to it
     moduleSlug: p.has("m") ? p.get("m") || null : p.get("m0"),
@@ -171,7 +213,7 @@ export function decodeConfig(search: string): ConfigState | null {
     cableLength: num(p, "cl", d.cableLength),
     crossSection: num(p, "cs", d.crossSection),
     batteryFloatVoltage: num(p, "bfv", d.batteryFloatVoltage),
-  };
+  });
 }
 
 export function loadInitialConfig(): ConfigState {
@@ -179,7 +221,7 @@ export function loadInitialConfig(): ConfigState {
   if (fromUrl) return fromUrl;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return { ...DEFAULT_CONFIG, ...(JSON.parse(stored) as Partial<ConfigState>) };
+    if (stored) return sanitize({ ...DEFAULT_CONFIG, ...(JSON.parse(stored) as Partial<ConfigState>) });
   } catch {
     // corrupt storage — fall through to defaults
   }
