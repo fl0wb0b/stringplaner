@@ -47,6 +47,22 @@ describe("decodeConfig — robustness", () => {
     expect(decodeConfig("fbclid=abc&d=dev")).not.toBeNull();
   });
 
+  it("recognizes every key encodeConfig writes (CONFIG_KEY stays in sync)", () => {
+    const full: ConfigState = {
+      ...DEFAULT_CONFIG,
+      deviceSlug: "dev",
+      moduleSlug: "mod",
+      custom: DEFAULT_CUSTOM_MODULE,
+      plz: "10115",
+      trackers: [tracker("mod-a"), tracker(null)],
+    };
+    for (const mode of ["variants", "independent"] as const) {
+      for (const [key, value] of new URLSearchParams(encodeConfig(full, mode))) {
+        expect(decodeConfig(`${key}=${encodeURIComponent(value)}`), key).not.toBeNull();
+      }
+    }
+  });
+
   it("resets temperatures outside a physical range (chart loop would never end)", () => {
     expect(decodeConfig("tmin=-1e308&tmax=70")?.tempMin).toBe(DEFAULT_CONFIG.tempMin);
     expect(decodeConfig("tmin=-10&tmax=1e9")?.tempMax).toBe(DEFAULT_CONFIG.tempMax);

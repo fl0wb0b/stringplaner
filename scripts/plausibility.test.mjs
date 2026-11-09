@@ -14,6 +14,10 @@ describe("implausibleReason (CEC import)", () => {
     expect(implausibleReason({ ...ok, temp_coeff_isc: 0.0927 })).toMatch(/alpha_sc/); // 0.67 %/°C
   });
 
+  it("rejects a negative Isc coefficient off by a unit factor, too", () => {
+    expect(implausibleReason({ ...ok, temp_coeff_isc: -6.34797 })).toMatch(/alpha_sc/);
+  });
+
   it("rejects Imp > Isc and Vmp >= Voc", () => {
     expect(implausibleReason({ ...ok, imp: 14 })).toMatch(/Imp/);
     expect(implausibleReason({ ...ok, vmp: 50 })).toMatch(/Vmp/);
