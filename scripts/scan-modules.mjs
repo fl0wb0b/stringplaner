@@ -112,7 +112,8 @@ function guessModelBase(text, pdfUrl) {
 // modules_manual.json); the sheet prints "TSM-455" and the series apart.
 function trinaSeries(text) {
   const counts = new Map();
-  for (const [s] of text.matchAll(/\bNE[A-Z0-9]{2,6}\.\d{2}\b/g)) counts.set(s, (counts.get(s) ?? 0) + 1);
+  // standalone ("NEG9R.28") or inside the type code ("TSM-445NEG9R.28")
+  for (const [s] of text.matchAll(/(?:\b|(?<=\d))NE[A-Z0-9]{2,6}\.\d{2}\b/g)) counts.set(s, (counts.get(s) ?? 0) + 1);
   return [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 }
 
@@ -139,8 +140,9 @@ export function parseDatasheet(text, pdfUrl) {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   // Some sheets give each power class several test-condition columns:
   // Aiko "STC NOCT" (440 331 445 335 …), Trina "STC NOCT BNPI" (425 325 471 …).
-  // Only the STC column is a power class; the header row tells the stride.
-  const cols = lines.map((l) => l.match(/\bSTC((?:\s+(?:NOCT|NMOT|BNPI))+)\s+STC\b/i)).find(Boolean);
+  // Only the STC column is a power class; the header row tells the stride
+  // (also with a single class, where no second "STC" follows).
+  const cols = lines.map((l) => l.match(/\bSTC((?:\s+(?:NOCT|NMOT|BNPI)\b)+)/i)).find(Boolean);
   const stride = cols ? cols[1].trim().split(/\s+/).length + 1 : 1;
   const pick = (arr) => (arr && stride > 1 ? arr.filter((_, i) => i % stride === 0) : arr);
   const powers = pick(findRow(lines, ROW_PATTERNS.power, { min: 150, max: 800, count: 8 * stride }));
@@ -349,6 +351,34 @@ Temperaturkoeffizient von VOC                        –0,24%/°C
 Temperaturkoeffizient von ISC                         0,04%/°C
 `;
 
+// Nur eine Leistungsklasse: die Kopfzeile hat genau eine Gruppe ohne zweites
+// "STC" – NOCT/BNPI dürfen trotzdem nicht als eigene Klassen durchrutschen.
+const FIXTURE_TRINA_EINE_KLASSE = `
+Trina Solar TSM-NEG9RC.27
+ Testbedingungen               STC NOCT BNPI
+ Nominalleistung-PMAX (Wp)*    425  325  471
+ Spannung im MPP-UMPP (V)     42,9 40,4 42,9
+ Strom im MPP-IMPP (A)        9,92 8,06 10,98
+ Leerlaufspannung-UOC (V)     50,9 48,3 50,9
+ Kurzschlusstrom-ISC (A)     10,56 8,51 11,70
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
+// Serie nur in den Typbezeichnungen (TSM-425NEG9RC.27), eine andere Serie
+// einmal im Fließtext – die Typbezeichnungen müssen gewinnen.
+const FIXTURE_TRINA_EINGEBETTET = `
+Trina Solar Vertex S+     TSM-425NEG9RC.27   TSM-430NEG9RC.27
+Garantiebedingungen wie bei NEG9R.28
+ Nominalleistung-PMAX (Wp)*    425    430
+ Spannung im MPP-UMPP (V)     42,9   43,2
+ Strom im MPP-IMPP (A)        9,92   9,96
+ Leerlaufspannung-UOC (V)     50,9   51,4
+ Kurzschlusstrom-ISC (A)     10,56  10,59
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
 if (process.argv.includes("--parse-test")) {
   // powers/names: optionale Erwartungen an Leistungsklassen und Modellnamen
   const cases = [
@@ -358,6 +388,10 @@ if (process.argv.includes("--parse-test")) {
       names: ["TSM-440NEG9R.28", "TSM-445NEG9R.28", "TSM-450NEG9R.28"] },
     { name: "Trina (DE, STC/NOCT/BNPI je Klasse)", text: FIXTURE_TRINA_BNPI, url: "https://example.com/TSM-NEG9RC27.pdf", expect: 3,
       powers: [425, 430, 435], names: ["TSM-425NEG9RC.27", "TSM-430NEG9RC.27", "TSM-435NEG9RC.27"] },
+    { name: "Trina (eine Klasse, STC/NOCT/BNPI)", text: FIXTURE_TRINA_EINE_KLASSE, url: "https://example.com/TSM-NEG9RC27.pdf", expect: 1,
+      powers: [425] },
+    { name: "Trina (Serie in der Typbezeichnung)", text: FIXTURE_TRINA_EINGEBETTET, url: "https://example.com/vertex.pdf", expect: 2,
+      names: ["TSM-425NEG9RC.27", "TSM-430NEG9RC.27"] },
     { name: "Longi (EN, Unicode-Celsius, Spalten-Kollision)", text: FIXTURE_LONGI_EN, url: "https://example.com/LR7-54HVD.pdf", expect: 3 },
     // Modellname aus dem Dateinamen (Token im Text nur einmal): ohne ".pdf"
     { name: "Modellname aus Dateiname ohne .pdf", text: FIXTURE_LONGI_EN,
