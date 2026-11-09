@@ -159,6 +159,7 @@ export function TrackerSection({
                   tracker={tracker}
                   tempMin={tempMin}
                   tempMax={tempMax}
+                  useIsc={result?.iCheckIsIsc}
                 />
               </div>
             </div>

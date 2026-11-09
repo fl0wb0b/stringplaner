@@ -12,6 +12,8 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    # downloads have no own time limit — cap the job instead of the 6 h default
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,7 +50,7 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
       - name: Open pull request with proposals
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
         with:
           branch: scan/module-proposals
           title: "Modul-Scan: neue Datenblatt-Extraktionen"

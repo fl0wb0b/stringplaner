@@ -1,5 +1,5 @@
 import type { PVModule } from "../lib/types";
-import { CUSTOM_MODULE_SLUG, type CustomModuleValues } from "../lib/urlState";
+import { CUSTOM_MODULE_SLUG, customToModule, type CustomModuleValues } from "../lib/urlState";
 import { moduleSlug } from "../lib/data";
 import { ModuleSearch } from "./ModuleSearch";
 import { NumberField } from "./NumberField";
@@ -104,6 +104,12 @@ export function ModulePicker({
               onChange={(v) => onCustomChange({ temp_coeff_isc_pct: v })}
             />
           </div>
+          {!customToModule(custom) && (
+            <p className="mt-2 text-xs text-red-400">
+              Werte physikalisch nicht möglich – keine Prüfung. Erwartet: Voc &gt; Vmp, Isc &gt; Imp,
+              Koeff. Voc negativ, Koeff. Isc positiv.
+            </p>
+          )}
           {Math.abs(custom.vmp * custom.imp - custom.power_stc) > custom.power_stc * 0.02 && (
             <p className="mt-2 text-xs text-amber-400">
               Hinweis: Vmp × Imp = {(custom.vmp * custom.imp).toFixed(0)} W weicht von{" "}

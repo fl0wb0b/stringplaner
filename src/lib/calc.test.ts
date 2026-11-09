@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculate, stringCurrentAtTemp, stringVocAtTemp, type CalcInput } from "./calc";
+import { calculate, defaultFloatVoltage, stringCurrentAtTemp, stringVocAtTemp, type CalcInput } from "./calc";
 import type { MpptTracker, PVModule } from "./types";
 
 // Round numbers chosen so expected values are hand-computable.
@@ -197,5 +197,35 @@ describe("calculate — MPPT-Ladereglerbatterie (batteryFloatVoltage)", () => {
     // float voltage far below v_mppt_min must not override the device limit
     const r = calculate({ ...baseInput, tracker, batteryFloatVoltage: 20 });
     expect(r.checks.vmpMin).toBe("fehler");
+  });
+});
+
+// Audit 2026-11
+describe("stringCurrentAtTemp — charger chart matches the check", () => {
+  it("uses Isc for MPPT chargers, like the current check", () => {
+    const input = { ...baseInput, deviceType: "mppt_charger" as const };
+    const r = calculate(input);
+    const chart = Math.max(
+      stringCurrentAtTemp(testModule, 2, -10, r.iCheckIsIsc),
+      stringCurrentAtTemp(testModule, 2, 70, r.iCheckIsIsc),
+    );
+    expect(chart).toBeCloseTo(r.iCheck, 9);
+  });
+});
+
+describe("defaultFloatVoltage", () => {
+  it("derives the LiFePO4 float voltage from the variant's battery voltage", () => {
+    expect(defaultFloatVoltage("PV (12V-Batterie)")).toBeCloseTo(13.4, 9);
+    expect(defaultFloatVoltage("PV (24V-Batterie)")).toBeCloseTo(26.8, 9);
+    expect(defaultFloatVoltage("PV (36V-Batterie)")).toBeCloseTo(40.2, 9);
+    expect(defaultFloatVoltage("Tracker 2 (48V-Batterie)")).toBeCloseTo(53.6, 9);
+    expect(defaultFloatVoltage("MPPT1")).toBeUndefined();
+  });
+
+  it("lets a 12 V setup pass that the fixed 48 V default rejected", () => {
+    const tracker12: MpptTracker = { ...testTracker, v_mppt_min: 13, v_max_absolute: 75, v_mppt_max: 75 };
+    const input = { ...baseInput, modulesInSeries: 1, stringsParallel: 1, tracker: tracker12, deviceType: "mppt_charger" as const };
+    expect(calculate({ ...input, batteryFloatVoltage: 53.6 }).checks.vmpMin).toBe("fehler");
+    expect(calculate({ ...input, batteryFloatVoltage: defaultFloatVoltage("PV (12V-Batterie)") }).checks.vmpMin).toBe("ok");
   });
 });
