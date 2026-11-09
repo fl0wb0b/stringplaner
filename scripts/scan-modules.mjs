@@ -99,12 +99,22 @@ function guessModelBase(text, pdfUrl) {
   }
   const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
   if (best && best[1] >= 2) return best[0];
-  // shop filenames usually carry the model code — underscores split the tokens
-  const file = decodeURIComponent(pdfUrl.split("/").pop() ?? "").replace(/_+/g, " ");
+  // shop filenames usually carry the model code — underscores split the tokens;
+  // the extension (sometimes doubled: ".pdf.pdf") is no part of it
+  const file = decodeURIComponent(pdfUrl.split("/").pop() ?? "").replace(/(\.pdf)+$/i, "").replace(/_+/g, " ");
   const fromFile = modelTokens(file).sort((a, b) => b.length - a.length)[0];
   if (fromFile) return stripPowerSuffix(fromFile);
   if (best) return best[0];
-  return file.replace(/\.pdf$/i, "").trim().replace(/[^A-Za-z0-9._-]+/g, "-").slice(0, 40) || "datenblatt";
+  return file.trim().replace(/[^A-Za-z0-9._-]+/g, "-").slice(0, 40) || "datenblatt";
+}
+
+// Trina names its classes "TSM-<Wp><Serie>" (TSM-455NEG9R.28, as in
+// modules_manual.json); the sheet prints "TSM-455" and the series apart.
+function trinaSeries(text) {
+  const counts = new Map();
+  // standalone ("NEG9R.28") or inside the type code ("TSM-445NEG9R.28")
+  for (const [s] of text.matchAll(/(?:\b|(?<=\d))NE[A-Z0-9]{2,6}\.\d{2}\b/g)) counts.set(s, (counts.get(s) ?? 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 }
 
 const KNOWN_MANUFACTURERS = [
@@ -128,11 +138,13 @@ function guessManufacturer(text) {
  */
 export function parseDatasheet(text, pdfUrl) {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
-  // Aiko-style sheets interleave STC and NOCT columns (440 331 445 335 …);
-  // in that case only every other value belongs to STC.
-  const interleaved = lines.some((l) => /STC\s+NOCT\s+STC\s+NOCT/i.test(l));
-  const stride = interleaved ? 2 : 1;
-  const pick = (arr) => (arr && stride === 2 ? arr.filter((_, i) => i % 2 === 0) : arr);
+  // Some sheets give each power class several test-condition columns:
+  // Aiko "STC NOCT" (440 331 445 335 …), Trina "STC NOCT BNPI" (425 325 471 …).
+  // Only the STC column is a power class; the header row tells the stride
+  // (also with a single class, where no second "STC" follows).
+  const cols = lines.map((l) => l.match(/\bSTC((?:\s+(?:NOCT|NMOT|BNPI)\b)+)/i)).find(Boolean);
+  const stride = cols ? cols[1].trim().split(/\s+/).length + 1 : 1;
+  const pick = (arr) => (arr && stride > 1 ? arr.filter((_, i) => i % stride === 0) : arr);
   const powers = pick(findRow(lines, ROW_PATTERNS.power, { min: 150, max: 800, count: 8 * stride }));
   if (!powers) return { entries: [], reason: "keine Leistungsklassen gefunden" };
   const n = powers.length;
@@ -152,13 +164,14 @@ export function parseDatasheet(text, pdfUrl) {
   const manufacturer = guessManufacturer(text);
   if (!manufacturer) return { entries: [], reason: "Hersteller nicht erkannt" };
   const base = guessModelBase(text, pdfUrl);
+  const series = manufacturer === "Trina Solar" ? trinaSeries(text) : null;
 
   const entries = [];
   for (let i = 0; i < n; i++) {
     if (voc[i] == null || vmp[i] == null || isc[i] == null || imp[i] == null) continue;
     entries.push({
       manufacturer,
-      model_name: `${base}-${powers[i]}`,
+      model_name: series ? `TSM-${powers[i]}${series}` : `${base}-${powers[i]}`,
       power_stc: powers[i],
       voc: voc[i],
       vmp: vmp[i],
@@ -318,12 +331,72 @@ Bifaciality                                                  70±5%             
 Fire Rating                                              IEC Class C                                                   Temperature Coefficient of Pmax                                                  -0.260%/℃
 `;
 
+// Trina-Datenblatt mit drei Spalten je Leistungsklasse (STC, NOCT, BNPI) –
+// echte Werte aus „Vertex S+ 440W TSM-NEG9RC27“ (Modul-Scan 09.11.2026). Nur
+// die STC-Spalte darf Einträge erzeugen: NOCT (325 W) und BNPI (471 W) sind
+// keine Leistungsklassen; ihre Vmp×Imp passen trotzdem zur „Leistung“, die
+// Plausibilitätsprüfung fängt sie also nicht ab.
+const FIXTURE_TRINA_BNPI = `
+BIFAZIALES DOPPELGLAS N-Typ i-TOPCon MODUL – Trina Solar TSM-NEG9RC.27
+ELEKTRISCHE DATEN (STC & NOCT & BNPI) NEG9RC.27      NEG9RC.27        NEG9RC.27
+ Testbedingungen               STC NOCT BNPI    STC NOCT BNPI    STC NOCT BNPI
+ Nominalleistung-PMAX (Wp)*    425  325  471    430  329  476    435  333  482
+ Spannung im MPP-UMPP (V)     42,9 40,4 42,9   43,2 40,7 43,2   43,6 41,0 43,6
+ Strom im MPP-IMPP (A)        9,92 8,06 10,98  9,96 8,08 11,03  9,99 8,12 11,05
+ Leerlaufspannung-UOC (V)     50,9 48,3 50,9   51,4 48,7 51,4   51,8 49,1 51,8
+ Kurzschlusstrom-ISC (A)     10,56 8,51 11,70 10,59 8,54 11,73 10,64 8,58 11,79
+STC: Einstrahlung 1000 W/m2. NOCT: Einstrahlung 800 W/m2. BNPI: Rückseite 135 W/m2.
+Temperaturkoeffizient von PMAX                        –0,29%/°C
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
+// Nur eine Leistungsklasse: die Kopfzeile hat genau eine Gruppe ohne zweites
+// "STC" – NOCT/BNPI dürfen trotzdem nicht als eigene Klassen durchrutschen.
+const FIXTURE_TRINA_EINE_KLASSE = `
+Trina Solar TSM-NEG9RC.27
+ Testbedingungen               STC NOCT BNPI
+ Nominalleistung-PMAX (Wp)*    425  325  471
+ Spannung im MPP-UMPP (V)     42,9 40,4 42,9
+ Strom im MPP-IMPP (A)        9,92 8,06 10,98
+ Leerlaufspannung-UOC (V)     50,9 48,3 50,9
+ Kurzschlusstrom-ISC (A)     10,56 8,51 11,70
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
+// Serie nur in den Typbezeichnungen (TSM-425NEG9RC.27), eine andere Serie
+// einmal im Fließtext – die Typbezeichnungen müssen gewinnen.
+const FIXTURE_TRINA_EINGEBETTET = `
+Trina Solar Vertex S+     TSM-425NEG9RC.27   TSM-430NEG9RC.27
+Garantiebedingungen wie bei NEG9R.28
+ Nominalleistung-PMAX (Wp)*    425    430
+ Spannung im MPP-UMPP (V)     42,9   43,2
+ Strom im MPP-IMPP (A)        9,92   9,96
+ Leerlaufspannung-UOC (V)     50,9   51,4
+ Kurzschlusstrom-ISC (A)     10,56  10,59
+Temperaturkoeffizient von VOC                        –0,24%/°C
+Temperaturkoeffizient von ISC                         0,04%/°C
+`;
+
 if (process.argv.includes("--parse-test")) {
+  // powers/names: optionale Erwartungen an Leistungsklassen und Modellnamen
   const cases = [
     { name: "JA Solar (EN, mehrspaltig)", text: FIXTURE, url: "https://example.com/JAM54D40.pdf", expect: 3 },
     { name: "Aiko (DE, STC/NOCT-interleaved)", text: FIXTURE_AIKO, url: "https://example.com/AIKO-A-MAH54Db.pdf", expect: 3 },
-    { name: "Trina (DE, UMPP-Label, En-Dash-Vorzeichen)", text: FIXTURE_TRINA_DE, url: "https://example.com/TSM-NEG9R.28.pdf", expect: 3 },
+    { name: "Trina (DE, UMPP-Label, En-Dash-Vorzeichen)", text: FIXTURE_TRINA_DE, url: "https://example.com/TSM-NEG9R.28.pdf", expect: 3,
+      names: ["TSM-440NEG9R.28", "TSM-445NEG9R.28", "TSM-450NEG9R.28"] },
+    { name: "Trina (DE, STC/NOCT/BNPI je Klasse)", text: FIXTURE_TRINA_BNPI, url: "https://example.com/TSM-NEG9RC27.pdf", expect: 3,
+      powers: [425, 430, 435], names: ["TSM-425NEG9RC.27", "TSM-430NEG9RC.27", "TSM-435NEG9RC.27"] },
+    { name: "Trina (eine Klasse, STC/NOCT/BNPI)", text: FIXTURE_TRINA_EINE_KLASSE, url: "https://example.com/TSM-NEG9RC27.pdf", expect: 1,
+      powers: [425] },
+    { name: "Trina (Serie in der Typbezeichnung)", text: FIXTURE_TRINA_EINGEBETTET, url: "https://example.com/vertex.pdf", expect: 2,
+      names: ["TSM-425NEG9RC.27", "TSM-430NEG9RC.27"] },
     { name: "Longi (EN, Unicode-Celsius, Spalten-Kollision)", text: FIXTURE_LONGI_EN, url: "https://example.com/LR7-54HVD.pdf", expect: 3 },
+    // Modellname aus dem Dateinamen (Token im Text nur einmal): ohne ".pdf"
+    { name: "Modellname aus Dateiname ohne .pdf", text: FIXTURE_LONGI_EN,
+      url: "https://example.com/Datenblatt%20-%20Longi%20Solar%20LR7-54HVD-470M.pdf.pdf", expect: 3,
+      names: ["LR7-54HVD-470M-465", "LR7-54HVD-470M-470", "LR7-54HVD-470M-475"] },
   ];
   let ok = true;
   for (const c of cases) {
@@ -333,7 +406,11 @@ if (process.argv.includes("--parse-test")) {
       const err = validateEntry(e);
       console.log(` - ${e.manufacturer} ${e.model_name}: ${e.power_stc} Wp, Voc ${e.voc}, tcIsc ${e.temp_coeff_isc} ${err ? "✗ " + err : "✓"}`);
     }
-    ok &&= entries.length === c.expect && entries.every((e) => !validateEntry(e));
+    const same = (want, got) => !want || JSON.stringify(want) === JSON.stringify(got);
+    const passed = entries.length === c.expect && entries.every((e) => !validateEntry(e))
+      && same(c.powers, entries.map((e) => e.power_stc)) && same(c.names, entries.map((e) => e.model_name));
+    if (!passed) console.log("   ✗ Erwartung verfehlt");
+    ok &&= passed;
   }
   process.exit(ok ? 0 : 1);
 }
