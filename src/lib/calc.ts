@@ -69,8 +69,7 @@ export function calculate(input: CalcInput): CalcResult {
   // max. Kurzschlussstrom – dort ist i_max ein Isc-Limit. Bei Wechselrichtern
   // ist i_max der max. Betriebs-Eingangsstrom und wird gegen Imp geprüft.
   const iCheckIsIsc = input.deviceType === "mppt_charger";
-  const iBase = iCheckIsIsc ? m.isc : m.imp;
-  const iAt = (t: number) => (iBase + m.temp_coeff_isc * (t - 25)) * stringsParallel;
+  const iAt = (t: number) => stringCurrentAtTemp(m, stringsParallel, t, iCheckIsIsc);
   const iCheck = Math.max(iAt(tempMin), iAt(tempMax));
 
   const powerTotal = m.power_stc * modulesInSeries * stringsParallel;
@@ -126,8 +125,23 @@ export function stringVmpAtTemp(m: PVModule, modulesInSeries: number, temp: numb
   return m.vmp * (1 + (m.temp_coeff_voc / 100) * (temp - 25)) * modulesInSeries;
 }
 
-// Array current as a function of temperature — same formula as iCold/iHot in
-// calculate(), used by the Current/Temperatur chart.
-export function stringCurrentAtTemp(m: PVModule, stringsParallel: number, temp: number): number {
-  return (m.imp + m.temp_coeff_isc * -(25 - temp)) * stringsParallel;
+// Array current as a function of temperature — used by the Current/Temperatur
+// chart and the current check. MPPT chargers are limited by short-circuit current
+// (Isc), so the chart must show Isc there, too; otherwise Imp (= iCold/iHot).
+export function stringCurrentAtTemp(
+  m: PVModule,
+  stringsParallel: number,
+  temp: number,
+  useIsc = false,
+): number {
+  const base = useIsc ? m.isc : m.imp;
+  return (base + m.temp_coeff_isc * -(25 - temp)) * stringsParallel;
+}
+
+// Default battery float voltage for a Victron battery-voltage variant
+// ("PV (12V-Batterie)" → 13.4 V): LiFePO4 float 3.35 V/cell, 4 cells per 12 V.
+// A fixed 48 V default would fail every 12/24/36 V setup.
+export function defaultFloatVoltage(trackerLabel: string): number | undefined {
+  const nominal = /(\d+)\s*V-Batterie/.exec(trackerLabel)?.[1];
+  return nominal ? Math.round((Number(nominal) / 12) * 13.4 * 10) / 10 : undefined;
 }

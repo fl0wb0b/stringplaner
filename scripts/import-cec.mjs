@@ -13,6 +13,7 @@
 import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { implausibleReason } from "./plausibility.mjs";
 
 const CSV_URL =
   "https://raw.githubusercontent.com/NREL/SAM/develop/deploy/libraries/CEC%20Modules.csv";
@@ -124,6 +125,13 @@ for (const line of lines.slice(3)) {
   const model_name = name.startsWith(manufacturer)
     ? name.slice(manufacturer.length).trim() || name
     : name;
+
+  const reason = implausibleReason({ voc, vmp, isc, imp, temp_coeff_isc: alpha_sc });
+  if (reason) {
+    console.log(`Skipping implausible ${manufacturer} ${model_name}: ${reason}`);
+    skipped++;
+    continue;
+  }
 
   const slugKey = `${manufacturer}__${model_name}`;
   if (seen.has(slugKey)) {

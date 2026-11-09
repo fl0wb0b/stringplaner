@@ -18,18 +18,20 @@ interface Props {
   tracker: MpptTracker;
   tempMin: number;
   tempMax: number;
+  // MPPT chargers: the limit is a short-circuit limit, so plot Isc (= CalcResult.iCheckIsIsc).
+  useIsc?: boolean;
 }
 
 // Array-Strom über Temperatur mit der Tracker-Stromgrenze als Referenzlinie —
 // das Strom-Gegenstück zum Spannungs-/Temperatur-Graph.
-export function CurrentChart({ module: m, stringsParallel, tracker, tempMin, tempMax }: Props) {
+export function CurrentChart({ module: m, stringsParallel, tracker, tempMin, tempMax, useIsc = false }: Props) {
   const from = Math.min(-30, Math.floor(tempMin / 5) * 5 - 5);
   const to = Math.max(85, Math.ceil(tempMax / 5) * 5 + 5);
   const data = [];
   for (let t = from; t <= to; t += 5) {
     data.push({
       t,
-      i: Number(stringCurrentAtTemp(m, stringsParallel, t).toFixed(2)),
+      i: Number(stringCurrentAtTemp(m, stringsParallel, t, useIsc).toFixed(2)),
     });
   }
 
@@ -68,7 +70,7 @@ export function CurrentChart({ module: m, stringsParallel, tracker, tempMin, tem
           />
           <ReferenceLine x={tempMin} stroke="#64748b" strokeDasharray="2 4" />
           <ReferenceLine x={tempMax} stroke="#64748b" strokeDasharray="2 4" />
-          <Line type="monotone" dataKey="i" name="I (Array)" stroke="#3987e5" dot={false} strokeWidth={2} />
+          <Line type="monotone" dataKey="i" name={useIsc ? "Isc (Array)" : "I (Array)"} stroke="#3987e5" dot={false} strokeWidth={2} />
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -7,6 +7,8 @@
 // Global: d, tmin, tmax, cl, cs. Old links using m/t/s/p on independent
 // devices are mapped onto the tracker t.
 
+import type { PVModule } from "./types";
+
 export interface CustomModuleValues {
   power_stc: number;
   voc: number;
@@ -18,6 +20,10 @@ export interface CustomModuleValues {
 }
 
 export const CUSTOM_MODULE_SLUG = "custom";
+
+// Plausible site temperatures (°C). Charts step through this range in 5 °C
+// steps — an unbounded value from a link (tmin=-1e308) never terminated.
+export const TEMP_RANGE = { min: -60, max: 100 } as const;
 
 export const DEFAULT_CUSTOM_MODULE: CustomModuleValues = {
   power_stc: 450,
@@ -143,6 +149,25 @@ function customOk(m: unknown): m is CustomModuleValues {
   );
 }
 
+// Custom values as a PVModule — null when physically impossible (e.g. positive
+// Voc coefficient), so no result is shown instead of a wrong "zulässig".
+export function customToModule(c: CustomModuleValues): PVModule | null {
+  if (!customOk(c)) return null;
+  return {
+    manufacturer: "Eigene Werte",
+    model_name: `${c.power_stc} Wp`,
+    power_stc: c.power_stc,
+    voc: c.voc,
+    vmp: c.vmp,
+    isc: c.isc,
+    imp: c.imp,
+    temp_coeff_voc: c.temp_coeff_voc,
+    temp_coeff_pmax: -0.3,
+    temp_coeff_isc: (c.temp_coeff_isc_pct * c.isc) / 100,
+    source: "manual",
+  };
+}
+
 /**
  * Physikalisch unmögliche Werte aus URL oder localStorage feldweise auf die
  * Standardwerte zurücksetzen. Ein negativer Kabelquerschnitt machte aus dem
@@ -154,13 +179,26 @@ function sanitize(c: ConfigState): ConfigState {
   const d = DEFAULT_CONFIG;
   const int = (v: unknown, min: number, f: number) =>
     finite(v) && Number.isInteger(v) && v >= min ? v : f;
-  const temps = finite(c.tempMin) && finite(c.tempMax) && c.tempMin <= c.tempMax;
+  const inRange = (t: unknown) => finite(t) && t >= TEMP_RANGE.min && t <= TEMP_RANGE.max;
+  const temps = inRange(c.tempMin) && inRange(c.tempMax) && c.tempMin <= c.tempMax;
+  // Stored state is only syntactically JSON — rebuild each tracker field by field.
+  const tracker = (t: unknown): TrackerConfig => {
+    const o = (t && typeof t === "object" ? t : {}) as Partial<TrackerConfig>;
+    const dt = DEFAULT_TRACKER_CONFIG;
+    return {
+      enabled: typeof o.enabled === "boolean" ? o.enabled : dt.enabled,
+      modulesInSeries: int(o.modulesInSeries, 1, dt.modulesInSeries),
+      stringsParallel: int(o.stringsParallel, 1, dt.stringsParallel),
+      moduleSlug: typeof o.moduleSlug === "string" ? o.moduleSlug : null,
+    };
+  };
   return {
     ...c,
     trackerIndex: int(c.trackerIndex, 0, d.trackerIndex),
     modulesInSeries: int(c.modulesInSeries, 1, d.modulesInSeries),
     stringsParallel: int(c.stringsParallel, 1, d.stringsParallel),
-    trackers: Array.isArray(c.trackers) ? c.trackers.slice(0, MAX_TRACKERS) : d.trackers,
+    trackers: Array.isArray(c.trackers) ? c.trackers.slice(0, MAX_TRACKERS).map(tracker) : d.trackers,
+    plz: typeof c.plz === "string" ? c.plz : d.plz,
     custom: c.custom == null ? null : customOk(c.custom) ? c.custom : { ...DEFAULT_CUSTOM_MODULE },
     tempMin: temps ? c.tempMin : d.tempMin,
     tempMax: temps ? c.tempMax : d.tempMax,
@@ -171,9 +209,13 @@ function sanitize(c: ConfigState): ConfigState {
   };
 }
 
+// Keys written by encodeConfig. Links carrying only foreign parameters
+// (utm_*, fbclid, …) must not replace the stored configuration with defaults.
+const CONFIG_KEY = /^(d|m|t|s|p|cw|cvo|cvm|cis|cim|ctv|cti|plz|tmin|tmax|cl|cs|bfv|[emsp]\d+)$/;
+
 export function decodeConfig(search: string): ConfigState | null {
   const p = new URLSearchParams(search);
-  if (![...p.keys()].length) return null;
+  if (![...p.keys()].some((k) => CONFIG_KEY.test(k))) return null;
   const d = DEFAULT_CONFIG;
 
   const trackers: TrackerConfig[] = [];

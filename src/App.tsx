@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { calculate, type CalcResult } from "./lib/calc";
+import { calculate, defaultFloatVoltage, type CalcResult } from "./lib/calc";
 import { inverterSlug, loadInverters, loadModules, moduleSlug } from "./lib/data";
 import type { Inverter, PVModule } from "./lib/types";
 import {
@@ -7,7 +7,9 @@ import {
   DEFAULT_CONFIG,
   DEFAULT_CUSTOM_MODULE,
   DEFAULT_TRACKER_CONFIG,
+  TEMP_RANGE,
   clearStoredConfig,
+  customToModule,
   loadInitialConfig,
   persistConfig,
   type ConfigState,
@@ -39,22 +41,8 @@ function App() {
   const moduleBySlug = useMemo(() => {
     const map = new Map<string, PVModule>();
     for (const m of modules ?? []) map.set(moduleSlug(m), m);
-    if (config.custom) {
-      const c = config.custom;
-      map.set(CUSTOM_MODULE_SLUG, {
-        manufacturer: "Eigene Werte",
-        model_name: `${c.power_stc} Wp`,
-        power_stc: c.power_stc,
-        voc: c.voc,
-        vmp: c.vmp,
-        isc: c.isc,
-        imp: c.imp,
-        temp_coeff_voc: c.temp_coeff_voc,
-        temp_coeff_pmax: -0.3,
-        temp_coeff_isc: (c.temp_coeff_isc_pct * c.isc) / 100,
-        source: "manual",
-      });
-    }
+    const custom = config.custom && customToModule(config.custom);
+    if (custom) map.set(CUSTOM_MODULE_SLUG, custom);
     return map;
   }, [modules, config.custom]);
 
@@ -88,8 +76,20 @@ function App() {
     }));
   };
 
+  // The float voltage follows the battery voltage of the chosen variant
+  // (12/24/36/48 V); manual overrides stay until the next device/variant change.
+  const floatFor = (tracker: Inverter["trackers"][number] | undefined, current: number) =>
+    (tracker && defaultFloatVoltage(tracker.tracker_label)) ?? current;
+
   const selectDevice = (slug: string) => {
-    setConfig((c) => ({ ...c, deviceSlug: slug, trackerIndex: 0, trackers: [] }));
+    const device = (inverters ?? []).find((i) => inverterSlug(i) === slug);
+    setConfig((c) => ({
+      ...c,
+      deviceSlug: slug,
+      trackerIndex: 0,
+      trackers: [],
+      batteryFloatVoltage: floatFor(device?.trackers[0], c.batteryFloatVoltage),
+    }));
   };
 
   // per-tracker module override (e.g. Anlagen-Erweiterung); null slug = Modul aus Schritt 2
@@ -259,7 +259,12 @@ function App() {
                 selectedSlug={config.deviceSlug}
                 trackerIndex={config.trackerIndex}
                 onSelectDevice={selectDevice}
-                onSelectTracker={(i) => update({ trackerIndex: i })}
+                onSelectTracker={(i) =>
+                  update({
+                    trackerIndex: i,
+                    batteryFloatVoltage: floatFor(selectedDevice?.trackers[i], config.batteryFloatVoltage),
+                  })
+                }
               />
             </section>
 
@@ -279,12 +284,16 @@ function App() {
                   <NumberField
                     label="Min. Temperatur"
                     unit="°C"
+                    min={TEMP_RANGE.min}
+                    max={TEMP_RANGE.max}
                     value={config.tempMin}
                     onChange={(v) => update({ tempMin: v })}
                   />
                   <NumberField
                     label="Max. Temperatur"
                     unit="°C"
+                    min={TEMP_RANGE.min}
+                    max={TEMP_RANGE.max}
                     value={config.tempMax}
                     onChange={(v) => update({ tempMax: v })}
                   />
@@ -401,6 +410,7 @@ function App() {
                                 tracker={variantTracker}
                                 tempMin={config.tempMin}
                                 tempMax={config.tempMax}
+                                useIsc={variantResult?.iCheckIsIsc}
                               />
                             </div>
                           </div>
